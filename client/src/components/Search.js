@@ -25,7 +25,7 @@ const Search = () => {
           <div class="col-xl-2 col-lg-4 col-md-6 px-2">
             <div class="date mb-3" id="date" data-target-input="nearest">
               <input
-                type="text"
+                type="date"
                 class="form-control p-4 datetimepicker-input"
                 placeholder="Pickup Date"
                 data-target="#date"
@@ -36,7 +36,7 @@ const Search = () => {
           <div class="col-xl-2 col-lg-4 col-md-6 px-2">
             <div class="time mb-3" id="time" data-target-input="nearest">
               <input
-                type="text"
+                type="time"
                 class="form-control p-4 datetimepicker-input"
                 placeholder="Pickup Time"
                 data-target="#time"
