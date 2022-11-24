@@ -33,7 +33,7 @@ function FindCar(){
                           <span>LAHORE</span>
                         </div>
                       </div>
-                      <a className="btn btn-primary px-3" href="">$99.00/Day</a>
+                      <a className="btn btn-primary px-3" href="Footer.js">$99.00/Day</a>
                     </div>
                   </div>
                   <div className="col-lg-4 col-md-6 mb-2">
@@ -58,7 +58,7 @@ function FindCar(){
                           <span>Karachi</span>
                         </div>
                       </div>
-                      <a className="btn btn-primary px-3" href="">$100.00/Day</a>
+                      <a className="btn btn-primary px-3" href="Footer.js">$100.00/Day</a>
                     </div>
                   </div>
                   <div className="col-lg-4 col-md-6 mb-2">
@@ -83,7 +83,7 @@ function FindCar(){
                           <span>Karachi</span>
                         </div>
                       </div>
-                      <a className="btn btn-primary px-3" href="">$100.00/Day</a>
+                      <a className="btn btn-primary px-3" href="Footer.js">$100.00/Day</a>
                     </div>
                   </div>
                   <div className="col-lg-4 col-md-6 mb-2">
@@ -108,7 +108,7 @@ function FindCar(){
                           <span>LAHORE</span>
                         </div>
                       </div>
-                      <a className="btn btn-primary px-3" href="">$99.00/Day</a>
+                      <a className="btn btn-primary px-3" href="Footer.js">$99.00/Day</a>
                     </div>
                   </div>
                   <div className="col-lg-4 col-md-6 mb-2">
@@ -133,7 +133,7 @@ function FindCar(){
                           <span>Karachi</span>
                         </div>
                       </div>
-                      <a className="btn btn-primary px-3" href="">$100.00/Day</a>
+                      <a className="btn btn-primary px-3" href="Footer.js">$100.00/Day</a>
                     </div>
                   </div>
                   <div className="col-lg-4 col-md-6 mb-2">
@@ -158,7 +158,7 @@ function FindCar(){
                           <span>Karachi</span>
                         </div>
                       </div>
-                      <a className="btn btn-primary px-3" href="">$100.00/Day</a>
+                      <a className="btn btn-primary px-3" href="Footer.js">$100.00/Day</a>
                     </div>
                   </div>
                 </div>
