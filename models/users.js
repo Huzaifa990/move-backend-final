@@ -4,15 +4,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = new mongoose.Schema({
-  type: {
+  firstName: {
     type: String,
     required: true,
   },
-  forename: {
-    type: String,
-    required: true,
-  },
-  surname: {
+  lastName: {
     type: String,
     required: true,
   },
@@ -25,23 +21,6 @@ const User = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phone: {
-    type: String,
-    unique: false,
-  },
-  companyName: {
-    type: String,
-  },
-  businessAddress: {
-    type: String,
-  },
-  entity: {
-    type: String,
-  },
-  newsLetter: {
-    type: Boolean,
-    required: true,
-  },
 });
 
 User.methods.generateAuthToken = function () {
@@ -49,9 +28,9 @@ User.methods.generateAuthToken = function () {
   const token = jwt.sign(
     {
       _id: this._id,
-      forename: this.forename,
-      surname: this.surname,
-      type: this.type,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      // type: this.type,
       email: this.email,
     },
     process.env.JWT_KEY,
