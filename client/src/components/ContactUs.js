@@ -3,52 +3,71 @@ import React from "react";
 function ContactUs(){
 
     return (
-        <div style={{display: 'grid',  justifyContent:'center', alignItems:'center'}}>
-            <div style={{display: "flex", justifyContent:'center', alignItems:'center'}}>
-                <h1 style={{color: '#f77d0a', fontSize: '150px', justifyItems:'center',fontWeight:'bold'}}>04</h1>
-            </div>
-            <div style={{}}>
-                <h2 style={{color: '#2b2e4a', fontSize: '150px', fontWeight:'bold',display: 'flex',  justifyContent:'center', alignItems:'center'}}>CONTACT US</h2>
-            </div>
-            
-            <div style={{display: 'flex'}}>
-            <div style={{background: '#e2e3e8', display: 'grid', justifyContent:'center', alignItems:'center', height: '100%', width: '100%',marginRight:'40px'}}>
-                <div style={{display:'flex' ,justifyContent:'space-between', margin:'50px'}}>
-                <form>
-                    <div>
-                        <label>
-                            <input style={{width:'47%', height: '50px', paddingLeft:'10px', borderColor: 'black', borderWidth: '1px', margin:'5px'}} type="text" name="name" placeholder="Your Name"/>
-                        </label>
-                        <label>
-                            <input style={{width:'47%', height: '50px', paddingLeft:'10px', borderColor: 'black', borderWidth: '1px', margin:'5px'}} type="text" name="email" placeholder="Your Email"/>
-                        </label>
+        <div className="container-fluid py-5">
+          <div className="container pt-5 pb-3">
+            <h1 className="display-1 text-primary text-center">04</h1>
+            <h1 className="display-4 text-uppercase text-center mb-5">Contact Us</h1>
+            <div className="row">
+              <div className="col-lg-7 mb-2">
+                <div className="contact-form bg-light mb-4" style={{padding: '30px'}}>
+                  <form>
+                    <div className="row">
+                      <div className="col-6 form-group">
+                        <input type="text" className="form-control p-4" placeholder="Your Name" required="required" />
+                      </div>
+                      <div className="col-6 form-group">
+                        <input type="email" className="form-control p-4" placeholder="Your Email" required="required" />
+                      </div>
                     </div>
-                    
-                    <div>
-                        <label>
-                            <input style={{width:'96.5%', height: '50px', paddingLeft:'10px', borderColor: 'black', borderWidth: '1px', margin:'5px'}} type="text" name="subject" placeholder="Subject"/>
-                        </label>
+                    <div className="form-group">
+                      <input type="text" className="form-control p-4" placeholder="Subject" required="required" />
                     </div>
-
-                    <div>
-                        <label>
-                            <input style={{width:'96.5%', height: '150px', paddingLeft:'10px', borderColor: 'black', borderWidth: '1px', margin:'5px'}} type="text" name="message" placeholder="Message"/>
-                        </label>
+                    <div className="form-group">
+                      <textarea className="form-control py-3 px-4" rows={5} placeholder="Message" required="required" defaultValue={""} />
                     </div>
-                    
-                    <input style = {{width: '45%', height: '75px', fontWeight: 'bold', color: 'white' ,backgroundColor: '#fb923c', marginLeft: '1%', marginTop: '1%' }} type="submit" value="Submit" />
-                </form>
+                    <div>
+                      <button className="btn btn-primary py-3 px-5" type="submit">
+                        Send Message
+                      </button>
+                    </div>
+                  </form>
                 </div>
-            </div>
-
-            <div style={{background: '#2b2e4a', display: 'grid', justifyContent:'center', alignItems:'center', height: '100%', width: '100%',marginRight:'40px'}}>
-                <div style={{display:'flex' ,justifyContent:'space-between', margin:'50px'}}>
+              </div>
+              <div className="col-lg-5 mb-2">
+                <div className="bg-secondary d-flex flex-column justify-content-center px-5 mb-4" style={{height: '435px'}}>
+                  <div className="d-flex mb-3">
+                    <i className="fa fa-2x fa-map-marker-alt text-primary flex-shrink-0 mr-3" />
+                    <div className="mt-n1">
+                      <h5 className="text-light">Head Office</h5>
+                      <p>BNU, TAROGIL CAMPUS</p>
+                    </div>
+                  </div>
+                  <div className="d-flex mb-3">
+                    <i className="fa fa-2x fa-map-marker-alt text-primary flex-shrink-0 mr-3" />
+                    <div className="mt-n1">
+                      <h5 className="text-light">Branch Office</h5>
+                      <p>BNU, TAROGIL CAMPUS</p>
+                    </div>
+                  </div>
+                  <div className="d-flex mb-3">
+                    <i className="fa fa-2x fa-envelope-open text-primary flex-shrink-0 mr-3" />
+                    <div className="mt-n1">
+                      <h5 className="text-light">Customer Service</h5>
+                      <p>F2019-297@BNU.EDU.PK</p>
+                    </div>
+                  </div>
+                  <div className="d-flex">
+                    <i className="fa fa-2x fa-envelope-open text-primary flex-shrink-0 mr-3" />
+                    <div className="mt-n1">
+                      <h5 className="text-light">Return &amp; Refund</h5>
+                      <p className="m-0">F2019-297@BNU.EDU.PK</p>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
-
-            </div>
+          </div>
         </div>
-    )
-
+      );
 }
 export default ContactUs;
