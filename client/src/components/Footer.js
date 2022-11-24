@@ -2,6 +2,7 @@ import React from "react";
 import CG1 from '../img/gallery-1.jpg';
 import CG2 from '../img/gallery-2.jpg';
 import CG3 from '../img/gallery-3.jpg';
+import { Link } from "react-router-dom";
 
 function Footer(){
     return (
@@ -62,7 +63,7 @@ function Footer(){
             </div>
             <div className="col-lg-3 col-md-6 mb-5">
               <h4 className="text-uppercase text-light mb-4">Reach Out!</h4>
-              <a href className="btn btn-primary p-2">Contact Us</a>
+              <Link to="/contact" className="btn btn-primary p-2">Contact Us</Link>
             </div>
           </div>
 
