@@ -22,18 +22,18 @@ function Footer(){
               </p>
               <h6 className="text-uppercase text-white py-2">Follow Us</h6>
               <div className="d-flex justify-content-start">
-                <a className="btn btn-lg btn-dark btn-lg-square mr-2" href="#"><i className="fab fa-twitter" /></a>
-                <a className="btn btn-lg btn-dark btn-lg-square mr-2" href="#"><i className="fab fa-facebook-f" /></a>
-                <a className="btn btn-lg btn-dark btn-lg-square mr-2" href="#"><i className="fab fa-linkedin-in" /></a>
-                <a className="btn btn-lg btn-dark btn-lg-square" href="#"><i className="fab fa-instagram" /></a>
+                <a className="btn btn-lg btn-dark btn-lg-square mr-2" href="Contact.js"><i className="fab fa-twitter" /></a>
+                <a className="btn btn-lg btn-dark btn-lg-square mr-2" href="Contact.js"><i className="fab fa-facebook-f" /></a>
+                <a className="btn btn-lg btn-dark btn-lg-square mr-2" href="Contact.js"><i className="fab fa-linkedin-in" /></a>
+                <a className="btn btn-lg btn-dark btn-lg-square" href="Contact.js"><i className="fab fa-instagram" /></a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 mb-5">
               <h4 className="text-uppercase text-light mb-4">Usefull Links</h4>
               <div className="d-flex flex-column justify-content-start">
-                <a className="text-body mb-2" href="#"><i className="fa fa-angle-right text-white mr-2" />Private
+                <a className="text-body mb-2" href="Contact.js"><i className="fa fa-angle-right text-white mr-2" />Private
                   Policy</a>
-                <a className="text-body mb-2" href="#"><i className="fa fa-angle-right text-white mr-2" />Term &amp;
+                <a className="text-body mb-2" href="Contact.js"><i className="fa fa-angle-right text-white mr-2" />Term &amp;
                   Conditions</a>
               </div>
             </div>
@@ -66,7 +66,7 @@ function Footer(){
             </div>
           </div>
 
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
+            <a href="Contact.js" class="btn btn-lg btn-primary btn-lg-square back-to-top">
             <i class="fa fa-angle-double-up"></i>
             </a>
 
