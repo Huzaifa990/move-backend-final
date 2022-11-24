@@ -1,0 +1,63 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.nextVideos {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem;
+
+  @include tablet {
+    padding: 1.6rem 3.6rem;
+  }
+
+  &__heading {
+    font-size: 1.3rem;
+    color: $silver;
+    padding-bottom: 1.6rem;
+    font-weight: 700;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+
+    &--video {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 1.6rem;
+      cursor: pointer;
+
+      @include tablet {
+        width: 45%;
+      }
+
+      @include laptop {
+        width: 100%;
+      }
+
+      .thumbnail {
+        width: 10rem;
+        height: 6rem;
+        border-radius: 0.4rem;
+      }
+
+      .info {
+        width: 60%;
+
+        @include laptop {
+          margin-left: 1.8rem;
+        }
+
+        h6 {
+          font-size: 1.3rem;
+          padding-bottom: 0.8rem;
+        }
+
+        p {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.video__container {
+  background-color: black;
+  max-height: 75vh;
+
+  video {
+    width: 100%;
+    max-height: 75vh;
+
+    @include tablet {
+      padding: 0 12rem;
+    }
+  }
+}

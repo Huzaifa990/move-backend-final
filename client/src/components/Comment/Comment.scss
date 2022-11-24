@@ -1,0 +1,55 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.comment {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid $mercury;
+  padding: 1.6rem 0;
+
+  @include tablet {
+    width: 100%;
+    padding: 1.6rem 1.6rem
+  }
+  @include laptop {
+    width: 100%;
+    padding: 1.6rem 3.6rem;
+  }
+  
+  &__profile-pic {
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    background-color: $mercury;
+
+    @include tablet {
+      margin-right: 2.4rem;
+    }
+  }
+
+  &__content {
+    display: flex;
+    font-size: 1.3rem;
+    flex-direction: column;
+    width: 84%;
+
+    @include tablet {
+      width: 100%;
+    }
+
+    &-name-date {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 0.8rem;
+
+      .user-name {
+        font-weight: 700;
+      }
+
+      .comment-date {
+        color: $silver;
+      }
+    }
+  }
+}

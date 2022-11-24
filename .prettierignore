@@ -1,0 +1,4 @@
+client/build/
+client/.next/
+utils/json/countries+states+cities.json
+client/utils/json/countries+states+cities.json
