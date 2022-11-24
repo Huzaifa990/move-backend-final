@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
@@ -57,19 +58,14 @@ const NavBar = () => {
               id="navbarCollapse"
             >
               <div className="navbar-nav ml-auto py-0">
-                <a href="Greet.js" className="nav-item nav-link active">
-                  Home
-                </a>
-                <a href="Greet.js" className="nav-item nav-link">
-                  About
-                </a>
-                <a href="Greet.js" className="nav-item nav-link">
-                  Service
-                </a>
 
-                <a href="Greet.js" className="nav-item nav-link">
-                  Car Listings
-                </a>
+                <Link to='/' className="nav-item nav-link active">Home</Link>
+                
+                <Link to='/about' className="nav-item nav-link active">About</Link>
+
+                <Link to='/services' className="nav-item nav-link active">Services</Link>
+
+                {/* <Link to='/listings' className="nav-item nav-link active">Car Listings</Link> */}
                
                 <div className="nav-item dropdown">
                   <div className="dropdown-menu rounded-0 m-0">
@@ -81,18 +77,16 @@ const NavBar = () => {
                     </a>
                   </div>
                 </div>
-                <a href="Greet.js" className="nav-item nav-link">
-                  Contact
-                </a>
-                <a href="Greet.js" className="nav-item nav-link">
-                  SIGN UP/ LOGIN
-                </a>
-                <a href="Greet.js" className="nav-item nav-link">
-                  My Listings
-                </a>
-                <a href="Greet.js" className="nav-link btn-primary">
-                  LIST YOUR CAR
-                </a>
+
+                <Link to='/Contact' className="nav-item nav-link active">Contact</Link>
+
+                {/* <Link to='/singup' className="nav-item nav-link active">Sign Up/ Login</Link>
+
+                <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>
+                
+                <Link to='/' className="nav-link btn-primary">LIST YOUR CAR</Link> */}
+
+              
               </div>
             </div>
           </nav>

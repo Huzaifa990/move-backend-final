@@ -1,11 +1,11 @@
 import React from "react";
 
-const SubServices = () => {
+const SubServices = (props) => {
   return (
     <div>
       <div className="container-fluid py-5">
         <div className="container pt-5 pb-3">
-          <h1 className="display-1 text-primary text-center">02</h1>
+          <h1 className="display-1 text-primary text-center">0{props.numbering}</h1>
           <h1 className="display-4 text-uppercase text-center mb-5">
             Our Services
           </h1>
