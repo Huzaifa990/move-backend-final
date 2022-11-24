@@ -1,10 +1,8 @@
 require("express-async-errors");
-const express = require("express");
-const { error } = require("../middleware/error");
-const app = express.Router();
+const app = require("express").Router();
+const { dbError } = require("../middleware/error");
 
 app.use("/auth", require("./auth"));
-
-app.use(error);
+app.use(dbError);
 
 module.exports = app;
