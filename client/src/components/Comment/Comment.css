@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "Avenir";
+  src: url("../../assets/fonts/AvenirNextLTPro-Regular.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Avenir";
+  src: url("../../assets/fonts/AvenirNextLTPro-Bold.otf");
+  font-weight: 700;
+  font-style: normal;
+}
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Avenir";
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+.comment {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 1.6rem 0;
+}
+@media screen and (min-width: 768px) {
+  .comment {
+    width: 100%;
+    padding: 1.6rem 1.6rem;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .comment {
+    width: 100%;
+    padding: 1.6rem 3.6rem;
+  }
+}
+.comment__profile-pic {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background-color: #e1e1e1;
+}
+@media screen and (min-width: 768px) {
+  .comment__profile-pic {
+    margin-right: 2.4rem;
+  }
+}
+.comment__content {
+  display: flex;
+  font-size: 1.3rem;
+  flex-direction: column;
+  width: 84%;
+}
+@media screen and (min-width: 768px) {
+  .comment__content {
+    width: 100%;
+  }
+}
+.comment__content-name-date {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.8rem;
+}
+.comment__content-name-date .user-name {
+  font-weight: 700;
+}
+.comment__content-name-date .comment-date {
+  color: #afafaf;
+}/*# sourceMappingURL=Comment.css.map */

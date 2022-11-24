@@ -1,0 +1,290 @@
+{
+  "data": [
+    {
+      "fecId": "C00640623",
+      "candidateId": "S0AL00156"
+    },
+    {
+      "fecId": "C00701672",
+      "candidateId": "S0AL00230"
+    },
+    {
+      "fecId": "C00570994",
+      "candidateId": "S4AK00214"
+    },
+    {
+      "fecId": "C00710822",
+      "candidateId": "S0AK00196"
+    },
+    {
+      "fecId": "C00696526",
+      "candidateId": "S0AZ00350"
+    },
+    {
+      "fecId": "C00666040",
+      "candidateId": "S8AZ00221"
+    },
+    {
+      "fecId": "C00499988",
+      "candidateId": "S4AR00103"
+    },
+    {
+      "fecId": "C00741124",
+      "candidateId": "S0AR00226"
+    },
+    {
+      "fecId": "C00716720",
+      "candidateId": "S0CO00575"
+    },
+    {
+      "fecId": "C00492454",
+      "candidateId": "S4CO00395"
+    },
+    {
+      "fecId": "C00475392",
+      "candidateId": "S0DE00092"
+    },
+    {
+      "fecId": "C00732982",
+      "candidateId": "S0DE00183"
+    },
+    {
+      "fecId": "C00736876",
+      "candidateId": "S0GA00559"
+    },
+    {
+      "fecId": "C00729608",
+      "candidateId": "S0GA00526"
+    },
+    {
+      "fecId": "C00718866",
+      "candidateId": "S8GA00180"
+    },
+    {
+      "fecId": "C00705871",
+      "candidateId": "S4GA11285"
+    },
+    {
+      "fecId": "C00440362",
+      "candidateId": "S8ID00092"
+    },
+    {
+      "fecId": "C00738757",
+      "candidateId": "S0ID00180"
+    },
+    {
+      "fecId": "C00148999",
+      "candidateId": "S6IL00151"
+    },
+    {
+      "fecId": "C00716340",
+      "candidateId": "S0IL00543"
+    },
+    {
+      "fecId": "C00546788",
+      "candidateId": "S4IA00129"
+    },
+    {
+      "fecId": "C00708164",
+      "candidateId": "S0IA00176"
+    },
+    {
+      "fecId": "C00576173",
+      "candidateId": "S0KS00315"
+    },
+    {
+      "fecId": "C00723122",
+      "candidateId": "S0KS00323"
+    },
+    {
+      "fecId": "C00745141",
+      "candidateId": "S0KS00356"
+    },
+    {
+      "fecId": "C00193342",
+      "candidateId": "S2KY00012"
+    },
+    {
+      "fecId": "C00711549",
+      "candidateId": "S0KY00339"
+    },
+    {
+      "fecId": "C00543983",
+      "candidateId": "S4LA00107"
+    },
+    {
+      "fecId": "C00752535",
+      "candidateId": "S0LA00386"
+    },
+    {
+      "candidateId": "S6LA00342"
+    },
+    {
+      "fecId": "C00314575",
+      "candidateId": "S6ME00159"
+    },
+    {
+      "fecId": "C00709899",
+      "candidateId": "S0ME00111"
+    },
+    {
+      "fecId": "C00196774",
+      "candidateId": "S4MA00028"
+    },
+    {
+      "fecId": "C00739177",
+      "candidateId": "S0MA00232"
+    },
+    {
+      "fecId": "C00437889",
+      "candidateId": "S4MI00355"
+    },
+    {
+      "fecId": "C00651208",
+      "candidateId": "S8MI00372"
+    },
+    {
+      "fecId": "C00663781",
+      "candidateId": "S8MN00578"
+    },
+    {
+      "fecId": "C00716860",
+      "candidateId": "S0MN00328"
+    },
+    {
+      "fecId": "C00675348",
+      "candidateId": "S8MS00261"
+    },
+    {
+      "fecId": "C00675884",
+      "candidateId": "C00675884"
+    },
+    {
+      "fecId": "C00491357",
+      "candidateId": "S2MT00096"
+    },
+    {
+      "fecId": "C00741611",
+      "candidateId": "S0MT00173"
+    },
+    {
+      "fecId": "C00547976",
+      "candidateId": "S4NE00090"
+    },
+    {
+      "candidateId": "S8NE00216"
+    },
+    {
+      "fecId": "C00457325",
+      "candidateId": "S0NH00219"
+    },
+    {
+      "fecId": "C00713412",
+      "candidateId": "S0NH00334"
+    },
+    {
+      "fecId": "C00540500",
+      "candidateId": "S4NJ00185"
+    },
+    {
+      "fecId": "C00722470",
+      "candidateId": "S0NJ00217"
+    },
+    {
+      "fecId": "C00443689",
+      "candidateId": "S0NM00058"
+    },
+    {
+      "fecId": "C00733469",
+      "candidateId": "S0NM00124"
+    },
+    {
+      "fecId": "C00545772",
+      "candidateId": "S4NC00162"
+    },
+    {
+      "fecId": "C00709410",
+      "candidateId": "S0NC00202"
+    },
+    {
+      "fecId": "C00207993",
+      "candidateId": "S4OK00083"
+    },
+    {
+      "fecId": "C00725762",
+      "candidateId": "S0OK00370"
+    },
+    {
+      "fecId": "C00437277",
+      "candidateId": "S8OR00207"
+    },
+    {
+      "fecId": "C00752535",
+      "candidateId": "S4OR00156"
+    },
+    {
+      "fecId": "C00238907",
+      "candidateId": "S6RI00163"
+    },
+    {
+      "fecId": "C00639161",
+      "candidateId": "S0RI00067"
+    },
+    {
+      "fecId": "C00458828",
+      "candidateId": "S0SC00149"
+    },
+    {
+      "fecId": "C00696153",
+      "candidateId": "S0SC00289"
+    },
+    {
+      "fecId": "C00532465",
+      "candidateId": "S4SD00049"
+    },
+    {
+      "fecId": "C00720623",
+      "candidateId": "S0SD00070"
+    },
+    {
+      "fecId": "C00718627",
+      "candidateId": "S0TN00169"
+    },
+    {
+      "fecId": "C00720805",
+      "candidateId": "S0TN00342"
+    },
+    {
+      "fecId": "C00369033",
+      "candidateId": "S2TX00106"
+    },
+    {
+      "fecId": "C00649350",
+      "candidateId": "S0TX00233"
+    },
+    {
+      "fecId": "C00438713",
+      "candidateId": "S6VA00093"
+    },
+    {
+      "fecId": "C00716571",
+      "candidateId": "S0VA00146"
+    },
+    {
+      "fecId": "C00539825",
+      "candidateId": "S4WV00159"
+    },
+    {
+      "fecId": "C00708891",
+      "candidateId": "S8WV00119"
+    },
+    {
+      "fecId": "C00443580",
+      "candidateId": "S0WY00137"
+    },
+    {
+      "fecId": "C00734152",
+      "candidateId": "S0WY00152"
+    }
+  ]
+}

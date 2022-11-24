@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+client/.next/
+logfile.log
+client/node_modules/
+.vercel
+schema-temp.js
+package-lock.json
+temp.js
+schema-temp.js
+# client/build/
+# client/package-lock.json

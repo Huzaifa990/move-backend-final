@@ -1,0 +1,134 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.addComment {
+  padding: 0 1.6rem;
+  font-size: 1.4rem;
+
+  @include tablet {
+    padding: 1.6rem 3.6rem 0 3.6rem;
+  }
+  @include laptop {
+    padding: 1.6rem 0 0 3.6rem;
+  }
+
+  &__heading {
+    margin-bottom: 1.6rem;
+  }
+
+  &__container {
+    display: flex;
+    border-bottom: 1px solid $mercury;
+    padding-bottom: 1.6rem;
+    @include tablet{
+      padding-right:3.6rem;
+    }
+
+    &--img {
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: 50%;
+
+      @include tablet {
+        margin-top: 3.8rem;
+      }
+    }
+
+    &--input {
+      width: 100%;
+      padding-left: 1.6rem;
+
+      p {
+        color: $silver;
+        margin-bottom: 0.4rem;
+      }
+
+      input {
+        outline: none;
+        border: 1px solid $mercury;
+        background-color: $albaster;
+        border-radius: 0.4rem;
+        width: 100%;
+        height: 10rem;
+        position: relative;
+        padding-left: 1rem;
+
+        &:focus {
+          outline: 1px solid $brainflix-blue;
+        }
+
+        @include tablet {
+          min-width: 24rem;
+          height: 4rem;
+          padding-right: 2.4rem;
+          margin-right: 2rem;
+          margin-top: 1.4rem;
+        }
+
+        &::placeholder {
+          position: absolute;
+          top: 1.6rem;
+          left: 1.6rem;
+          color: $brainflix-black;
+
+          @include tablet {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+          }
+        }
+      }
+    }
+
+    &--button {
+      position: relative;
+      background-color: $brainflix-blue;
+      margin-top: 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      color: $white;
+      border-radius: 0.4rem;
+      text-align: center;
+      transition: all 0.3s;
+
+      &:hover {
+        background-color: $brainflix-dark-blue;
+      }
+
+      @include tablet {
+        width: 40%;
+      }
+
+      &--icon {
+        width: 2.4rem;
+        height: 2.4rem;
+        z-index: 10;
+      }
+    }
+
+    &-btn {
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: inherit;
+      font-size: 1.4rem;
+      font-weight: 400;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    @include tablet {
+      &--tab {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+    }
+  }
+}

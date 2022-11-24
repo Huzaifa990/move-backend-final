@@ -1,0 +1,16 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.comments__container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.6rem;
+
+  @include tablet {
+    padding: 0 3.6rem;
+  }
+  @include laptop {
+    padding: 0 0 0 3.6rem;
+  }
+}
