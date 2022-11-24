@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,
+  //  useEffect 
+  } from "react";
  import M1 from '../../img/M1.jpg';
  import M2 from '../../img/M2.jpg';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
