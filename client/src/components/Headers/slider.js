@@ -31,7 +31,7 @@ const Slider = () => {
               <div id="header-carousel" className="carousel slide" data-ride="carousel">
                 <div className="carousel-inner">
                   <div className="carousel-item active">
-                      <img className="w-100" src={index === 0 ? M1 : M2} alt="Image" />
+                      <img className="w-100" src={index === 0 ? M1 : M2} alt="Carousel" />
                       <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div className="p-3" style={{maxWidth: '900px'}}>
                           <h4 className="text-white text-uppercase mb-md-3" >{index === 0 ? "Reserve Now" : "Reserve Now"}</h4>
