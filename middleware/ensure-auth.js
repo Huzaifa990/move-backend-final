@@ -40,15 +40,20 @@ const ensureAccess = (user) => {
   };
 };
 
-const Validator = (schema, params) => {
-  return async (req, res, next) => {
-    const { error } = schema.validate(
+const Validator = (schema, params) => async (req, res, next) => {
+  try {
+    await schema.validate(
       params === "body" ? req.body : params === "params" ? req.params : req.query,
-      { abortEarly: false }
+      {
+        abortEarly: false,
+      }
     );
-    if (error) return res.status(422).send({ msg: "Invalid data", errors: error?.details });
-    next();
-  };
+    return next();
+  } catch (err) {
+    return res.status(422).json({
+      error: err.inner.reduce((acc, error) => ({ ...acc, [error.path]: error.message }), {}),
+    });
+  }
 };
 
 module.exports = { ensureAuth, ensureAccess, Validator };
