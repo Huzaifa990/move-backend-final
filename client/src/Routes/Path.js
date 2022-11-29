@@ -14,6 +14,7 @@ import Map from "../components/Map";
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
 import Slider from "../components/Headers/Slider";
 import SignUp from "../components/SignUp";
+import SignIn from "../components/SignIn";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path='contact' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Contact"/> <ContactUs numbering="1"/> <Map/>  <Footer/> </>} />
             <Route path='services' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Services"/> <SubServices numbering="1"/> <Discount/> <Driver/>  <Footer/> </>} />
             <Route path='signup' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="SignUp"/> <SignUp/> <SubServices numbering="1"/><Footer/> </>} />
+            <Route path='signin' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="SignIn"/> <SignIn/> <SubServices numbering="1"/><Footer/> </>} />
         </Routes>
       </BrowserRouter>
     </>
