@@ -4,7 +4,6 @@ require("dotenv").config();
 const User = require("../../models/users");
 
 const login = async (req, res) => {
-  let candidate = {};
   let { email, password } = req.body;
   email = email.toLowerCase();
 
@@ -24,7 +23,7 @@ const login = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  const { firstName, lastName, email, password, confirmPassword } = req.body;
+  const { name, email, password, confirmPassword, accountType } = req.body;
 
   const emailCheck = await User.findOne({ email });
   if (emailCheck) return res.status(402).send({ msg: "Email Already Exists!" });
@@ -34,10 +33,10 @@ const signUp = async (req, res) => {
   }
 
   const user = new User({
-    firstName,
-    lastName,
+    name,
     email,
     password,
+    accountType,
   });
   await user.save();
 
