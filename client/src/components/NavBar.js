@@ -65,6 +65,7 @@ const NavBar = () => {
 
                 <Link to='/services' className="nav-item nav-link active">Services</Link>
 
+
                 {/* <Link to='/listings' className="nav-item nav-link active">Car Listings</Link> */}
                
                 <div className="nav-item dropdown">
@@ -79,6 +80,8 @@ const NavBar = () => {
                 </div>
 
                 <Link to='/Contact' className="nav-item nav-link active">Contact</Link>
+
+                <Link to='/signup' className="nav-item nav-link active">SignUp</Link>
 
                 {/* <Link to='/singup' className="nav-item nav-link active">Sign Up/ Login</Link>
 

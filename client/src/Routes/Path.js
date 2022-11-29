@@ -11,50 +11,20 @@ import Footer from "../components/Footer";
 import ContactUs from "../components/ContactUs";
 import Driver from "../components/Driver";
 import Map from "../components/Map";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Slider from "../components/Headers/slider";
+import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import Slider from "../components/Headers/Slider";
+import SignUp from "../components/SignUp";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <NavBar /> <Search /> <Slider /> <Introduction /> <SubServices numbering="2" />{" "}
-                <Discount /> <FindCar /> <ContactUs numbering="4" /> <Footer />{" "}
-              </>
-            }
-          />
-          <Route
-            path="about"
-            element={
-              <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="About" /> <Introduction />{" "}
-                <Driver /> <Footer />{" "}
-              </>
-            }
-          />
-          <Route
-            path="contact"
-            element={
-              <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="Contact" />{" "}
-                <ContactUs numbering="1" /> <Map /> <Footer />{" "}
-              </>
-            }
-          />
-          <Route
-            path="services"
-            element={
-              <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="Services" />{" "}
-                <SubServices numbering="1" /> <Discount /> <Driver /> <Footer />{" "}
-              </>
-            }
-          />
+            <Route path='/' element={ <><NavBar/> <Search/> <Slider/> <Introduction/> <SubServices numbering="2"/> <Discount/> <FindCar/> <ContactUs numbering="4"/> <Footer/> </>} />
+            <Route path='about' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="About"/> <Introduction/> <Driver/>  <Footer/> </>} />
+            <Route path='contact' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Contact"/> <ContactUs numbering="1"/> <Map/>  <Footer/> </>} />
+            <Route path='services' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Services"/> <SubServices numbering="1"/> <Discount/> <Driver/>  <Footer/> </>} />
+            <Route path='signup' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="SignUp"/> <SignUp/> <SubServices numbering="1"/><Footer/> </>} />
         </Routes>
       </BrowserRouter>
     </>
