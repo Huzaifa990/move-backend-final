@@ -333,6 +333,7 @@ h6,
   width: 40%;
   margin: auto;
   background-image: linear-gradient(rgba(4,9,30,0.7), rgba(4,9,30,0.7)), url(img/bg-banner.jpg);
+  background-attachment: fixed;
 
   padding: 30px;
   border-radius: 10px;
@@ -347,11 +348,11 @@ h6,
 .signup-form-container{
   width: 60%;
   margin: auto;
-
-  background-color: #2b2e4a;
+  /* background-color: #2b2e4a; */
+  background-image: linear-gradient(rgba(4,9,30,0.7), rgba(4,9,30,0.7)), url(img/bg-banner.jpg);
+  background-attachment: fixed;
   padding: 30px;
   border-radius: 10px;
-
 }
 
 #password-lbl-error{
@@ -416,5 +417,24 @@ h6,
 .navbar-front{
   z-index: 9
 }
+
+#errorApi{
+  display: block;
+  padding: 20px;
+  background-color: crimson;
+  border-radius: 5px;
+  position: absolute;
+  visibility: hidden;
+}
+
+input, select{
+  opacity: 0.8;
+}
+
+input:focus, select:focus{
+  opacity: 1;
+}
+
+
 
 
