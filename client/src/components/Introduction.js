@@ -25,7 +25,7 @@ const Introduction = () => {
           <div className="row mt-3">
             <div className="col-lg-4 mb-2">
               <div
-                className="d-flex align-items-center bg-light p-4 mb-4"
+                className="d-flex align-items-center bg-#1d2021 p-4 mb-4"
                 style={{height: 150}}
               >
                 <div
@@ -55,7 +55,7 @@ const Introduction = () => {
             </div>
             <div className="col-lg-4 mb-2">
               <div
-                className="d-flex align-items-center bg-light p-4 mb-4"
+                className="d-flex align-items-center bg-#1d2021 p-4 mb-4"
                 style={{height: 150}}
               >
                 <div
