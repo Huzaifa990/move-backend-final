@@ -10,7 +10,7 @@ function ContactUs(props){
               <h1 className="display-4 text-uppercase text-center mb-5">Contact Us</h1>
               <div className="row">
                 <div className="col-lg-7 mb-2">
-                  <div className="contact-form bg-light mb-4" style={{padding: '30px'}}>
+                  <div className="contact-form bg-secondary mb-4" style={{padding: '30px'}}>
                     <form>
                       <div className="row">
                         <div className="col-6 form-group">
