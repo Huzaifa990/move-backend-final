@@ -75,7 +75,7 @@ const NavBar = () => {
                 <Link to='/services' className="nav-item nav-link active">Services</Link>
 
 
-                {/* <Link to='/listings' className="nav-item nav-link active">Car Listings</Link> */}
+                <Link to='/listings' className="nav-item nav-link active">Car Listings</Link>
                
                 <div className="nav-item dropdown">
                   <div className="dropdown-menu rounded-0 m-0">
