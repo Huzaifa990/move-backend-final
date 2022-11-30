@@ -1,7 +1,6 @@
 import React from "react";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
-        
 const SignIn = () => {
   const sendData = () =>{
     let email = document.getElementById("signInEmail").value;
@@ -12,7 +11,9 @@ const SignIn = () => {
         password
     })
     .then((res) => {
-        console.log(res.data.user.name);
+        console.log(res.headers.authorization);
+        localStorage.setItem("userDetails", JSON.stringify(res.headers.authorization));
+        localStorage.setItem("userName", JSON.stringify(res.data.user.name));
         navigateToHome();
       }).catch((e) =>{
         console.log(e)
