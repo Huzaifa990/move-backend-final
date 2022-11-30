@@ -39,7 +39,7 @@ const SubServices = (props) => {
                   </div>
                   <h1 className="display-2 text-white mt-n2 m-0">02</h1>
                 </div>
-                <h4 className="text-uppercase mb-3">Car Insurance</h4>
+                <h4 className="text-uppercase text-primary mb-3">Car Insurance</h4>
                 <p className="m-0">
                   Kasd dolor no lorem nonumy sit labore tempor at justo rebum
                   rebum stet, justo elitr dolor amet sit sea sed

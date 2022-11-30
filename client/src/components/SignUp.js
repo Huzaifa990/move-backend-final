@@ -102,7 +102,7 @@ const sendData = ()=>{
       <label htmlFor id="password-lbl-error">PASSWORD DOES NOT MATCH!</label>
 
       <div class="form-group">
-            <select class="custom-select px-4 mb-3" placeholder="Select Account Type" id="accountType" style={{height: 50}}>
+            <select class="custom-select px-4 mb-3 bg-dark" placeholder="Select Account Type" id="accountType" style={{height: 50}}>
               <option selected>Choose Account Type</option>
               <option value="Lessee">I Want to Rent a Car</option>
               <option value="Lessor">I Want to Upload My Car for Rent</option>
