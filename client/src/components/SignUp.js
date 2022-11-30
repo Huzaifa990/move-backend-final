@@ -31,27 +31,44 @@ const sendData = ()=>{
         console.log(e);
         // document.getElementById("emailError").innerText = e.response.data.error.email;
         if(e.response.data.error.name !== undefined){
+          document.getElementById("name").style.border="2px solid crimson";
           document.getElementById("errorMessage").innerText = e.response.data.error.name;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
           document.getElementById("errorApi").style.width="100%";
         }
         else if(e.response.data.error.email !== undefined){
+          document.getElementById("name").style.border="none";
+          document.getElementById("email").style.border="2px solid crimson";
           document.getElementById("errorMessage").innerText = e.response.data.error.email;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
         }
         else if(e.response.data.error.password !== undefined){
+          document.getElementById("name").style.border="none";
+          document.getElementById("email").style.border="none";
+          document.getElementById("password").style.border="2px solid crimson";
           document.getElementById("errorMessage").innerText = e.response.data.error.password;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
         }
         else if(e.response.data.error.confirmPassword !== undefined){
+          document.getElementById("name").style.border="none";
+          document.getElementById("email").style.border="none";
+          document.getElementById("password").style.border="none";
+          document.getElementById("confirmPassword").style.border="2px solid crimson";
+
           document.getElementById("errorMessage").innerText = e.response.data.error.confirmPassword;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
         }
         else if(e.response.data.error.accountType !== undefined){
+          document.getElementById("name").style.border="none";
+          document.getElementById("email").style.border="none";
+          document.getElementById("password").style.border="none";
+          document.getElementById("confirmPassword").style.border="none";
+          document.getElementById("accountType").style.border="2px solid crimson";
+
           document.getElementById("errorMessage").innerText = e.response.data.error.accountType;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
