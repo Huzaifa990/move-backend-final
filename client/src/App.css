@@ -167,12 +167,12 @@ h6,
 
 .service-item:hover h1,
 .service-item.active h1 {
-  color: var(--dark) !important;
+  color: var(--primary) !important;
 }
 
 .service-item:hover h4,
 .service-item.active h4 {
-  color: var(--light);
+  color: var(--primary);
 }
 
 .rent-item {
@@ -193,7 +193,7 @@ h6,
 
 .rent-item:hover h4,
 .rent-item.active h4 {
-  color: var(--light);
+  color: var(--primary);
 }
 
 .team-item {
