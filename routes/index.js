@@ -7,6 +7,7 @@ app.get("/", async (req, res) => {
 });
 app.use("/auth", require("./auth"));
 app.use("/contact", require("./contact"));
+app.use("/listing", require("./listing"));
 
 app.use(dbError);
 
