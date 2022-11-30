@@ -2,6 +2,15 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
+
+  function logout(){
+    localStorage.removeItem("userName")
+    localStorage.removeItem("userDetails");
+    window.location.reload();
+  }
+  console.log(localStorage.getItem("userName"))
+  var userName= JSON.parse(localStorage.getItem("userName")); 
+  
   return (
     <div>
       <div className="container-fluid bg-dark py-3 px-lg-5 d-none d-lg-block">
@@ -80,9 +89,24 @@ const NavBar = () => {
                 </div>
 
                 <Link to='/Contact' className="nav-item nav-link active">Contact</Link>
+                { 
+                  (userName !== null)
+                    ? <button className="nav-item nav-link active" style={{background:"none", border:"none", paddingBottom:"35px"}} onClick={logout}>Logout</button>
+                    : null
+                }
 
-                <Link to='/signup' className="nav-item nav-link active">SignUp</Link>
+                { 
+                  (userName === null)
+                    ? <Link to='/signup' className="nav-item nav-link active">SignUp</Link>
+                    : <div>
+                        <Link to="/" className="nav-link btn-primary active">Welcome {userName}</Link>
+                      </div>
+                }
 
+                
+
+                
+                
                 {/* <Link to='/singup' className="nav-item nav-link active">Sign Up/ Login</Link>
 
                 <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>

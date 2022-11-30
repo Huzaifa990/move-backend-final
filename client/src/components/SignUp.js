@@ -25,7 +25,7 @@ const sendData = ()=>{
         accountType
     })
     .then((res) => {
-        console.log(res.data.msg);
+        console.log(res);
         navigateToLogin();
       }).catch((e) =>{
         console.log(e);
