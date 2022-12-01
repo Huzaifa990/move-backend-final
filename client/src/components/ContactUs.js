@@ -1,15 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ContactUs = (props) => {
-
-  const navigate = useNavigate();
-
-    const navigateToLogin = () => {
-    // 👇️ navigate to /signin
-    navigate('/');
-};
 
 const sendData = ()=>{
   let name = document.getElementById("name").value;
@@ -24,7 +16,19 @@ const sendData = ()=>{
   })
   .then((res) => {
       console.log(res);
-      navigateToLogin();
+      document.getElementById("name").value='';
+      document.getElementById("email").value='';
+      document.getElementById("subject").value='';
+      document.getElementById("message").value='';
+
+      document.getElementById("errorApi").style.visibility="hidden";
+      document.getElementById("errorApi").style.position="absolute";
+      document.getElementById("errorApi").style.width="0%";
+
+      document.getElementById("successApi").style.visibility="visible";
+      document.getElementById("successApi").style.position="relative";
+      document.getElementById("successApi").style.width="100%";
+
     }).catch((e) =>{
       console.log(e);
       if(e.response.data.error.name !== undefined){
@@ -33,6 +37,10 @@ const sendData = ()=>{
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
         document.getElementById("errorApi").style.width="100%";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
       else if(e.response.data.error.email !== undefined){
         document.getElementById("name").style.border="none";
@@ -40,6 +48,10 @@ const sendData = ()=>{
         document.getElementById("errorMessage").innerText = e.response.data.error.email;
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
       else if(e.response.data.error.subject !== undefined){
         document.getElementById("name").style.border="none";
@@ -48,6 +60,10 @@ const sendData = ()=>{
         document.getElementById("errorMessage").innerText = e.response.data.error.password;
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
       else if(e.response.data.error.message !== undefined){
         document.getElementById("name").style.border="none";
@@ -57,6 +73,10 @@ const sendData = ()=>{
         document.getElementById("errorMessage").innerText = e.response.data.error.confirmPassword;
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
     });
 }
@@ -71,7 +91,8 @@ const sendData = ()=>{
                 <div className="col-lg-7 mb-2">
                   <div className="contact-form bg-secondary mb-4" style={{padding: '30px'}}>
                   <label htmlFor id="errorApi"> <span id="errorMessage"></span></label>
-                    <form>
+                  <label htmlFor id="successApi"> <span id="errorMessage">We will get back to you shortly!</span></label>
+                    
                       <div className="row">
                         <div className="col-6 form-group">
                           <input type="text" className="form-control p-4" placeholder="Your Name" required="required" id="name" />
@@ -91,7 +112,6 @@ const sendData = ()=>{
                           Send Message
                         </button>
                       </div>
-                    </form>
                   </div>
                 </div>
                 <div className="col-lg-5 mb-2">
