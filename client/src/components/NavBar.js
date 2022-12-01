@@ -97,7 +97,7 @@ const NavBar = () => {
 
                 { 
                   (userName === null)
-                    ? <Link to='/signup' className="nav-item nav-link active">SignUp</Link>
+                    ? <Link to='/signin' className="nav-item nav-link active">Sign In</Link>
                     : <div>
                         <Link to="/" className="nav-link btn-primary active">Welcome {userName}</Link>
                       </div>

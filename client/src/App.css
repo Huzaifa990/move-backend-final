@@ -14,6 +14,7 @@ code {
   --secondary: #2B2E4A;
   --light: #F4F5F8;
   --dark: #1C1E32;
+  --lightdark: #232627;
 }
 
 h1,
@@ -178,7 +179,8 @@ h6,
 .rent-item {
   padding: 30px;
   text-align: center;
-  background: var(--light);
+  /* Find Car Color Changes Here */
+  background: var(--lightdark);
   transition: .5s;
 }
 

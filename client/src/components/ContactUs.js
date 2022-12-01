@@ -1,6 +1,65 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function ContactUs(props){
+const ContactUs = (props) => {
+
+  const navigate = useNavigate();
+
+    const navigateToLogin = () => {
+    // 👇️ navigate to /signin
+    navigate('/');
+};
+
+const sendData = ()=>{
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let subject = document.getElementById("subject").value;
+  let message = document.getElementById("message").value;
+  axios.post("http://localhost:8080/api/contact",{
+      name,
+      email,
+      subject,
+      message
+  })
+  .then((res) => {
+      console.log(res);
+      navigateToLogin();
+    }).catch((e) =>{
+      console.log(e);
+      if(e.response.data.error.name !== undefined){
+        document.getElementById("name").style.border="2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.name;
+        document.getElementById("errorApi").style.visibility="visible";
+        document.getElementById("errorApi").style.position="relative";
+        document.getElementById("errorApi").style.width="100%";
+      }
+      else if(e.response.data.error.email !== undefined){
+        document.getElementById("name").style.border="none";
+        document.getElementById("email").style.border="2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.email;
+        document.getElementById("errorApi").style.visibility="visible";
+        document.getElementById("errorApi").style.position="relative";
+      }
+      else if(e.response.data.error.subject !== undefined){
+        document.getElementById("name").style.border="none";
+        document.getElementById("email").style.border="none";
+        document.getElementById("subject").style.border="2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.password;
+        document.getElementById("errorApi").style.visibility="visible";
+        document.getElementById("errorApi").style.position="relative";
+      }
+      else if(e.response.data.error.message !== undefined){
+        document.getElementById("name").style.border="none";
+        document.getElementById("email").style.border="none";
+        document.getElementById("subject").style.border="none";
+        document.getElementById("message").style.border="2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.confirmPassword;
+        document.getElementById("errorApi").style.visibility="visible";
+        document.getElementById("errorApi").style.position="relative";
+      }
+    });
+}
 
     return (
         <div>
@@ -14,20 +73,20 @@ function ContactUs(props){
                     <form>
                       <div className="row">
                         <div className="col-6 form-group">
-                          <input type="text" className="form-control p-4" placeholder="Your Name" required="required" />
+                          <input type="text" className="form-control p-4" placeholder="Your Name" required="required" id="name" />
                         </div>
                         <div className="col-6 form-group">
-                          <input type="email" className="form-control p-4" placeholder="Your Email" required="required" />
+                          <input type="email" className="form-control p-4" placeholder="Your Email" required="required" id="email" />
                         </div>
                       </div>
                       <div className="form-group">
-                        <input type="text" className="form-control p-4" placeholder="Subject" required="required" />
+                        <input type="text" className="form-control p-4" placeholder="Subject" required="required" id="subject" />
                       </div>
                       <div className="form-group">
-                        <textarea className="form-control py-3 px-4" rows={5} placeholder="Message" required="required" defaultValue={""} />
+                        <textarea className="form-control py-3 px-4" rows={5} placeholder="Message" required="required" defaultValue={""} id="message" />
                       </div>
                       <div>
-                        <button className="btn btn-primary py-3 px-5" type="submit">
+                        <button className="btn btn-primary py-3 px-5" type="submit" onClick={sendData}>
                           Send Message
                         </button>
                       </div>
