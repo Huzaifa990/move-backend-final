@@ -19,6 +19,8 @@ const Listings = () => {
     console.log(data.listings);
     setName(data.listings);
   };
+
+  var i = 0;
   return (
 
     <>
@@ -78,7 +80,7 @@ const Listings = () => {
                 </div>
                 <div className="col-lg-4 col-md-6 mb-2">
                     <div className="rent-item  mb-4">
-                        <img className="img-fluid mb-4 car-listings" src={typeR} alt=""/>
+                        <img className="img-fluid mb-4 car-listings" style={{height: 193}}  src={typeR} alt=""/>
                         <h4 className="text-uppercase mb-4">Honda Civic Type-R</h4>
                         <div className="d-flex justify-content-center mb-4">
                             <div className="px-2">
@@ -111,35 +113,72 @@ const Listings = () => {
         <h1 className="display-4 text-uppercase text-center mb-5">Find Your Car</h1>
         <div className="row">
           {name.map((data) => {
-            return (
-              <>
-                <div className="col-lg-4 col-md-6 mb-2" key={data.id}>
-                  <div className="rent-item mb-4">
-                    <img className="img-fluid mb-4 car-listings" src={data.picture} alt="" />
-                    <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
-                    <div className="d-flex justify-content-center mb-4">
-                      <div className="px-2">
-                        <i className="fa fa-car text-primary mr-1"></i>
-                        <span>{data.model}</span>
+            i = i + 1;
+            if(i % 2 === 0 && i !== 0){
+              console.log(i);
+              i = -1;
+              return (
+                <>
+                  <div className="col-lg-4 col-md-6 mb-2" key={data._id}>
+                    <div className="rent-item active mb-4">
+                      <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture} alt="" />
+                      <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
+                      <div className="d-flex justify-content-center mb-4">
+                        <div className="px-2">
+                          <i className="fa fa-car text-primary mr-1"></i>
+                          <span>{data.model}</span>
+                        </div>
+                        <div className="px-2 border-left border-right">
+                          <i className="fa fa-cogs text-primary mr-1"></i>
+                          <span>{data.transmission}</span>
+                        </div>
+                        <div className="px-2">
+                          <i className="fa fa-road text-primary mr-1"></i>
+                          <span>{data.mileage}</span>
+                        </div>
+                        <div className="px-2">
+                          <i className="fa fa-map-marker text-primary mr-1"></i>
+                          <span>{data.location}</span>
+                        </div>
                       </div>
-                      <div className="px-2 border-left border-right">
-                        <i className="fa fa-cogs text-primary mr-1"></i>
-                        <span>{data.transmission}</span>
-                      </div>
-                      <div className="px-2">
-                        <i className="fa fa-road text-primary mr-1"></i>
-                        <span>{data.mileage}</span>
-                      </div>
-                      <div className="px-2">
-                        <i className="fa fa-map-marker text-primary mr-1"></i>
-                        <span>{data.location}</span>
+                      <Link to="/listings" className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</Link>
+                    </div>
+                  </div>
+                </>
+              );
+            }
+            else{
+                return (
+                  <>
+                    <div className="col-lg-4 col-md-6 mb-2" key={data._id}>
+                      <div className="rent-item mb-4">
+                        <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture} alt="" />
+                        <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
+                        <div className="d-flex justify-content-center mb-4">
+                          <div className="px-2">
+                            <i className="fa fa-car text-primary mr-1"></i>
+                            <span>{data.model}</span>
+                          </div>
+                          <div className="px-2 border-left border-right">
+                            <i className="fa fa-cogs text-primary mr-1"></i>
+                            <span>{data.transmission}</span>
+                          </div>
+                          <div className="px-2">
+                            <i className="fa fa-road text-primary mr-1"></i>
+                            <span>{data.mileage}</span>
+                          </div>
+                          <div className="px-2">
+                            <i className="fa fa-map-marker text-primary mr-1"></i>
+                            <span>{data.location}</span>
+                          </div>
+                        </div>
+                        <Link to="/listings" className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</Link>
                       </div>
                     </div>
-                    <Link to="/listings" className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</Link>
-                  </div>
-                </div>
-              </>
-            );
+                  </>
+                );
+            }
+            
           })}
         </div>
       </div>
