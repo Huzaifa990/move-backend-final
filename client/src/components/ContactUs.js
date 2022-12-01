@@ -21,6 +21,10 @@ const sendData = ()=>{
       document.getElementById("subject").value='';
       document.getElementById("message").value='';
 
+      document.getElementById("errorApi").style.visibility="hidden";
+      document.getElementById("errorApi").style.position="absolute";
+      document.getElementById("errorApi").style.width="0%";
+
       document.getElementById("successApi").style.visibility="visible";
       document.getElementById("successApi").style.position="relative";
       document.getElementById("successApi").style.width="100%";
@@ -33,6 +37,10 @@ const sendData = ()=>{
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
         document.getElementById("errorApi").style.width="100%";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
       else if(e.response.data.error.email !== undefined){
         document.getElementById("name").style.border="none";
@@ -40,6 +48,10 @@ const sendData = ()=>{
         document.getElementById("errorMessage").innerText = e.response.data.error.email;
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
       else if(e.response.data.error.subject !== undefined){
         document.getElementById("name").style.border="none";
@@ -48,6 +60,10 @@ const sendData = ()=>{
         document.getElementById("errorMessage").innerText = e.response.data.error.password;
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
       else if(e.response.data.error.message !== undefined){
         document.getElementById("name").style.border="none";
@@ -57,6 +73,10 @@ const sendData = ()=>{
         document.getElementById("errorMessage").innerText = e.response.data.error.confirmPassword;
         document.getElementById("errorApi").style.visibility="visible";
         document.getElementById("errorApi").style.position="relative";
+
+        document.getElementById("successApi").style.visibility="hidden";
+        document.getElementById("successApi").style.position="absolute";
+        document.getElementById("successApi").style.width="0%";
       }
     });
 }
