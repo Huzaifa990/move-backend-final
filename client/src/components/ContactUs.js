@@ -70,6 +70,7 @@ const sendData = ()=>{
               <div className="row">
                 <div className="col-lg-7 mb-2">
                   <div className="contact-form bg-secondary mb-4" style={{padding: '30px'}}>
+                  <label htmlFor id="errorApi"> <span id="errorMessage"></span></label>
                     <form>
                       <div className="row">
                         <div className="col-6 form-group">
@@ -86,7 +87,7 @@ const sendData = ()=>{
                         <textarea className="form-control py-3 px-4" rows={5} placeholder="Message" required="required" defaultValue={""} id="message" />
                       </div>
                       <div>
-                        <button className="btn btn-primary py-3 px-5" type="submit" onClick={sendData}>
+                        <button className="btn btn-primary py-3 px-5" onClick={sendData}>
                           Send Message
                         </button>
                       </div>

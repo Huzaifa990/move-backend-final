@@ -116,7 +116,7 @@ const Listings = () => {
                 <div className="col-lg-4 col-md-6 mb-2" key={data.id}>
                   <div className="rent-item mb-4">
                     <img className="img-fluid mb-4 car-listings" src={data.picture} alt="" />
-                    <h4 className="text-uppercase mb-4">{data.carName}</h4>
+                    <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
                     <div className="d-flex justify-content-center mb-4">
                       <div className="px-2">
                         <i className="fa fa-car text-primary mr-1"></i>
