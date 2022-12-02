@@ -17,7 +17,14 @@ const SignIn = () => {
         navigateToHome();
       }).catch((e) =>{
         console.log(e)
-        if(e.response.data.error.email !== undefined){
+
+        if(e.response.data.msg !== undefined){
+          document.getElementById("errorMessage").innerText = e.response.data.msg;
+          document.getElementById("errorApi").style.visibility="visible";
+          document.getElementById("errorApi").style.position="relative";
+        }
+        
+        else if(e.response.data.error.email !== undefined){
           document.getElementById("signInEmail").style.border="2px solid crimson";
           document.getElementById("errorMessage").innerText = e.response.data.error.email;
           document.getElementById("errorApi").style.visibility="visible";
