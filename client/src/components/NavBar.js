@@ -76,6 +76,12 @@ const NavBar = () => {
 
 
                 <Link to='/listings' className="nav-item nav-link active">Car Listings</Link>
+
+                { 
+                  (userName !== null)
+                    ? <Link to='/addListings' className="nav-item nav-link active">List a Car</Link>
+                    : null
+                }
                
                 <div className="nav-item dropdown">
                   <div className="dropdown-menu rounded-0 m-0">
