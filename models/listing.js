@@ -27,6 +27,9 @@ const Listings = new mongoose.Schema({
   picture: {
     type: String,
   },
+  // verified: {
+  //   type: Boolean
+  // }
 });
 
 module.exports = mongoose.model("Listings", Listings);
