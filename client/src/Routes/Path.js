@@ -17,6 +17,7 @@ import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import Listings from "../components/Listings";
 import AddListings from "../components/AddListings";
+import ImageUpload from "../components/Dump-Files/Multifiles";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path='signin' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="SignIn"/> <SignIn/> <SubServices numbering="1"/><Footer/> </>} />
             <Route path='listings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Listings"/> <Listings/> <Footer/> </>} />
             <Route path='addListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="List Your Car"/> <AddListings/> <Footer/> </>} />
+            <Route path='test' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="test"/> <ImageUpload/> <Footer/> </>} />
 
         </Routes>
       </BrowserRouter>

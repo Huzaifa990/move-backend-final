@@ -4,39 +4,57 @@ import axios from "axios";
 window.onload = function () {
   document.querySelector("#inp").addEventListener("change", readFile);
 
-  function readFile() {
-    if (!this.files || !this.files[0]) return;
+  function readFile(e) {
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      (function (file) {
+        var reader = new FileReader();
+        reader.onload = () => {
+          var img = document.createElement("img");
+          img.id = "img";
+          img.src = reader.result;
+          img.style.height = "150px";
+          document.getElementById("selected-images").appendChild(img);
 
-    const FR = new FileReader();
+          document.getElementsByClassName("inpp")[i].value = reader.result;
+        };
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+    setTimeout(tranferData, 1000);
+  }
 
-    FR.addEventListener("load", function (evt) {
-        document.querySelector("#img").style.visibility = "visible";
-        document.querySelector("#img").style.position = "relative";
-        document.querySelector("#img").src = evt.target.result;
-        document.querySelector("#picBase64").value = evt.target.result;
-    });
-
-    FR.readAsDataURL(this.files[0]);
+  function tranferData() {
+    var space = document.getElementsByClassName("inpp");
+    for (var i = 0; i < space.length; i++) {
+      var data = space[i].value;
+      if (data !== "") {
+        picture.push(space[i].value);
+      }
+    }
+    console.log(picture);
   }
 };
+var picture = [];
+const sendData = () => {
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const headers = {
+    Authorization: userDetails,
+  };
 
-const sendData = ()=>{
-    var userDetails= JSON.parse(localStorage.getItem("userDetails")); 
-    const headers = {
-        'Authorization': userDetails
-    }
+  let carName = document.getElementById("model").value;
+  let company = document.getElementById("make").value;
+  let model = parseInt(document.getElementById("modelYear").value);
+  let mileage = parseInt(document.getElementById("mileage").value);
+  let location = document.getElementById("location").value;
+  let rentPerDay = parseInt(document.getElementById("userPrice").value);
+  let transmissio = document.getElementById("transmission");
+  let transmission = transmissio[transmissio.selectedIndex].value;
 
-    let carName = document.getElementById("model").value;
-    let company = document.getElementById("make").value;
-    let model = parseInt(document.getElementById("modelYear").value);
-    let mileage = parseInt(document.getElementById("mileage").value);
-    let location = document.getElementById("location").value;
-    let rentPerDay = parseInt(document.getElementById("userPrice").value);
-    let picture = document.getElementById("picBase64").value;
-    let transmissio = document.getElementById("transmission");
-    let transmission = transmissio[transmissio.selectedIndex].value;
-
-    axios.post("http://localhost:8080/api/listing/",{
+  axios
+    .post(
+      "http://localhost:8080/api/listing/",
+      {
         carName,
         company,
         model,
@@ -44,122 +62,115 @@ const sendData = ()=>{
         transmission,
         location,
         rentPerDay,
-        picture
-    }, {
-        headers: headers
-    })
+        picture,
+      },
+      {
+        headers: headers,
+      }
+    )
     .then((res) => {
-        console.log(res);
-        document.getElementById("errorMessage").innerText = "Your Car Has Been Listed Successfully!";
-        document.getElementById("errorApi").style.visibility="visible";
-        document.getElementById("errorApi").style.position="relative";
-        document.getElementById("errorApi").style.width="100%";
-        document.getElementById("errorApi").style.background="green";
+      console.log(res);
+      document.getElementById("errorMessage").innerText = "Your Car Has Been Listed Successfully!";
+      document.getElementById("errorApi").style.visibility = "visible";
+      document.getElementById("errorApi").style.position = "relative";
+      document.getElementById("errorApi").style.width = "100%";
+      document.getElementById("errorApi").style.background = "green";
 
-        document.getElementById("model").value = null;
-        document.getElementById("make").value = null;
-        document.getElementById("modelYear").value = null;
-        document.getElementById("mileage").value = null;
-        document.getElementById("location").value = null;
-        document.getElementById("userPrice").value = null;
-        document.getElementById("inp").value = null;
-        document.querySelector("#img").style.visibility = "hidden";
-        document.querySelector("#img").style.position = "absolute";
-   
-      }).catch((e) =>{
-        console.log(e); 
+      document.getElementById("model").value = null;
+      document.getElementById("make").value = null;
+      document.getElementById("modelYear").value = null;
+      document.getElementById("mileage").value = null;
+      document.getElementById("location").value = null;
+      document.getElementById("userPrice").value = null;
+      document.getElementById("inp").value = null;
+      document.querySelector("#img").style.visibility = "hidden";
+      document.querySelector("#img").style.position = "absolute";
+    })
+    .catch((e) => {
+      console.log(e);
 
-        if(e.response.data.msg !== undefined){
-            document.getElementById("errorMessage").innerText = e.response.data.msg;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-        }
-        else if(e.response.data.error.company !== undefined){
-            document.getElementById("make").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.company;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        
-        else if(e.response.data.error.carName !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.carName;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        else if(e.response.data.error.model !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="none";
-            document.getElementById("modelYear").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.model;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        else if(e.response.data.error.mileage !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="none";
-            document.getElementById("modelYear").style.border="none";
-            document.getElementById("mileage").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.mileage;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        else if(e.response.data.error.transmission !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="none";
-            document.getElementById("modelYear").style.border="none";
-            document.getElementById("mileage").style.border="none";
-            document.getElementById("transmission").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.transmission;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        else if(e.response.data.error.location !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="none";
-            document.getElementById("modelYear").style.border="none";
-            document.getElementById("mileage").style.border="none";
-            document.getElementById("transmission").style.border="none";
-            document.getElementById("location").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.location;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        else if(e.response.data.error.rentPerDay !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="none";
-            document.getElementById("modelYear").style.border="none";
-            document.getElementById("mileage").style.border="none";
-            document.getElementById("transmission").style.border="none";
-            document.getElementById("location").style.border="none";
-            document.getElementById("userPrice").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.rentPerDay;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-        else if(e.response.data.error.picture !== undefined){
-            document.getElementById("make").style.border="none";
-            document.getElementById("model").style.border="none";
-            document.getElementById("modelYear").style.border="none";
-            document.getElementById("mileage").style.border="none";
-            document.getElementById("transmission").style.border="none";
-            document.getElementById("location").style.border="none";
-            document.getElementById("userPrice").style.border="none";
-            document.getElementById("errorMessage").innerText = e.response.data.error.picture;
-            document.getElementById("errorApi").style.visibility="visible";
-            document.getElementById("errorApi").style.position="relative";
-            document.getElementById("errorApi").style.width="100%";
-        }
-      });
-}
+      if (e.response.data.msg !== undefined) {
+        document.getElementById("errorMessage").innerText = e.response.data.msg;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+      } else if (e.response.data.error.company !== undefined) {
+        document.getElementById("make").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.company;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.carName !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.carName;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.model !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.model;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.mileage !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.mileage;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.transmission !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("transmission").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.transmission;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.location !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("transmission").style.border = "none";
+        document.getElementById("location").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.location;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.rentPerDay !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("transmission").style.border = "none";
+        document.getElementById("location").style.border = "none";
+        document.getElementById("userPrice").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.rentPerDay;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      } else if (e.response.data.error.picture !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("transmission").style.border = "none";
+        document.getElementById("location").style.border = "none";
+        document.getElementById("userPrice").style.border = "none";
+        document.getElementById("errorMessage").innerText = e.response.data.error.picture;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      }
+    });
+};
 
 const AddListings = () => {
   return (
@@ -168,7 +179,10 @@ const AddListings = () => {
         <h1 className="display text-uppercase text-white mb-3 text-center p-4">LIST YOUR CAR</h1>
 
         <p className="sub-form-heading">Car Details:</p>
-        <label htmlFor id="errorApi"> <span id="errorMessage"></span></label>
+        <label htmlFor id="errorApi">
+          {" "}
+          <span id="errorMessage"></span>
+        </label>
         <div className="row">
           <div className="col-6 form-group">
             <label for="">Make: </label>
@@ -184,26 +198,10 @@ const AddListings = () => {
               id="model"
             />
           </div>
-          {/* <div className="col-6 form-group">
-            <label for="">Model Year</label>
-            <input
-              type="month"
-              className="form-control p-4"
-              placeholder=""
-              required="required"
-              id="model"
-              min="1970-12"
-              max="2022-09"
-            />
-          </div> */}
+          
         </div>
 
         <div className="row">
-          {/* <div className="col-6 form-group">
-            <label for="">Registration Number: </label>
-            <input type="text" className="form-control p-4" required="required" id="regNum" />
-          </div> */}
-
           <div className="col-6 form-group">
             <label for="">Model Year</label>
             <input
@@ -229,10 +227,22 @@ const AddListings = () => {
 
           <div className="col-6 form-group">
             <label for="">Car Images:</label>
-            <input type="file" placeholder="" required="required" id="inp" accept="image/*"/>
-            <br/> <br/>
-            <img id="img" height="150" alt="CarImage"></img>  
-            <input type="text" id="picBase64"/>      
+            <input
+              type="file"
+              placeholder=""
+              required="required"
+              id="inp"
+              accept="image/*"
+              multiple
+            />
+            <br /> <br />
+            <div id="selected-images"></div>
+            <input type="text" name="" class="inpp" />
+            <input type="text" name="" class="inpp" />
+            <input type="text" name="" class="inpp" />
+            <input type="text" name="" class="inpp" />
+            <input type="text" name="" class="inpp" />
+            <input type="text" name="" class="inpp" />
           </div>
         </div>
         <br />

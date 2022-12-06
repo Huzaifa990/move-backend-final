@@ -121,7 +121,7 @@ const Listings = () => {
                 <>
                   <div className="col-lg-4 col-md-6 mb-2" key={data._id}>
                     <div className="rent-item active mb-4">
-                      <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture} alt="" />
+                      <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                       <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
                       <div className="d-flex justify-content-center mb-4">
                         <div className="px-2">
@@ -152,7 +152,7 @@ const Listings = () => {
                   <>
                     <div className="col-lg-4 col-md-6 mb-2" key={data._id}>
                       <div className="rent-item mb-4">
-                        <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture} alt="" />
+                        <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                         <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
                         <div className="d-flex justify-content-center mb-4">
                           <div className="px-2">
