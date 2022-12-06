@@ -60,9 +60,43 @@ const getById = async (req, res) => {
   res.status(200).send({ item });
 };
 
+const updateListing = async (req, res) => {
+  const { carName, company, model, mileage, transmission, location, rentPerDay, picture } =
+    req.body;
+
+  const id = req.params.id;
+  const valid = mongoose.isValidObjectId(id);
+
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  const item = await listing.findById(id);
+  if (!item) {
+    return res.status(422).send({ msg: "No Such Listing Found!" });
+  }
+
+  await listing.updateOne(
+    { _id: id },
+    {
+      carName,
+      company,
+      model,
+      mileage,
+      transmission,
+      location,
+      rentPerDay,
+      picture,
+      // verified: false,
+    }
+  );
+  //need to cater admin side.. when will a listing go under reverification (in case of rentPerDay changed or location changed, or car details like model, name, company changed etc)
+
+  return res.status(200).send({ msg: "Listing Updated Successfully!" });
+};
+
 module.exports = {
   getById,
   getAllListings,
   addListing,
   deleteListing,
+  updateListing,
 };

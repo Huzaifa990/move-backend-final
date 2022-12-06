@@ -24,9 +24,11 @@ const Listings = new mongoose.Schema({
   rentPerDay: {
     type: Number,
   },
-  picture: {
-    type: String,
-  },
+  picture: [
+    {
+      type: String,
+    },
+  ],
   // verified: {
   //   type: Boolean
   // }
