@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
+const { default: mongoose } = require("mongoose");
 require("dotenv").config();
-
 const User = require("../../models/users");
 
 const login = async (req, res) => {
@@ -41,6 +41,31 @@ const signUp = async (req, res) => {
   await user.save();
 
   return res.status(200).send({ msg: "Sign Up Successful!" });
+};
+
+const updatePassword = async (req, res) => {
+  console.log(req.body);
+  let { password, newPassword, _id } = req.body;
+
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  const validPass = await bcrypt.compare(password, user.password);
+  if (!validPass) {
+    return res.status(404).send({ msg: "Invalid Current Password Entered!" });
+  }
+
+  let updateStatus = await User.updateOne({ _id }, { $set: { password: newPassword } });
+  if (!updateStatus) {
+    return res.status(500).send("Update Failed");
+  }
+
+  res.status(200).send({ msg: "Password Updated Successfully." });
 };
 
 // const forgotPassword = async (req, res) => {
@@ -88,24 +113,6 @@ const signUp = async (req, res) => {
 //   });
 
 //   res.status(200).send({ msg: "Password reset email sent. Please Check your email." });
-// };
-
-// const changePassword = async (req, res) => {
-//   let { email, newPassword } = req.body;
-
-//   email = email.toLowerCase();
-
-//   let user = await User.findOne({ email });
-//   if (!user) {
-//     return res.status(404).send({ msg: "Invalid email!" });
-//   }
-
-//   let updateStatus = await User.updateOne({ email }, { $set: { password: newPassword } }); //pre function updates pass to encrypted pass
-//   if (!updateStatus) {
-//     return res.status(500).send("Update Failed");
-//   }
-
-//   res.status(200).send({ msg: "Password Updated Successfully." });
 // };
 
 // const resetPassword = async (req, res) => {
@@ -250,10 +257,10 @@ const signUp = async (req, res) => {
 module.exports = {
   login,
   signUp,
+  updatePassword,
   // getById,
   // getPayment,
   // resetPassword,
   // deleteProfile,
-  // changePassword,
   // forgotPassword,
 };

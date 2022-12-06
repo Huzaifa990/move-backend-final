@@ -10,9 +10,8 @@ const ensureAuth = async (req, res, next) => {
       const decoded = await jwt.verify(token, process.env.JWT_KEY);
 
       (req.body._id = decoded._id),
-        (req.body.forename = decoded.forename),
-        (req.body.surname = decoded.surname),
-        (req.body.type = decoded.type),
+        (req.body.name = decoded.name),
+        (req.body.accountType = decoded.accountType),
         (req.body.email = decoded.email),
         next();
     } catch (err) {
