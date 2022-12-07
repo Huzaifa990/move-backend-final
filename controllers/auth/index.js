@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { default: mongoose } = require("mongoose");
 require("dotenv").config();
 const User = require("../../models/users");
+const { nodeMailer } = require("../../utils/helper");
 
 const login = async (req, res) => {
   let { email, password } = req.body;
@@ -68,52 +69,31 @@ const updatePassword = async (req, res) => {
   res.status(200).send({ msg: "Password Updated Successfully." });
 };
 
-// const forgotPassword = async (req, res) => {
-//   let { email } = req.body;
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
 
-//   email = email.toLowerCase();
+  let user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).send({ msg: "No User Found!" });
+  }
 
-//   if (!email) {
-//     return res.status(422).send({ msg: "Email is missing" });
-//   }
+  const otp = Math.floor(Math.random() * 1000000000000);
 
-//   let user = await User.findOne({ email });
-//   if (!user) {
-//     return res.status(404).send({ msg: "Invalid email!" });
-//   }
+  await User.findOneAndUpdate(
+    { email },
+    {
+      otp,
+    }
+  );
 
-//   const randomNum = Math.round(Math.random() * 1000000);
-//   const userName = user.forename.charAt(0).toUpperCase() + user.forename.slice(1);
-//   const newPassword = `${userName.replace(" ", "")}@${randomNum}`;
+  const emailSent = await nodeMailer({
+    to: `${email}`,
+    subject: "Reset Your Move Account Password",
+    html: `<h1>Hey There! Reset Password Using this link: ${process.env.DOMAIN}/reset?otp=${otp}</h1>`,
+  });
 
-//   // let updateStatus = await User.updateOne({ email }, { $set: { password: newPassword } }); //pre function updates pass to encrypted pass
-//   // if (!updateStatus) {
-//   //   return res.status(500).send("Update Failed");
-//   // }
-
-//   const token = (() => {
-//     const maxAge = 3 * 24 * 60 * 60;
-//     const token = jwt.sign(
-//       {
-//         email,
-//       },
-//       process.env.JWT_KEY,
-//       {
-//         expiresIn: maxAge,
-//       }
-//     );
-//     return token;
-//   })();
-
-//   // Send Reset Password email
-//   await mailer({
-//     to: email,
-//     subject: "Yehaww - Reset Password",
-//     html: forgotPassTemplate({ name: `${user?.forename} ${user?.surname}`, token, email }),
-//   });
-
-//   res.status(200).send({ msg: "Password reset email sent. Please Check your email." });
-// };
+  res.status(200).send({ msg: "Emai Sent Successfully", emailSent });
+};
 
 // const resetPassword = async (req, res) => {
 //   let { token, password } = req.body;
@@ -258,9 +238,9 @@ module.exports = {
   login,
   signUp,
   updatePassword,
+  forgotPassword,
   // getById,
   // getPayment,
   // resetPassword,
   // deleteProfile,
-  // forgotPassword,
 };
