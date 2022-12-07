@@ -1,11 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import typeR from "../img/type-r.jpg";
 import c180 from "../img/c180.jpg";
 import m3 from "../img/m3.jpg";
 
 const Listings = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState([]);
 
   useEffect(() => {
@@ -19,6 +20,14 @@ const Listings = () => {
     console.log(data.listings);
     setName(data.listings);
   };
+
+  function goToDetails(id){
+    navigate("/viewListings", {state: {id:id}})
+  }
+
+  function showId(id){
+    goToDetails(id);
+  }
 
   var i = 0;
   return (
@@ -115,11 +124,10 @@ const Listings = () => {
           {name.map((data) => {
             i = i + 1;
             if(i % 2 === 0 && i !== 0){
-              console.log(i);
               i = -1;
               return (
                 <>
-                  <div className="col-lg-4 col-md-6 mb-2" key={data._id}>
+                  <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} onClick={ () => showId(data._id) }>
                     <div className="rent-item active mb-4">
                       <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                       <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
@@ -141,7 +149,7 @@ const Listings = () => {
                           <span>{data.location}</span>
                         </div>
                       </div>
-                      <Link to="/listings" className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</Link>
+                      <button className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</button>
                     </div>
                   </div>
                 </>
@@ -150,7 +158,7 @@ const Listings = () => {
             else{
                 return (
                   <>
-                    <div className="col-lg-4 col-md-6 mb-2" key={data._id}>
+                    <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} onClick={ () => showId(data._id) }>
                       <div className="rent-item mb-4">
                         <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                         <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
@@ -172,7 +180,7 @@ const Listings = () => {
                             <span>{data.location}</span>
                           </div>
                         </div>
-                        <Link to="/listings" className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</Link>
+                        <button className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</button>
                       </div>
                     </div>
                   </>
