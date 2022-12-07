@@ -5,6 +5,7 @@ const {
   signUp,
   updatePassword,
   forgotPassword,
+  setPassword,
   // forgotPassword,
   // getById,
   // changePassword,
@@ -18,6 +19,7 @@ const {
   validateSignUp,
   validateChangePassword,
   validateForgotPassword,
+  validateSetPassword,
 } = require("./validate");
 
 const app = express.Router();
@@ -27,6 +29,7 @@ app.post("/login", Validator(validateLogin, "body"), login);
 app.post("/sign-up", Validator(validateSignUp, "body"), signUp);
 app.put("/updatePassword", ensureAuth, Validator(validateChangePassword, "body"), updatePassword);
 app.post("/forgotPassword", Validator(validateForgotPassword, "body"), forgotPassword);
+app.put("/setPassword", Validator(validateSetPassword, "body"), setPassword);
 
 // app.post("/forgot", Validator(validateForgetPass, "body"), forgotPassword);
 // app.post("/change-password", Validator(validateChangePassword, "body"), ensureAuth, changePassword);
