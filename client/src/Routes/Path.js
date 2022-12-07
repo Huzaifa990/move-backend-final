@@ -19,6 +19,7 @@ import Listings from "../components/Listings";
 import AddListings from "../components/AddListings";
 import ViewListings from "../components/ViewListings";
 import EditListing from "../components/EditListings";
+import ChangePassword from "../components/ChangePassword";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path='addListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="List Your Car"/> <AddListings/> <Footer/> </>} />
             <Route path='viewListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Car Details"/> <ViewListings/> <Footer/> </>} />
             <Route path='editListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Edit Details"/> <EditListing/> <Footer/> </>} />
+            <Route path='changepassword' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Update Password"/> <ChangePassword/> <SubServices numbering="1"/><Footer/> </>} />
 
         </Routes>
       </BrowserRouter>
