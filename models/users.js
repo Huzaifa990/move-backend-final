@@ -21,6 +21,9 @@ const User = new mongoose.Schema({
     type: String,
     required: true,
   },
+  otp: {
+    type: String,
+  },
 });
 
 User.methods.generateAuthToken = function () {

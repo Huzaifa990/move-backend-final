@@ -41,3 +41,7 @@ module.exports.validateChangePassword = yup.object({
     .required()
     .label("Confirm New Password"),
 });
+
+module.exports.validateForgotPassword = yup.object({
+  email: yup.string().email().required().label("Email"),
+});
