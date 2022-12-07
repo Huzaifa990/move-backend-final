@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import typeR from "../img/type-r.jpg";
 import c180 from "../img/c180.jpg";
 import m3 from "../img/m3.jpg";
@@ -25,8 +26,16 @@ const Listings = () => {
     navigate("/viewListings", {state: {id:id}})
   }
 
+  function goToEdit(id){
+    navigate("/editListings", {state: {id:id}})
+  }
+
   function showId(id){
     goToDetails(id);
+  }
+
+  function editCar(id){
+    goToEdit(id);
   }
 
   var i = 0;
@@ -150,7 +159,7 @@ const Listings = () => {
                         </div>
                       </div>
                       <div className="crud-section">
-                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}}></i>
+                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}} onClick={ () => editCar(data._id) }></i>
                           
                           <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
                           
@@ -187,11 +196,12 @@ const Listings = () => {
                           </div>
                         </div>
                         <div className="crud-section">
-                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}}></i>
+                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}} onClick={ () => editCar(data._id) }></i>
                           
                           <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
                           
-                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}}></i>                        </div>
+                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}}></i>                        
+                        </div>
                       </div>
                     </div>
                   </>
@@ -202,7 +212,6 @@ const Listings = () => {
         </div>
       </div>
     </div>
-
     </>
   );
 };
