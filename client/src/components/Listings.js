@@ -127,7 +127,7 @@ const Listings = () => {
               i = -1;
               return (
                 <>
-                  <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} onClick={ () => showId(data._id) }>
+                  <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} >
                     <div className="rent-item active mb-4">
                       <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                       <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
@@ -149,7 +149,13 @@ const Listings = () => {
                           <span>{data.location}</span>
                         </div>
                       </div>
-                      <button className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</button>
+                      <div className="crud-section">
+                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}}></i>
+                          
+                          <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
+                          
+                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}}></i>
+                      </div>                    
                     </div>
                   </div>
                 </>
@@ -158,7 +164,7 @@ const Listings = () => {
             else{
                 return (
                   <>
-                    <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} onClick={ () => showId(data._id) }>
+                    <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} >
                       <div className="rent-item mb-4">
                         <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                         <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
@@ -180,7 +186,12 @@ const Listings = () => {
                             <span>{data.location}</span>
                           </div>
                         </div>
-                        <button className="btn btn-primary px-3">PKR {data.rentPerDay}/Day</button>
+                        <div className="crud-section">
+                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}}></i>
+                          
+                          <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
+                          
+                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}}></i>                        </div>
                       </div>
                     </div>
                   </>
