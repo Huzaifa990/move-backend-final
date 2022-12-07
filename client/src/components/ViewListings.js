@@ -40,12 +40,36 @@ const ViewListings = () => {
             <h1 className="display-4 text-uppercase mb-5">{name.company} {name.carName}</h1>
             <div className="row align-items-center pb-2">
                 {
-                    (img.length>1)
-                    ? <div className="col-lg-4 mb-4">
+                    (img.length<3 && img.length > 1)
+                    ? <><div className="col-lg-4 mb-4">
                       
                     <img className="img-fluid" src={img[0]} alt=""/>
                     <img className="img-fluid" src={img[1]} alt=""/>
                     </div>
+                     </>
+                    :(img.length<4 && img.length > 1)
+                    ? <><div className="col-lg-4 mb-4">
+                      
+                    <img className="img-fluid" src={img[0]} alt=""/>
+                    <img className="img-fluid" src={img[1]} alt=""/>
+                    </div>
+                    <div className="col-lg-6 mb-4">
+                      
+                    <img className="img-fluid" src={img[2]} alt=""/>
+                    </div> </>
+
+                    :(img.length<5  && img.length > 1)
+                    ? <><div className="col-lg-4 mb-4">
+                    
+                    <img className="img-fluid" src={img[0]} alt=""/>
+                    <img className="img-fluid" src={img[1]} alt=""/>
+                    </div>
+                    <div className="col-lg-4 mb-4">
+                    
+                    <img className="img-fluid" src={img[2]} alt=""/>
+                    <img className="img-fluid" src={img[3]} alt=""/>
+                    </div> </>
+                    
                     : <div className="col-lg-6 mb-4">
                       
                     <img className="img-fluid" src={img[0]} alt=""/>

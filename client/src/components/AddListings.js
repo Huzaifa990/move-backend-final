@@ -185,11 +185,11 @@ const AddListings = () => {
         </label>
         <div className="row">
           <div className="col-6 form-group">
-            <label for="">Make: </label>
+            <label for="">Company </label>
             <input type="text" className="form-control p-4" required="required" id="make" />
           </div>
           <div className="col-6 form-group">
-            <label for="">Varient</label>
+            <label for="">Car Name</label>
             <input
               type="text"
               className="form-control p-4"
