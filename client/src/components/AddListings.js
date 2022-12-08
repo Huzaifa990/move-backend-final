@@ -85,6 +85,7 @@ const sendData = () => {
       document.getElementById("inp").value = null;
       document.querySelector("#img").style.visibility = "hidden";
       document.querySelector("#img").style.position = "absolute";
+      document.getElementById("selected-images").innerHTML= "";
     })
     .catch((e) => {
       console.log(e);
