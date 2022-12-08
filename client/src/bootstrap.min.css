@@ -2188,7 +2188,8 @@ pre code {
     background-clip: padding-box;
     border: 1px solid var(--primary);
     border-radius: 0;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    resize: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
