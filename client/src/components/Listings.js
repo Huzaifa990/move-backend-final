@@ -30,12 +30,21 @@ const Listings = () => {
     navigate("/editListings", {state: {id:id}})
   }
 
+  function goToDelete(id){
+    navigate("/deleteListings", {state: {id:id}})
+  }
+
   function showId(id){
     goToDetails(id);
   }
 
   function editCar(id){
     goToEdit(id);
+  }
+
+  function deleteCar(id)
+  {
+    goToDelete(id);
   }
 
   var i = 0;
@@ -163,7 +172,7 @@ const Listings = () => {
                           
                           <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
                           
-                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}}></i>
+                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}} onClick={ () => deleteCar(data._id) }></i>
                       </div>                    
                     </div>
                   </div>
@@ -200,7 +209,7 @@ const Listings = () => {
                           
                           <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
                           
-                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}}></i>                        
+                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}} onClick={ () => deleteCar(data._id) }></i>                       
                         </div>
                       </div>
                     </div>
