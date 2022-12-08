@@ -95,11 +95,18 @@ const NavBar = () => {
                 </div>
 
                 <Link to='/Contact' className="nav-item nav-link active">Contact</Link>
+                {
+                  (userName !== null)
+                ? <Link to='/changepassword' className="nav-item nav-link active">Change Password</Link>
+                : null
+                }
+
                 { 
                   (userName !== null)
                     ? <button className="nav-item nav-link active" style={{background:"none", border:"none", paddingBottom:"35px"}} onClick={logout}>Logout</button>
                     : null
                 }
+
 
                 { 
                   (userName === null)
