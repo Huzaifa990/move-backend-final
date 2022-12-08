@@ -21,6 +21,8 @@ import ViewListings from "../components/ViewListings";
 import EditListing from "../components/EditListings";
 import ChangePassword from "../components/ChangePassword";
 import DeleteListing from "../components/DeleteListing";
+import RequestForget from "../components/RequestForget";
+import ResetPassword from "../components/ResetPassword";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
             <Route path='editListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Edit Details"/> <EditListing/> <Footer/> </>} />
             <Route path='changepassword' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Update Password"/> <ChangePassword/> <SubServices numbering="1"/><Footer/> </>} />
             <Route path='deleteListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Delete Listing"/> <DeleteListing/> <Footer/> </>} />
+            <Route path='requestForget' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Forgot Password"/> <RequestForget/> <Footer/> </>} />
+            <Route path='reset' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Reset Password"/> <ResetPassword/> <Footer/> </>} />
 
         </Routes>
       </BrowserRouter>
