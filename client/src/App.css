@@ -446,10 +446,10 @@ input:focus, select:focus{
   opacity: 1;
 }
 
-.inpp{
+/* .inpp{
   visibility: hidden;
   position: absolute;
-}
+} */
 
 #selected-images{
   display: flex;

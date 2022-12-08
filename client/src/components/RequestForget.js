@@ -24,6 +24,7 @@ const RequestForget = () => {
           document.getElementById("errorMessage").innerText = e.response.data.msg;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
+          document.getElementById("errorApi").style.background = "crimson";
         }
         
         else if(e.response.data.error.email !== undefined){
@@ -31,6 +32,7 @@ const RequestForget = () => {
           document.getElementById("errorMessage").innerText = e.response.data.error.email;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
+          document.getElementById("errorApi").style.background = "crimson";
         }
       });
 }

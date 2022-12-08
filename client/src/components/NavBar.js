@@ -51,9 +51,9 @@ const NavBar = () => {
       <div className="container-fluid position-relative nav-bar p-0">
         <div className="position-relative bg-dark px-lg-5 navbar-front">
           <nav className="navbar navbar-expand-lg bg-secondary navbar-dark py-3 py-lg-0 pl-3 pl-lg-5">
-            <a href="Greet.js" className="navbar-brand">
+            <Link to="/" className="navbar-brand">
               <h1 className="text-uppercase text-primary mb-1">MOVE</h1>
-            </a>
+            </Link>
             <button
               type="button"
               className="navbar-toggler"

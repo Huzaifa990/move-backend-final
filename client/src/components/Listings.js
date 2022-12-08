@@ -72,7 +72,7 @@ const Listings = () => {
                                 <i className="fa fa-road text-primary mr-1"></i>
                                 <span>25K</span>
                             </div>
-                            <div className="px-2">
+                            <div className="px-2 border-left">
                                 <i className="fa fa-map-marker text-primary mr-1"></i>
                                 <span>LAHORE</span>
                             </div>
@@ -97,7 +97,7 @@ const Listings = () => {
                                 <i className="fa fa-road text-primary mr-1"></i>
                                 <span>55K</span>
                             </div>
-                            <div className="px-2">
+                            <div className="px-2 border-left">
                                 <i className="fa fa-map-marker text-primary mr-1"></i>
                                 <span>Karachi</span>
                             </div>
@@ -122,7 +122,7 @@ const Listings = () => {
                                 <i className="fa fa-road text-primary mr-1"></i>
                                 <span>55K</span>
                             </div>
-                            <div className="px-2">
+                            <div className="px-2 border-left">
                                 <i className="fa fa-map-marker text-primary mr-1"></i>
                                 <span>Karachi</span>
                             </div>
@@ -162,7 +162,7 @@ const Listings = () => {
                           <i className="fa fa-road text-primary mr-1"></i>
                           <span>{data.mileage}</span>
                         </div>
-                        <div className="px-2">
+                        <div className="px-2 border-left">
                           <i className="fa fa-map-marker text-primary mr-1"></i>
                           <span>{data.location}</span>
                         </div>
@@ -199,7 +199,7 @@ const Listings = () => {
                             <i className="fa fa-road text-primary mr-1"></i>
                             <span>{data.mileage}</span>
                           </div>
-                          <div className="px-2">
+                          <div className="px-2 border-left">
                             <i className="fa fa-map-marker text-primary mr-1"></i>
                             <span>{data.location}</span>
                           </div>
