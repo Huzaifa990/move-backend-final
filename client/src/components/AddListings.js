@@ -1,5 +1,11 @@
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+var picture = [];
+
+const AddListings = () => {
+  
 
 window.onload = function () {
   document.querySelector("#inp").addEventListener("change", readFile);
@@ -35,8 +41,18 @@ window.onload = function () {
     console.log(picture);
   }
 };
-var picture = [];
+
+
+
+const navigate = useNavigate();
+
+const navigateToLogin = () => {
+    // 👇️ navigate to /signin
+    navigate('/listings');
+};
 const sendData = () => {
+
+
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const headers = {
     Authorization: userDetails,
@@ -50,7 +66,7 @@ const sendData = () => {
   let rentPerDay = parseInt(document.getElementById("userPrice").value);
   let transmissio = document.getElementById("transmission");
   let transmission = transmissio[transmissio.selectedIndex].value;
-
+  console.log(picture);
   axios
     .post(
       "http://localhost:8080/api/listing/",
@@ -85,6 +101,7 @@ const sendData = () => {
       document.getElementById("inp").value = null;
       document.querySelector("#img").style.visibility = "hidden";
       document.querySelector("#img").style.position = "absolute";
+      setTimeout(navigateToLogin,2000);
     })
     .catch((e) => {
       console.log(e);
@@ -172,7 +189,6 @@ const sendData = () => {
     });
 };
 
-const AddListings = () => {
   return (
     <>
       <div className="signup-form-container">
