@@ -49,7 +49,13 @@ const ChangePassword = () => {
     })
     .catch((e) =>{
         console.log(e);
-        if(e.response.data.error.password !== undefined){
+        if(e.response.data.msg !== undefined){
+          document.getElementById("errorMessage").innerText = e.response.data.msg;
+          document.getElementById("errorApi").style.visibility="visible";
+          document.getElementById("errorApi").style.position="relative";
+          document.getElementById("errorApi").style.width="100%";
+        }
+        else if(e.response.data.error.password !== undefined){
           document.getElementById("password").style.border="2px solid crimson";
           document.getElementById("errorMessage").innerText = e.response.data.error.password;
           document.getElementById("errorApi").style.visibility="visible";
