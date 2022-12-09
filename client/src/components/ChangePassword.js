@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+// import {useNavigate} from "react-router-dom";
 
 const ChangePassword = () => {
 
@@ -7,6 +8,10 @@ const ChangePassword = () => {
     const headers = {
         'Authorization': userDetails
     }
+  //   const navigate = useNavigate();
+  //   const goToHome = () => {
+  //     navigate('/');
+  // };
 
   const sendData = () =>{
     
@@ -23,12 +28,15 @@ const ChangePassword = () => {
     {
       headers: headers
     })
-    
-    .catch((e) =>{
-        console.log(e)
+    .then((res) => {
+      console.log(res);
       document.getElementById("password").value='';
       document.getElementById("newPassword").value='';
       document.getElementById("confirmNewPassword").value='';
+
+      document.getElementById("password").style.border="none";
+      document.getElementById("newPassword").style.border="none";
+      document.getElementById("confirmNewPassword").style.border="none";
 
       document.getElementById("errorApi").style.visibility="hidden";
       document.getElementById("errorApi").style.position="absolute";
@@ -37,21 +45,17 @@ const ChangePassword = () => {
       document.getElementById("successApi").style.visibility="visible";
       document.getElementById("successApi").style.position="relative";
       document.getElementById("successApi").style.width="100%";
-
-        if(e.response.data.msg !== undefined){
-          document.getElementById("errorMessage").innerText = e.response.data.msg;
-          document.getElementById("errorApi").style.visibility="visible";
-          document.getElementById("errorApi").style.position="relative";
-          document.getElementById("successApi").style.visibility="hidden";
-          document.getElementById("successApi").style.position="absolute";
-          document.getElementById("successApi").style.width="0%";
-        }
-        
-        else if(e.response.data.error.password !== undefined){
+      // setTimeout(goToHome, 15000)
+    })
+    .catch((e) =>{
+        console.log(e);
+        if(e.response.data.error.password !== undefined){
           document.getElementById("password").style.border="2px solid crimson";
-          document.getElementById("errorMessage").innerText = e.response.data.error.email;
+          document.getElementById("errorMessage").innerText = e.response.data.error.password;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
+          document.getElementById("errorApi").style.width="100%";
+
           document.getElementById("successApi").style.visibility="hidden";
           document.getElementById("successApi").style.position="absolute";
           document.getElementById("successApi").style.width="0%";
@@ -59,20 +63,24 @@ const ChangePassword = () => {
         else if(e.response.data.error.newPassword !== undefined){
           document.getElementById("password").style.border="none";
           document.getElementById("newPassword").style.border="2px solid crimson";
-          document.getElementById("errorMessage").innerText = e.response.data.error.password;
+          document.getElementById("errorMessage").innerText = e.response.data.error.newPassword;
           document.getElementById("errorApi").style.visibility="visible";
           document.getElementById("errorApi").style.position="relative";
+          document.getElementById("errorApi").style.width="100%";
+
           document.getElementById("successApi").style.visibility="hidden";
           document.getElementById("successApi").style.position="absolute";
           document.getElementById("successApi").style.width="0%";
         }
         else if(e.response.data.error.confirmNewPassword !== undefined){
             document.getElementById("password").style.border="none";
-            document.getElementById("newpassword").style.border="none";
+            document.getElementById("newPassword").style.border="none";
             document.getElementById("confirmNewPassword").style.border="2px solid crimson";
-            document.getElementById("errorMessage").innerText = e.response.data.error.password;
+            document.getElementById("errorMessage").innerText = e.response.data.error.confirmNewPassword;
             document.getElementById("errorApi").style.visibility="visible";
             document.getElementById("errorApi").style.position="relative";
+            document.getElementById("errorApi").style.width="100%";
+
             document.getElementById("successApi").style.visibility="hidden";
             document.getElementById("successApi").style.position="absolute";
             document.getElementById("successApi").style.width="0%";
@@ -86,7 +94,7 @@ return (
         
       <h1 className="display text-uppercase text-white mb-3 text-center p-4">Update Password</h1>
       <label htmlFor id="errorApi"> <span id="errorMessage"></span></label>
-      <label htmlFor id="successApi"> <span id="errorMessage">Password Updated!</span></label>
+      <label htmlFor id="successApi"> <span id="successMessage">Password Updated</span></label>
       <div className="form-group">
         <input type="password" className="form-control p-4 login-inps" placeholder="Old Password" required="required" id="password" />
       </div>

@@ -115,7 +115,7 @@ const sendData = ()=>{
                   </div>
                 </div>
                 <div className="col-lg-5 mb-2">
-                  <div className="bg-secondary d-flex flex-column justify-content-center px-5 mb-4" style={{height: '435px'}}>
+                  <div className="bg-secondary d-flex flex-column justify-content-center px-5 mb-4" style={{height: '420px'}}>
                     <div className="d-flex mb-3">
                       <i className="fa fa-2x fa-map-marker-alt text-primary flex-shrink-0 mr-3" />
                       <div className="mt-n1">
