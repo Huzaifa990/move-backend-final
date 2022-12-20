@@ -2,6 +2,11 @@
 const mongoose = require("mongoose");
 
 const Listings = new mongoose.Schema({
+  lessor: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "users",
+  },
   carName: {
     type: String,
     required: true,

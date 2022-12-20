@@ -8,9 +8,28 @@ const getAllListings = async (req, res) => {
 };
 
 const addListing = async (req, res) => {
-  const { carName, company, model, mileage, transmission, location, rentPerDay, picture } =
-    req.body;
+  const {
+    carName,
+    company,
+    model,
+    mileage,
+    transmission,
+    location,
+    rentPerDay,
+    picture,
+    _id,
+    accountType,
+  } = req.body;
+
+  console.log(accountType);
+  console.log(accountType !== "Lessor");
+
+  if (accountType === "Lessee") {
+    return res.status(402).send({ msg: "This Account Cannot Add A Listing" });
+  }
+
   const listedCar = new listing({
+    lessor: mongoose.Types.ObjectId(_id),
     carName,
     company,
     model,
@@ -93,8 +112,16 @@ const updateListing = async (req, res) => {
   return res.status(200).send({ msg: "Listing Updated Successfully!" });
 };
 
+const myListings = async (req, res) => {
+  const { _id } = req.body;
+  const listings = await listing.find({ lessor: _id });
+
+  res.status(200).send({ count: listings.length, listings });
+};
+
 module.exports = {
   getById,
+  myListings,
   getAllListings,
   addListing,
   deleteListing,
