@@ -6,6 +6,7 @@ const NavBar = () => {
   function logout(){
     localStorage.removeItem("userName")
     localStorage.removeItem("userDetails");
+    localStorage.removeItem("listingsId");
     window.location.reload();
   }
   console.log(localStorage.getItem("userName"))
@@ -81,6 +82,12 @@ const NavBar = () => {
                   (userName !== null)
                     ? <Link to='/addListings' className="nav-item nav-link active">List a Car</Link>
                     : null
+                }
+
+                {
+                  (userName !== null)
+                ? <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>
+                : null
                 }
                
                 <div className="nav-item dropdown">
