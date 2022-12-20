@@ -13,21 +13,14 @@ const MyListings = () => {
   }, []);
 
   const names = async () => {
-    const response = await fetch("http://localhost:8080/api/listing/");
+    var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    const response = await fetch("http://localhost:8080/api/listing/my-listings",{
+        headers: {Authorization: userDetails}
+      });
     console.log(response);
     const data = await response.json();
     console.log(data.listings);
-    var listingsId= JSON.parse(localStorage.getItem("listingsId"));
-    if(listingsId !== null){
-        var existData = data.listings;
-        const filteredGenre = existData.filter(element => listingsId.includes(element._id))
-        console.log(filteredGenre);
-        setName(filteredGenre);
-    }
-    else{
-        var dataSet = [];
-        setName(dataSet);
-    }
+    setName(data.listings);
     
   };
 
