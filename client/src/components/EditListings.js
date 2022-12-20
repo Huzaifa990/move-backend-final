@@ -8,7 +8,7 @@ const EditListing = () => {
 
     const goToListings = () => {
         // 👇️ navigate to /listings
-        navigate('/listings');
+        navigate('/myListings');
     };
  
     const location = useLocation();
