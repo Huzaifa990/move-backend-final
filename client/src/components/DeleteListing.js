@@ -8,7 +8,7 @@ const DeleteListing = () => {
 
     const goToListings = () => {
         // 👇️ navigate to /listings
-        navigate('/listings');
+        navigate('/myListings');
     };
  
     const location = useLocation();
@@ -43,6 +43,21 @@ const DeleteListing = () => {
     )
     .then((res) => {
       console.log(res);
+      var listingsId= JSON.parse(localStorage.getItem("listingsId"));
+      if(listingsId !== null){
+        const index = listingsId.indexOf(CarId);
+        if (index > -1) { 
+          listingsId.splice(index, 1); 
+        }
+        console.log(listingsId);
+        if(listingsId.length === 0){
+          localStorage.removeItem("listingsId");
+        }
+        else{
+          localStorage.setItem("listingsId", JSON.stringify(listingsId));
+        }
+      }
+      
       document.getElementById("errorMessage").innerText = "Your listing has been deleted!";
       document.getElementById("errorApi").style.visibility = "visible";
       document.getElementById("errorApi").style.position = "relative";

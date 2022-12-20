@@ -11,7 +11,7 @@ const SignIn = () => {
         password
     })
     .then((res) => {
-        console.log(res.headers.authorization);
+        console.log(res);
         localStorage.setItem("userDetails", JSON.stringify(res.headers.authorization));
         localStorage.setItem("userName", JSON.stringify(res.data.user.name));
         navigateToHome();

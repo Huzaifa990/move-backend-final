@@ -1,8 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
-
+import axios from "axios";
 
 const ViewListings = () => {
     const location = useLocation(); 
@@ -27,6 +26,81 @@ const ViewListings = () => {
     console.log(data.item);
     setName(data.item);
   };
+
+  const bookingCar = () => {
+
+    var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    const headers = {
+        Authorization: userDetails,
+    };
+
+    var pickupDate = document.getElementById("pickDate").value+"Z";
+    var dropOffDate = document.getElementById("dropDate").value+"Z";
+    var paymentMethod = document.getElementById("COD").value;
+    
+    var car = location.state.id;
+
+    console.log(car, dropOffDate, pickupDate,paymentMethod);
+
+    axios
+    .post(
+      "http://localhost:8080/api/booking/",
+      {
+        car,
+        pickupDate,
+        dropOffDate,
+        paymentMethod
+      },
+      {
+        headers: headers,
+      }
+    )
+    .then((res) => {
+        console.log(res);
+        document.getElementById("errorMessage").innerText = "Your Car Has Been Listed Successfully!";
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+        document.getElementById("errorApi").style.background = "green";
+
+        document.getElementById("pickDate").style.border = "none";
+        document.getElementById("dropDate").style.border = "none";
+
+        document.getElementById("pickDate").value = "";
+        document.getElementById("dropDate").value = "";
+
+      
+
+    }).catch((e)=>{
+        console.log(e);
+
+        if (e.response.data.msg !== undefined) {
+            document.getElementById("errorMessage").innerText = e.response.data.msg;
+            document.getElementById("pickDate").style.border = "none";
+            document.getElementById("dropDate").style.border = "none";
+            document.getElementById("errorApi").style.visibility = "visible";
+            document.getElementById("errorApi").style.backgroundColor = "crimson";
+            document.getElementById("errorApi").style.position = "relative";
+          } else if (e.response.data.error.pickupDate !== undefined) {
+            document.getElementById("errorApi").style.backgroundColor = "crimson";
+            document.getElementById("pickDate").style.border = "2px solid crimson";
+            document.getElementById("errorMessage").innerText = e.response.data.error.pickupDate;
+            document.getElementById("errorApi").style.visibility = "visible";
+            document.getElementById("errorApi").style.position = "relative";
+            document.getElementById("errorApi").style.width = "100%";
+          } else if (e.response.data.error.dropOffDate !== undefined) {
+            document.getElementById("errorApi").style.backgroundColor = "crimson";
+            document.getElementById("pickDate").style.border = "none";
+            document.getElementById("dropDate").style.border = "2px solid crimson";
+            document.getElementById("errorMessage").innerText = e.response.data.error.dropOffDate;
+            document.getElementById("errorApi").style.visibility = "visible";
+            document.getElementById("errorApi").style.position = "relative";
+            document.getElementById("errorApi").style.width = "100%";
+          }
+    })
+
+
+  }
 
   
 
@@ -128,45 +202,33 @@ const ViewListings = () => {
         <div className="container">
             <div className="row">
                 <div className="col-lg-8">
-                    <h2 className="mb-4">Personal Detail</h2>
-                    <div className="mb-5">
-                        <div className="row">
-                            <div className="col-6 form-group">
-                                <input type="text" className="form-control p-4" placeholder="First Name" required="required"/>
-                            </div>
-                            <div class="col-6 form-group">
-                                <input type="text" className="form-control p-4" placeholder="Last Name" required="required"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 form-group">
-                                <input type="email" className="form-control p-4" placeholder="Your Email" required="required"/>
-                            </div>
-                            <div class="col-6 form-group">
-                                <input type="text" className="form-control p-4" placeholder="Mobile Number" required="required"/>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <h2 className="mb-4">Booking Detail</h2>
+                    <label htmlFor id="errorApi">
+                    {" "}
+                    <span id="errorMessage"></span>
+                    </label>
                     <div className="mb-5">
-                        
                         <div className="row">
                             <div className="col-6 form-group">
-                                <div clclassNameass="date" id="date2" data-target-input="nearest">
-                                    <input type="text" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
+                                <label for="">Pickup Date: </label>
+                                <div className="date" id="date2" data-target-input="nearest">
+                                    <input type="datetime-local" id="pickDate" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
                                         data-target="#date2" data-toggle="datetimepicker" />
                                 </div>
                             </div>
                             <div className="col-6 form-group">
-                                <div className="time" id="time2" data-target-input="nearest">
-                                    <input type="text" className="form-control p-4 datetimepicker-input" placeholder="Pickup Time"
-                                        data-target="#time2" data-toggle="datetimepicker" />
+                                <label for="">Dropoff Date: </label>
+                                <div className="date" id="date2" data-target-input="nearest">
+                                    <input type="datetime-local" id="dropDate" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
+                                        data-target="#date2" data-toggle="datetimepicker" />
                                 </div>
                             </div>
                         </div>
                         
                         <div className="form-group">
-                            <textarea className="form-control py-3 px-4" rows="3" placeholder="Special Request" required="required"></textarea>
+                            <label for="">A Note For The Lessor: </label>
+                            <textarea className="form-control py-3 px-4" rows="3" placeholder="Note.." required="required"></textarea>
                         </div>
                     </div>
                 </div>
@@ -175,24 +237,24 @@ const ViewListings = () => {
                         <h2 className="text-primary mb-4">Payment</h2>
                         <div className="form-group">
                             <div className="custom-control custom-radio">
-                                <input type="radio" className="custom-control-input" name="payment" id="paypal"/>
+                                <input type="radio" className="custom-control-input" name="payment" id="paypal" disabled/>
                                 <label className="custom-control-label" for="paypal">Paypal</label>
                             </div>
                         </div>
                         <div className="form-group">
                             <div className="custom-control custom-radio">
-                                <input type="radio" className="custom-control-input" name="payment" id="directcheck"/>
+                                <input type="radio" className="custom-control-input" name="payment" id="directcheck" disabled/>
                                 <label className="custom-control-label" for="directcheck">Credit/ Debit Card</label>
                             </div>
                         </div>
                         <div className="form-group mb-4">
                             <div className="custom-control custom-radio">
-                                <input type="radio" className="custom-control-input" name="payment" id="banktransfer"/>
-                                <label className="custom-control-label" for="banktransfer">Bank Transfer</label>
+                                <input checked type="radio" className="custom-control-input" name="payment" value="COD" id="COD"/>
+                                <label className="custom-control-label" for="banktransfer">COD</label>
                             </div>
                         </div>
                     
-                        <button className="btn btn-block btn-primary py-3">Reserve Now</button>
+                        <button className="btn btn-block btn-primary py-3" onClick={() => bookingCar()}>Reserve Now</button>
                     </div>
                 </div>
             </div>

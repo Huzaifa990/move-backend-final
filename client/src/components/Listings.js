@@ -46,11 +46,13 @@ const Listings = () => {
   {
     goToDelete(id);
   }
+ 
 
   var i = 0;
   return (
 
     <>
+
         <div className="container-fluid  featured">
         <div className="container pt-5 pb-3">
             <h1 className="display-4 text-uppercase text-center mb-5">FEATURED CARS</h1>

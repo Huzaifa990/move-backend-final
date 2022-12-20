@@ -50,6 +50,27 @@ const navigateToLogin = () => {
     // 👇️ navigate to /signin
     navigate('/listings');
 };
+var myListings = [];
+const getId = async () => {
+  const response = await fetch("http://localhost:8080/api/listing/");
+  const data = await response.json();
+  console.log(data.listings[data.listings.length-1]);
+  var listingsId= JSON.parse(localStorage.getItem("listingsId"));
+  if(listingsId === null){
+    myListings.push(data.listings[data.listings.length-1]._id);
+    localStorage.setItem("listingsId", JSON.stringify(myListings));
+  } 
+  else{
+    for(var i = 0; i < listingsId.length; i++){
+      myListings.push(listingsId[i]);
+    }
+    myListings.push(data.listings[data.listings.length-1]._id);
+    localStorage.setItem("listingsId", JSON.stringify(myListings));
+  }
+
+  setTimeout(navigateToLogin,2000);
+
+}
 const sendData = () => {
 
 
@@ -101,7 +122,8 @@ const sendData = () => {
       document.getElementById("inp").value = null;
       document.querySelector("#img").style.visibility = "hidden";
       document.querySelector("#img").style.position = "absolute";
-      setTimeout(navigateToLogin,2000);
+      
+      getId();
     })
     .catch((e) => {
       console.log(e);

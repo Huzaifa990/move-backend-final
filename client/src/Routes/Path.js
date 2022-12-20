@@ -23,6 +23,7 @@ import ChangePassword from "../components/ChangePassword";
 import DeleteListing from "../components/DeleteListing";
 import RequestForget from "../components/RequestForget";
 import ResetPassword from "../components/ResetPassword";
+import MyListings from "../components/MyListings";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path='deleteListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Delete Listing"/> <DeleteListing/> <Footer/> </>} />
             <Route path='requestForget' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Forgot Password"/> <RequestForget/> <Footer/> </>} />
             <Route path='reset' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Reset Password"/> <ResetPassword/> <Footer/> </>} />
+            <Route path='myListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Listings"/> <MyListings/> <Footer/> </>} />
 
         </Routes>
       </BrowserRouter>
