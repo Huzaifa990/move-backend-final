@@ -13,6 +13,7 @@ const NavBar = () => {
   }
   console.log(localStorage.getItem("userName"))
   var userName= JSON.parse(localStorage.getItem("userName")); 
+  var accountType= JSON.parse(localStorage.getItem("accountType")); 
   
   return (
     <div>
@@ -82,19 +83,19 @@ const NavBar = () => {
 
                 { 
                   (userName !== null)
-                    ? <Link to='/addListings' className="nav-item nav-link active">List a Car</Link>
+                    ? (accountType === "Lessor")? <Link to='/addListings' className="nav-item nav-link active">List a Car</Link>: null
                     : null
                 }
 
 { 
                   (userName !== null)
-                    ? <Link to='/myBookings' className="nav-item nav-link active">My Bookings</Link>
+                    ?(accountType === "Lessee")? <Link to='/myBookings' className="nav-item nav-link active">My Bookings</Link>: null
                     : null
                 }
 
                 {
                   (userName !== null)
-                ? <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>
+                ? (accountType === "Lessor")?  <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>: null
                 : null
                 }
                

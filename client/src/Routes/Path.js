@@ -25,6 +25,7 @@ import RequestForget from "../components/RequestForget";
 import ResetPassword from "../components/ResetPassword";
 import MyListings from "../components/MyListings";
 import MyBookings from "../components/MyBookings";
+import EditBooking from "../components/EditBooking";
 function App() {
   return (
     <>
@@ -46,6 +47,7 @@ function App() {
             <Route path='reset' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Reset Password"/> <ResetPassword/> <Footer/> </>} />
             <Route path='myListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Listings"/> <MyListings/> <Footer/> </>} />
             <Route path='myBookings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Bookings"/> <MyBookings/> <Footer/> </>} />
+            <Route path='editBooking' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Edit Bookings"/> <EditBooking/> <Footer/> </>} />
 
         </Routes>
       </BrowserRouter>

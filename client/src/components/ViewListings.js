@@ -57,7 +57,7 @@ const ViewListings = () => {
     )
     .then((res) => {
         console.log(res);
-        document.getElementById("errorMessage").innerText = "Your Car Has Been Listed Successfully!";
+        document.getElementById("errorMessage").innerText = "Your Car Has Been Booked Successfully!";
         document.getElementById("errorApi").style.visibility = "visible";
         document.getElementById("errorApi").style.position = "relative";
         document.getElementById("errorApi").style.width = "100%";
