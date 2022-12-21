@@ -107,6 +107,11 @@ const addBooking = async (req, res) => {
 
 const getAllBookings = async (req, res) => {
   // need to work on filters like get all bookings against a person, or a car.
+  const { accountType } = req.body;
+
+  if (accountType !== "Admin")
+    return res.status(402).send({ msg: "Only Admin Can View All Bookings!" });
+
   const bookings = await booking
     .find({})
     .populate("lessee", "name email _id accountType")
@@ -269,10 +274,24 @@ const updateBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Updated Successfully" });
 };
 
+const getMyBookings = async (req, res) => {
+  const { _id, accountType } = req.body;
+  if (accountType === "Lessor") {
+    return res.status(402).send({ msg: "Only Lessees Can View Their Bookings!" });
+  }
+  const bookings = await booking
+    .find({ lessee: _id })
+    .populate("lessee", "name email _id accountType")
+    .populate("car")
+    .populate("paymentDetails");
+  return res.status(200).send({ count: bookings.length, bookings });
+};
+
 module.exports = {
   addBooking,
   deleteBooking,
   updateBooking,
   getAllBookings,
   getBookingById,
+  getMyBookings,
 };
