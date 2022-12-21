@@ -86,6 +86,12 @@ const NavBar = () => {
                     : null
                 }
 
+{ 
+                  (userName !== null)
+                    ? <Link to='/myBookings' className="nav-item nav-link active">My Bookings</Link>
+                    : null
+                }
+
                 {
                   (userName !== null)
                 ? <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>
