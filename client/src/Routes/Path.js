@@ -24,7 +24,7 @@ import DeleteListing from "../components/DeleteListing";
 import RequestForget from "../components/RequestForget";
 import ResetPassword from "../components/ResetPassword";
 import MyListings from "../components/MyListings";
-
+import MyBookings from "../components/MyBookings";
 function App() {
   return (
     <>
@@ -45,6 +45,7 @@ function App() {
             <Route path='requestForget' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Forgot Password"/> <RequestForget/> <Footer/> </>} />
             <Route path='reset' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Reset Password"/> <ResetPassword/> <Footer/> </>} />
             <Route path='myListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Listings"/> <MyListings/> <Footer/> </>} />
+            <Route path='myBookings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Bookings"/> <MyBookings/> <Footer/> </>} />
 
         </Routes>
       </BrowserRouter>
