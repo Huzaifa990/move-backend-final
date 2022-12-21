@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-
+  const navigate = useNavigate();
   function logout(){
     localStorage.removeItem("userName")
     localStorage.removeItem("userDetails");
-    localStorage.removeItem("listingsId");
+    localStorage.removeItem("accountType");
+    navigate("/");
     window.location.reload();
   }
   console.log(localStorage.getItem("userName"))
