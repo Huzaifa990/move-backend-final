@@ -21,9 +21,6 @@ const addListing = async (req, res) => {
     accountType,
   } = req.body;
 
-  console.log(accountType);
-  console.log(accountType !== "Lessor");
-
   if (accountType === "Lessee") {
     return res.status(402).send({ msg: "This Account Cannot Add A Listing" });
   }
