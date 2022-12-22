@@ -2,6 +2,7 @@ import React from "react";
 import M1 from '../../img/carousel-1.jpg';
 import M2 from '../../img/carousel-2.jpg';
 import {useState} from "react";
+import {Link } from "react-router-dom";
 
 const Slider = () => {
 
@@ -38,7 +39,7 @@ const Slider = () => {
                           <h1 className="display-1 text-white mb-md-4">
                           {index === 0 ? "Best Rental Cars In Your Location" : "Quality Cars with Unlimited Miles"}
                           </h1>
-                          <a href className="btn btn-primary py-md-3 px-md-5 mt-2">Reserve Now</a>
+                          <Link className="btn btn-primary py-md-3 px-md-5 mt-2" to="/listings">Reserve Now</Link>
                         </div>
                       </div>
                     </div>

@@ -2,9 +2,11 @@ import moment from "moment/moment";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 const MyListings = () => {
   const [name, setName] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +21,7 @@ const MyListings = () => {
     });
     const data = await response.json();
     setName(data.bookings);
+    setLoading(false);
   };
 
   function goToDetails(id) {
@@ -48,7 +51,7 @@ const MyListings = () => {
   return (
     <>
       <div className="">
-        {name.length > 0 ? (
+        {loading===true? <Loader/>:name.length > 0 ? (
           name.map((data) => {
             if (data !== null) {
               return (
@@ -97,7 +100,7 @@ const MyListings = () => {
                       <div className="px-2">
                         <span>Pickup Date: {moment(data?.pickupDate).format("llll")}</span>
                       </div>
-                      <div className="px-2 border-left border-right">
+                      <div className="px-2 border-left">
                         <span>Dropoff Date: {moment(data?.dropOffDate).format("llll")}</span>
                       </div>
                     </div>
@@ -122,7 +125,7 @@ const MyListings = () => {
               return <div></div>;
             }
           })
-        ) : (
+        ) :loading===true? <Loader/>: (
           <div>
             <center>
               <h1>No Booking Found!</h1>
