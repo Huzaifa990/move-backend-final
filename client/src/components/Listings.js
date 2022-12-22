@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import typeR from "../img/type-r.jpg";
 import c180 from "../img/c180.jpg";
 import m3 from "../img/m3.jpg";
+import loader from "../img/loader.gif";
 
 const Listings = () => {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ const Listings = () => {
                                 <span>LAHORE</span>
                             </div>
                         </div>
-                        <a className="btn btn-primary px-3" href="booking.html">$99.00/Day</a>
+                        <a className="btn btn-primary px-3" href="/listings">$99.00/Day</a>
                     </div>
                 </div>
                 <div className="col-lg-4 col-md-6 mb-2">
@@ -104,7 +105,7 @@ const Listings = () => {
                                 <span>Karachi</span>
                             </div>
                         </div>
-                        <a className="btn btn-primary px-3" href="booking.html">$100.00/Day</a>
+                        <a className="btn btn-primary px-3" href="/listings">$100.00/Day</a>
                     </div>
                 </div>
                 <div className="col-lg-4 col-md-6 mb-2">
@@ -129,7 +130,7 @@ const Listings = () => {
                                 <span>Karachi</span>
                             </div>
                         </div>
-                        <a className="btn btn-primary px-3" href="booking.html">$100.00/Day</a>
+                        <a className="btn btn-primary px-3" href="/listings">$100.00/Day</a>
                     </div>
                 </div>
                 
@@ -141,7 +142,7 @@ const Listings = () => {
       <div className="container pt-5 pb-3">
         <h1 className="display-4 text-uppercase text-center mb-5">Find Your Car</h1>
         <div className="row">
-          {name.map((data) => {
+          {name.length> 0? name.map((data) => {
             i = i + 1;
             if(i % 2 === 0 && i !== 0){
               i = -1;
@@ -219,7 +220,15 @@ const Listings = () => {
                 );
             }
             
-          })}
+          }):
+          <div style={{width: "100%"}}>
+          <center>
+              <img src={loader} alt="loader" width="50px"/> 
+              <br/> <br/>
+              <h1>Loading Listings...</h1>
+          </center>
+          </div>
+          }
         </div>
       </div>
     </div>

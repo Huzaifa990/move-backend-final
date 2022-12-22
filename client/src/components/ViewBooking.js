@@ -54,6 +54,7 @@ const ViewBooking = () => {
                 }
                 
                 <div className="col-lg-6 mb-4">
+                    <br/><br/>
                     <h4 className="mb-2">PKR{name?.car?.rentPerDay}/Day</h4>
                     <div className="d-flex mb-3">
                         <h6 className="mr-2">Rating:</h6>

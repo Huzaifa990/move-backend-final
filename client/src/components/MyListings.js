@@ -1,11 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 
 const MyListings = () => {
 
   const [name, setName] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,8 +23,10 @@ const MyListings = () => {
     const data = await response.json();
     console.log(data.listings);
     setName(data.listings);
+    setLoading(false);
     
   };
+
 
   function goToDetails(id){
     navigate("/viewListings", {state: {id:id}})
@@ -52,7 +56,8 @@ const MyListings = () => {
     return(
         <>
         <div className="">
-            {name.length>0?name.map((data)=>{
+            
+            { loading===true? <Loader/>:name.length>0?name.map((data)=>{
                 if(data !== null){
                     return(
                         <>
@@ -108,7 +113,7 @@ const MyListings = () => {
                     )
                 }
                 
-            }):
+            }): loading===true? <Loader/>:
                 <div>
                     <center>
                         <h1>No Listings Found!</h1>
