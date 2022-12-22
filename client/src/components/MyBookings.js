@@ -100,7 +100,7 @@ const MyListings = () => {
                       <div className="px-2">
                         <span>Pickup Date: {moment.utc(data?.pickupDate).format("llll")}</span>
                       </div>
-                      <div className="px-2 border-left border-right">
+                      <div className="px-2 border-left">
                         <span>Dropoff Date: {moment.utc(data?.dropOffDate).format("llll")}</span>
                       </div>
                     </div>
