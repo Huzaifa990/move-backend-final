@@ -63,7 +63,7 @@ return (
           Sign In
         </button>
         <br /> <br />
-        <Link to='/signup'>SignUp Instead</Link>
+        <Link to='/signup'>Sign Up Instead</Link>
         <br /> <br />
         <Link to='/requestForget'>Forgot Password</Link>
       </div>

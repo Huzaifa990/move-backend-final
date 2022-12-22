@@ -95,10 +95,10 @@ const MyListings = () => {
                     </ul>
                     <div className="d-flex mb-4">
                       <div className="px-2">
-                        <span>Pickup Date: {moment(data?.pickupDate).format("llll")}</span>
+                        <span>Pickup Date: {moment.utc(data?.pickupDate).format("llll")}</span>
                       </div>
                       <div className="px-2 border-left border-right">
-                        <span>Dropoff Date: {moment(data?.dropOffDate).format("llll")}</span>
+                        <span>Dropoff Date: {moment.utc(data?.dropOffDate).format("llll")}</span>
                       </div>
                     </div>
 
