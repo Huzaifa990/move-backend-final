@@ -37,6 +37,7 @@ const ViewBooking = () => {
       headers: { Authorization: userDetails },
     });
     const data = await response.json();
+    console.log("Response is: ", data)
     setName(data.carBooking);
   };
 
@@ -127,13 +128,13 @@ const ViewBooking = () => {
                             <div className="col-6 form-group">
                                 <label for="">Pickup Date: </label>
                                 <div className="date" id="date2" data-target-input="nearest">
-                                <h5>Pickup Date: {moment(name?.pickupDate).format("llll")}</h5>
+                                <h5>Pickup Date: {moment.utc(name?.pickupDate).format("llll")}</h5>
                                 </div>
                             </div>
                             <div className="col-6 form-group">
                                 <label for="">Dropoff Date: </label>
                                 <div className="date" id="date2" data-target-input="nearest">
-                                <h5>DropOff Date: {moment(name?.dropOffDate).format("llll")}</h5>
+                                <h5>DropOff Date: {moment.utc(name?.dropOffDate).format("llll")}</h5>
                                 </div>
                             </div>
                         </div>
