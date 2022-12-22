@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 
 const DeleteListing = () => {
@@ -80,12 +80,9 @@ const DeleteListing = () => {
         </label>
 
         <div className="edit-close">
-            <div>
-            <button className="btn btn-primary py-3 px-5" onClick={deleteCar}>Confirm</button>
-            </div>
-
-            <div>
-            <Link to="/listings" className="btn btn-secondary py-3 px-5 cancel-btn">Cancel</Link>
+        <div className="btn-container">
+            <button className="btn btn-primaryDelete py-3 px-5 login-btn" onClick={deleteCar}>Confirm</button>
+            <button className="btn btn-secondaryDelete py-3 px-5 login-btn" onClick={goToListings}>Cancel</button>
             </div>
         </div>
         

@@ -2714,7 +2714,23 @@ fieldset:disabled a.btn {
 .btn-primary {
     color: #fff;
     background-color: #F77D0A;
-    border-color: #F77D0A
+    border-color: #F77D0A;
+}
+
+.btn-primaryDelete {
+    color: #fff;
+    background-color: #F77D0A;
+    border-color: #F77D0A;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+.btn-secondaryDelete {
+    color: #fff;
+    background-color: #2B2E4A;
+    border-color: #2B2E4A;
+    margin-bottom: 15px;
+    margin-right: 15px;
 }
 
 .btn-edit {
