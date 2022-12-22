@@ -27,6 +27,25 @@ const ViewListings = () => {
     setName(data.item);
   };
 
+  function timeFix(){
+    const timeInput1 = document.getElementById('pickTime');
+
+        timeInput1.addEventListener('input', (e) => {
+        let hour = e.target.value.split(':')[0]
+        e.target.value = `${hour}:00`
+        })
+
+        const timeInput2 = document.getElementById('dropTime');
+
+        timeInput2.addEventListener('input', (e) => {
+        let hour = e.target.value.split(':')[0]
+        e.target.value = `${hour}:00`
+        })
+  }
+
+  setTimeout(timeFix, 2000);
+  
+
   const bookingCar = () => {
 
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -34,8 +53,15 @@ const ViewListings = () => {
         Authorization: userDetails,
     };
 
-    var pickupDate = document.getElementById("pickDate").value+"Z";
-    var dropOffDate = document.getElementById("dropDate").value+"Z";
+    var pickDate = document.getElementById("pickDate").value;
+    var pickTime = document.getElementById("pickTime").value;
+    var dropDate = document.getElementById("dropDate").value;
+    var dropTime = document.getElementById("dropTime").value;
+
+    var pickupDate = pickDate+"T"+pickTime+"Z";
+    var dropOffDate = dropDate+"T"+dropTime+"Z";
+    console.log(pickupDate);
+    console.log(dropOffDate);
     var paymentMethod = document.getElementById("COD").value;
     
     var car = location.state.id;
@@ -65,9 +91,13 @@ const ViewListings = () => {
 
         document.getElementById("pickDate").style.border = "none";
         document.getElementById("dropDate").style.border = "none";
+        document.getElementById("pickTime").style.border = "none";
+        document.getElementById("dropTime").style.border = "none";
 
         document.getElementById("pickDate").value = "";
         document.getElementById("dropDate").value = "";
+        document.getElementById("pickTime").value = "";
+        document.getElementById("dropTime").value = "";
 
       
 
@@ -78,12 +108,15 @@ const ViewListings = () => {
             document.getElementById("errorMessage").innerText = e.response.data.msg;
             document.getElementById("pickDate").style.border = "none";
             document.getElementById("dropDate").style.border = "none";
+            document.getElementById("pickTime").style.border = "none";
+            document.getElementById("dropTime").style.border = "none";
             document.getElementById("errorApi").style.visibility = "visible";
             document.getElementById("errorApi").style.backgroundColor = "crimson";
             document.getElementById("errorApi").style.position = "relative";
           } else if (e.response.data.error.pickupDate !== undefined) {
             document.getElementById("errorApi").style.backgroundColor = "crimson";
             document.getElementById("pickDate").style.border = "2px solid crimson";
+            document.getElementById("pickTime").style.border = "2px solid crimson";
             document.getElementById("errorMessage").innerText = e.response.data.error.pickupDate;
             document.getElementById("errorApi").style.visibility = "visible";
             document.getElementById("errorApi").style.position = "relative";
@@ -91,7 +124,9 @@ const ViewListings = () => {
           } else if (e.response.data.error.dropOffDate !== undefined) {
             document.getElementById("errorApi").style.backgroundColor = "crimson";
             document.getElementById("pickDate").style.border = "none";
+            document.getElementById("pickTime").style.border = "none";
             document.getElementById("dropDate").style.border = "2px solid crimson";
+            document.getElementById("dropTime").style.border = "2px solid crimson";
             document.getElementById("errorMessage").innerText = e.response.data.error.dropOffDate;
             document.getElementById("errorApi").style.visibility = "visible";
             document.getElementById("errorApi").style.position = "relative";
@@ -213,22 +248,33 @@ const ViewListings = () => {
                             <div className="col-6 form-group">
                                 <label for="">Pickup Date: </label>
                                 <div className="date" id="date2" data-target-input="nearest">
-                                    <input type="datetime-local" id="pickDate" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
-                                        data-target="#date2" data-toggle="datetimepicker" />
+                                    <input type="date" id="pickDate" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
+                                        data-target="#date2"/>
                                 </div>
                             </div>
                             <div className="col-6 form-group">
-                                <label for="">Dropoff Date: </label>
+                                <label for="">Pickup Time: </label>
                                 <div className="date" id="date2" data-target-input="nearest">
-                                    <input type="datetime-local" id="dropDate" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
-                                        data-target="#date2" data-toggle="datetimepicker" />
+                                    <input type="time" id="pickTime" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
+                                        data-target="#date2"/>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div className="form-group">
-                            <label for="">A Note For The Lessor: </label>
-                            <textarea className="form-control py-3 px-4" rows="3" placeholder="Note.." required="required"></textarea>
+                        <div className="row">
+                            <div className="col-6 form-group">
+                                <label for="">Dropoff Date: </label>
+                                <div className="date" id="date2" data-target-input="nearest">
+                                    <input type="date" id="dropDate" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
+                                        data-target="#date2"/>
+                                </div>
+                            </div>
+                            <div className="col-6 form-group">
+                                <label for="">Dropoff Time: </label>
+                                <div className="date" id="date2" data-target-input="nearest">
+                                    <input type="time" id="dropTime" className="form-control p-4 datetimepicker-input" placeholder="Pickup Date"
+                                        data-target="#date2"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -259,10 +305,7 @@ const ViewListings = () => {
                 </div>
             </div>
         </div>
-    </div>
-
-
-              
+    </div>           
            
       
 

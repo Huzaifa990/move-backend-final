@@ -26,26 +26,26 @@ const Listings = () => {
     navigate("/viewListings", {state: {id:id}})
   }
 
-  function goToEdit(id){
-    navigate("/editListings", {state: {id:id}})
-  }
+  // function goToEdit(id){
+  //   navigate("/editListings", {state: {id:id}})
+  // }
 
-  function goToDelete(id){
-    navigate("/deleteListings", {state: {id:id}})
-  }
+  // function goToDelete(id){
+  //   navigate("/deleteListings", {state: {id:id}})
+  // }
 
   function showId(id){
     goToDetails(id);
   }
 
-  function editCar(id){
-    goToEdit(id);
-  }
+  // function editCar(id){
+  //   goToEdit(id);
+  // }
 
-  function deleteCar(id)
-  {
-    goToDelete(id);
-  }
+  // function deleteCar(id)
+  // {
+  //   goToDelete(id);
+  // }
  
 
   var i = 0;
@@ -148,7 +148,7 @@ const Listings = () => {
               return (
                 <>
                   <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} >
-                    <div className="rent-item active mb-4">
+                    <div className="rent-item active mb-4" onClick={ () => showId(data._id) }>
                       <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                       <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
                       <div className="d-flex justify-content-center mb-4">
@@ -170,11 +170,11 @@ const Listings = () => {
                         </div>
                       </div>
                       <div className="crud-section">
-                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}} onClick={ () => editCar(data._id) }></i>
+                          {/* <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}} onClick={ () => editCar(data._id) }></i> */}
                           
                           <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
                           
-                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}} onClick={ () => deleteCar(data._id) }></i>
+                          {/* <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}} onClick={ () => deleteCar(data._id) }></i> */}
                       </div>                    
                     </div>
                   </div>
@@ -185,7 +185,7 @@ const Listings = () => {
                 return (
                   <>
                     <div className="col-lg-4 col-md-6 mb-2 car-container-main" key={data._id} >
-                      <div className="rent-item mb-4">
+                      <div className="rent-item mb-4" onClick={ () => showId(data._id) }>
                         <img className="img-fluid mb-4" width={"100%"} style={{height: 217}} src={data.picture[0]} alt="" />
                         <h4 className="text-uppercase mb-4">{data.company} {data.carName}</h4>
                         <div className="d-flex justify-content-center mb-4">
@@ -207,11 +207,11 @@ const Listings = () => {
                           </div>
                         </div>
                         <div className="crud-section">
-                          <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}} onClick={ () => editCar(data._id) }></i>
+                          {/* <i className="fa fa-edit text-primary mr-1" style={{fontSize:25}} onClick={ () => editCar(data._id) }></i> */}
                           
                           <button className="btn btn-primary px-3" onClick={ () => showId(data._id) }>PKR {data.rentPerDay}/Day</button>
                           
-                          <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}} onClick={ () => deleteCar(data._id) }></i>                       
+                          {/* <i className="fa fa-trash text-primary mr-1" style={{fontSize:25}} onClick={ () => deleteCar(data._id) }></i>                        */}
                         </div>
                       </div>
                     </div>
