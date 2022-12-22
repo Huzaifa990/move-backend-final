@@ -1,15 +1,15 @@
 import React from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 
 const DeleteBooking = () => {
 
     const navigate = useNavigate();
 
-    const goToListings = () => {
-        // 👇️ navigate to /listings
+    const goToBookings = () => {
         navigate('/myBookings');
     };
+    
  
     const location = useLocation();
     var CarId = location.state.id;
@@ -49,7 +49,7 @@ const DeleteBooking = () => {
       document.getElementById("errorApi").style.width = "100%";
       document.getElementById("errorApi").style.background = "green";
 
-      setTimeout(goToListings, 3000)
+      setTimeout(goToBookings, 3000)
     })
 ;
   }
@@ -65,13 +65,10 @@ const DeleteBooking = () => {
         </label>
 
         <div className="edit-close">
-            <div>
-            <button className="btn btn-primary py-3 px-5" onClick={deleteCar}>Confirm</button>
-            </div>
-
-            <div>
-            <Link to="/myBookings" className="btn btn-secondary py-3 px-5 cancel-btn">Cancel</Link>
-            </div>
+        <div className="btn-container">
+        <button className="btn btn-primaryDelete py-3 px-5 login-btn" onClick={deleteCar}>Confirm</button>
+        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={goToBookings}>Cancel</button>
+        </div>
         </div>
         
       </div>

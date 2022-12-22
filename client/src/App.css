@@ -382,6 +382,7 @@ h6,
 .btn-container{
   width: 80%;
   text-align: center;
+  justify-content: space-around;
   margin: auto;
 }
 
@@ -478,9 +479,8 @@ input:focus, select:focus{
 .edit-close{
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 
