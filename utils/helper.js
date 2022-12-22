@@ -111,7 +111,7 @@ const amPmTwentyFourFormatter = (time) => {
   if (amPm === "p" && time?.split(":")[0] === "12") {
     hours = 12;
   } else if (amPm === "a" && time?.split(":")[0] === "00") {
-    hours = 00;
+    hours = 0;
   } else {
     hours = amPm === "p" ? parseInt(time.split(":")[0]) + 12 : parseInt(time.split(":")[0]);
   }

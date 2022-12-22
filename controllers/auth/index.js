@@ -45,11 +45,10 @@ const signUp = async (req, res) => {
 };
 
 const updatePassword = async (req, res) => {
-  console.log(req.body);
   let { password, newPassword, _id } = req.body;
 
   const valid = mongoose.isValidObjectId(_id);
-  if (!_id || _id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+  if (!_id || _id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
 
   let user = await User.findById({ _id });
   if (!user) {
@@ -58,7 +57,7 @@ const updatePassword = async (req, res) => {
 
   const validPass = await bcrypt.compare(password, user.password);
   if (!validPass) {
-    return res.status(404).send({ msg: "Invalid Current Password Entered!" });
+    return res.status(402).send({ msg: "Invalid Current Password Entered!" });
   }
 
   let updateStatus = await User.updateOne({ _id }, { $set: { password: newPassword } });
