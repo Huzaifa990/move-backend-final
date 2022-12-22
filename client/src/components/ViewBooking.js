@@ -11,11 +11,8 @@ const ViewBooking = () => {
 
   useEffect(() => {
     names();
-  }, []);
+  },);
 
-  function goToDetails(id) {
-    navigate("/viewBooking", { state: { id: id } });
-  }
 
   function goToEdit(id) {
     navigate("/editBooking", { state: { id: id } });
@@ -23,10 +20,6 @@ const ViewBooking = () => {
 
   function goToDelete(id) {
     navigate("/deleteBooking", { state: { id: id } });
-  }
-
-  function showId(id) {
-    goToDetails(id);
   }
 
   function editCar(id) {
