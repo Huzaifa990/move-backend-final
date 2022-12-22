@@ -26,6 +26,8 @@ import ResetPassword from "../components/ResetPassword";
 import MyListings from "../components/MyListings";
 import MyBookings from "../components/MyBookings";
 import EditBooking from "../components/EditBooking";
+import ViewBooking from "../components/ViewBooking";
+import DeleteBooking from "../components/DeleteBooking";
 function App() {
   return (
     <>
@@ -48,6 +50,8 @@ function App() {
             <Route path='myListings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Listings"/> <MyListings/> <Footer/> </>} />
             <Route path='myBookings' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="My Bookings"/> <MyBookings/> <Footer/> </>} />
             <Route path='editBooking' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Edit Bookings"/> <EditBooking/> <Footer/> </>} />
+            <Route path='viewBooking' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="View Bookings"/> <ViewBooking/> <Footer/> </>} />
+            <Route path='deleteBooking' element={ <><NavBar/> <Search/> <SubHeaderAbout headingText="Delete Bookings"/> <DeleteBooking/> <Footer/> </>} />
 
         </Routes>
       </BrowserRouter>

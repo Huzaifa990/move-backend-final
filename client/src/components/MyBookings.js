@@ -17,9 +17,7 @@ const MyListings = () => {
     const response = await fetch("http://localhost:8080/api/booking/myBookings", {
       headers: { Authorization: userDetails },
     });
-    // console.log("My Booking Response",response.data);
     const data = await response.json();
-    // console.log("The Data Is =>",data);
     setName(data.bookings);
   };
 
@@ -46,8 +44,6 @@ const MyListings = () => {
   function deleteCar(id) {
     goToDelete(id);
   }
-
-  console.log("The Final Booking Data is =>", name);
 
   return (
     <>
@@ -99,21 +95,11 @@ const MyListings = () => {
                     </ul>
                     <div className="d-flex mb-4">
                       <div className="px-2">
-                        <i className="fa fa-car text-primary mr-1"></i>
-                        <span>{moment(data?.pickupDate).format("llll")}</span>
+                        <span>Pickup Date: {moment(data?.pickupDate).format("llll")}</span>
                       </div>
                       <div className="px-2 border-left border-right">
-                        <i className="fa fa-cogs text-primary mr-1"></i>
-                        <span>{moment(data?.dropOffDate).format("llll")}</span>
+                        <span>Dropoff Date: {moment(data?.dropOffDate).format("llll")}</span>
                       </div>
-                      <div className="px-2">
-                        <i className="fa fa-road text-primary mr-1"></i>
-                        <span>{data?.bookingDays}</span>
-                      </div>
-                      {/* <div className="px-2">
-                            <i className="fa fa-map-marker text-primary mr-1"></i>
-                            <span>{data.location}</span>
-                        </div> */}
                     </div>
 
                     <span
@@ -121,8 +107,9 @@ const MyListings = () => {
                     >
                       <h5>PKR {data?.car?.rentPerDay}/Day</h5>
                       <h5>
-                        Status: <span style={{ color: "rgb(197, 197, 197)" }}>Active</span>
+                        Booking Days: <span style={{ color: "rgb(197, 197, 197)" }}>{data?.bookingDays}</span>
                       </h5>
+                      <h5>Location: {data?.car?.location}</h5>
                       <br />
                       <button className="btn btn-primary px-3" onClick={() => showId(data._id)}>
                         View Booking

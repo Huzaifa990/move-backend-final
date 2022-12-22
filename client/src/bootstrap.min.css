@@ -639,6 +639,7 @@ pre code {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+
     background-color: #1d2021;
 }
 
@@ -1464,7 +1465,8 @@ pre code {
 
     .col-lg-4 {
         flex: 0 0 33.33333%;
-        max-width: 33.33333%
+        max-width: 33.33333%;
+        /* margin-top: -4px; */
     }
 
     .col-lg-5 {
@@ -2713,6 +2715,18 @@ fieldset:disabled a.btn {
     color: #fff;
     background-color: #F77D0A;
     border-color: #F77D0A
+}
+
+.btn-edit {
+    color: rgb(255, 255, 255);
+    background-color: #3df70a;
+    border-color: #3df70a;
+}
+
+.btn-deleteBooking {
+    color: rgb(255, 255, 255);
+    background-color: #f70a49;
+    border-color: #f70a49;
 }
 
 .btn-primary:hover {
@@ -10416,7 +10430,7 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-    color: #F77D0A !important
+    color: #F77D0A !important;
 }
 
 a.text-primary:hover,
