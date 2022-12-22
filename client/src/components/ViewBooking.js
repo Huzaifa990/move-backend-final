@@ -11,11 +11,8 @@ const ViewBooking = () => {
 
   useEffect(() => {
     names();
-  }, []);
+  },);
 
-  function goToDetails(id) {
-    navigate("/viewBooking", { state: { id: id } });
-  }
 
   function goToEdit(id) {
     navigate("/editBooking", { state: { id: id } });
@@ -23,10 +20,6 @@ const ViewBooking = () => {
 
   function goToDelete(id) {
     navigate("/deleteBooking", { state: { id: id } });
-  }
-
-  function showId(id) {
-    goToDetails(id);
   }
 
   function editCar(id) {
@@ -44,10 +37,7 @@ const ViewBooking = () => {
       headers: { Authorization: userDetails },
     });
     const data = await response.json();
-    console.log("Data: ", data.carBooking);
     setName(data.carBooking);
-    console.log("Name: ", data.carBooking.car.carName);
-    console.log("The length of data: ", name.length)
   };
 
   return (
@@ -141,9 +131,9 @@ const ViewBooking = () => {
                                 </div>
                             </div>
                             <div className="col-6 form-group">
-                                <label for="">Dropoff Time: </label>
+                                <label for="">Dropoff Date: </label>
                                 <div className="date" id="date2" data-target-input="nearest">
-                                <h5>Pickup Date: {moment(name?.dropOffDate).format("llll")}</h5>
+                                <h5>DropOff Date: {moment(name?.dropOffDate).format("llll")}</h5>
                                 </div>
                             </div>
                         </div>
