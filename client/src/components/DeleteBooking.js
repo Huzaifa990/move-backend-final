@@ -4,13 +4,13 @@ import axios from "axios";
 
 const DeleteBooking = () => {
 
+  //Function that navigates the user to the myBookings Page when called.
     const navigate = useNavigate();
-
     const goToBookings = () => {
         navigate('/myBookings');
     };
     
- 
+    //Storing the specific id of that booking in a variable.
     const location = useLocation();
     var CarId = location.state.id;
     async function getData(){
@@ -26,7 +26,7 @@ const DeleteBooking = () => {
 
   getData();
 
-  
+  //Function that sends the id of the booking that was chosen to the delete Api.
   function deleteCar(){
 
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -41,6 +41,7 @@ const DeleteBooking = () => {
         headers: headers,
       }
     )
+    //Confirmation box that appears when a booking is deleted.
     .then((res) => {
       console.log(res);
       document.getElementById("errorMessage").innerText = "Your booking has been deleted!";
@@ -54,6 +55,7 @@ const DeleteBooking = () => {
 ;
   }
 
+  // A box where the user can confirm the deletion or cancel the deletion.
   return (
     <>
       <div className="signup-form-container">
