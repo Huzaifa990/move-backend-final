@@ -3,9 +3,12 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
+// 👇️ View all listings from the API 
 const ViewListings = () => {
     const location = useLocation(); 
     console.log(location.state.id);
+
+    // 👇️ Use states for storing data and images from the API 
   const [name, setName] = useState([]);
   const [img, setImg] = useState([]);
 
@@ -14,6 +17,8 @@ const ViewListings = () => {
   });
   var imgg = [];
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  // 👇️ Getting data from the API and setting use states to store data and images form the API
   const names = async () => {
     const response = await fetch("http://localhost:8080/api/listing/"+location.state.id,{
         headers: {Authorization: userDetails}
@@ -27,6 +32,7 @@ const ViewListings = () => {
     setName(data.item);
   };
 
+  // 👇️ Changing the format of time and date so that it can be inserted into the form inputs
   function timeFix(){
     const timeInput1 = document.getElementById('pickTime');
 
@@ -45,7 +51,7 @@ const ViewListings = () => {
 
   setTimeout(timeFix, 2000);
   
-
+  // 👇️ Allows user to book a car 
   const bookingCar = () => {
 
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -67,7 +73,7 @@ const ViewListings = () => {
     var car = location.state.id;
 
     console.log(car, dropOffDate, pickupDate,paymentMethod);
-
+    // 👇️ Axios command to add a booking
     axios
     .post(
       "http://localhost:8080/api/booking/",
@@ -83,6 +89,7 @@ const ViewListings = () => {
     )
     .then((res) => {
         console.log(res);
+        // 👇️ Displaying the confirmation message and clearing the input values //
         document.getElementById("errorMessage").innerText = "Your Car Has Been Booked Successfully!";
         document.getElementById("errorApi").style.visibility = "visible";
         document.getElementById("errorApi").style.position = "relative";
@@ -103,7 +110,7 @@ const ViewListings = () => {
 
     }).catch((e)=>{
         console.log(e);
-
+        // 👇️ Displaying the error codes on the screen from the API //
         if (e.response.data.msg !== undefined) {
             document.getElementById("errorMessage").innerText = e.response.data.msg;
             document.getElementById("pickDate").style.border = "none";
