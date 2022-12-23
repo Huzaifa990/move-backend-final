@@ -5,14 +5,18 @@ import Loader from "./Loader";
 
 
 const MyListings = () => {
+ // Creating use states for data and loader
 
   const [name, setName] = useState([]);
+  // State of true means data is loading state of false means data has been loaded
+
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     names();
   }, []);
+  // Getting data from API 
 
   const names = async () => {
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -27,19 +31,21 @@ const MyListings = () => {
     
   };
 
-
+  // Go to view cars 
   function goToDetails(id){
     navigate("/viewListings", {state: {id:id}})
   }
 
+  // Go to editing listings 
   function goToEdit(id){
     navigate("/editListings", {state: {id:id}})
   }
 
+  // Go to delete listings
   function goToDelete(id){
     navigate("/deleteListings", {state: {id:id}})
   }
-
+  // Child callers for edit, delete, and show
   function showId(id){
     goToDetails(id);
   }
@@ -56,6 +62,7 @@ const MyListings = () => {
     return(
         <>
         <div className="">
+            {/* first check if the data is loading, then check if the data exists in the database */}
             
             { loading===true? <Loader/>:name.length>0?name.map((data)=>{
                 if(data !== null){

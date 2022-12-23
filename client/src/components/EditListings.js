@@ -7,16 +7,19 @@ const EditListing = () => {
     const navigate = useNavigate();
 
     const goToListings = () => {
-        // 👇️ navigate to /listings
+        // 👇️ navigate to my listings
         navigate('/myListings');
     };
  
     const location = useLocation();
     var CarId = location.state.id;
+
+    // 👇️ Get data form the API
     async function getData(){
 
         var userDetails = JSON.parse(localStorage.getItem("userDetails"));
         const response = await fetch("http://localhost:8080/api/listing/" + location.state.id, {
+          // 👇️ Sending AUTH TOKEN to the API
             headers: { Authorization: userDetails },
         });
         console.log(response);
@@ -27,7 +30,7 @@ const EditListing = () => {
     }
 
   getData();
-
+    // 👇️filling data from API into the form
   function fillForm(data) {
     document.getElementById("model").value = data.carName;
     document.getElementById("make").value = data.company;
@@ -43,11 +46,12 @@ const EditListing = () => {
     }
   }
 
-
+  // 👇️ Allows user to edit and update data 
   function editData(){
 
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
     const headers = {
+      // 👇️ Sending AUTH TOKEN to the API
         Authorization: userDetails,
     };
 
@@ -59,6 +63,7 @@ const EditListing = () => {
     let rentPerDay = parseInt(document.getElementById("userPrice").value);
     let transmissio = document.getElementById("transmission");
     let transmission = transmissio[transmissio.selectedIndex].value;
+    // 👇️ Axios command to edit and update data 
     axios
     .put(
       "http://localhost:8080/api/listing/" + CarId,
@@ -77,6 +82,9 @@ const EditListing = () => {
     )
     .then((res) => {
       console.log(res);
+      
+      // 👇️ Displaying confirmation message on the screen and clearing input values
+
       document.getElementById("errorMessage").innerText = "Your Details Have Been Updated Successfully!";
       document.getElementById("errorApi").style.visibility = "visible";
       document.getElementById("errorApi").style.position = "relative";
@@ -94,6 +102,7 @@ const EditListing = () => {
     })
     .catch((e) => {
       console.log(e);
+      // 👇️ Displaying the error codes on the screen from the API
 
       if (e.response.data.msg !== undefined) {
         document.getElementById("errorMessage").innerText = e.response.data.msg;
