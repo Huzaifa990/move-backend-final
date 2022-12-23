@@ -2,10 +2,14 @@ import moment from "moment/moment";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 const MyListings = () => {
   const [name, setName] = useState([]);
   const navigate = useNavigate();
+  // State of true means data is loading state of false means data has been loaded
+
+  const [loading, setLoading] = useState(true);
 
   //Function being called that fetches data from api.
   useEffect(() => {
@@ -21,6 +25,7 @@ const MyListings = () => {
     });
     const data = await response.json();
     setName(data.bookings);
+    setLoading(false);
   };
 
   //Functions to navigate from one state to another upon the press of certain buttons.
@@ -53,7 +58,7 @@ const MyListings = () => {
     <>
       <div className="">
         {/* This condition allows us to render all of the objects received from the Api. It runs for the count of objects received. */}
-        {name.length > 0 ? (
+        {loading===true? <Loader/>:name.length > 0 ? (
           name.map((data) => {
             if (data !== null) {
               return (
@@ -129,7 +134,7 @@ const MyListings = () => {
               return <div></div>;
             }
           })
-        ) : (
+        ) : loading===true? <Loader/>:(
           // If no data is found from API, this is show.
           <div>
             <center>
