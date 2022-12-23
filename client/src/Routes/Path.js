@@ -12,7 +12,7 @@ import ContactUs from "../components/ContactUs";
 import Driver from "../components/Driver";
 import Map from "../components/Map";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Slider from "../components/Headers/slider";
+import Slider from "../components/Headers/Slider";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import Listings from "../components/Listings";
