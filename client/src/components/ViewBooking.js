@@ -12,8 +12,8 @@ const ViewBooking = () => {
   useEffect(() => {
     names();
   },);
-
-
+  
+  //Functions to navigate from one state to another upon the press of certain buttons.
   function goToEdit(id) {
     navigate("/editBooking", { state: { id: id } });
   }
@@ -22,6 +22,7 @@ const ViewBooking = () => {
     navigate("/deleteBooking", { state: { id: id } });
   }
 
+  //Function that also passes the ID of the object to the navigated page.
   function editCar(id) {
     goToEdit(id);
   }
@@ -30,6 +31,7 @@ const ViewBooking = () => {
     goToDelete(id);
   }
 
+  //Function defined to fetch data from api for the specific booking and store it in a variable.
   const names = async () => {
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
     console.log("User ID =>", userDetails);
@@ -43,6 +45,7 @@ const ViewBooking = () => {
 
   return (
     <>    
+    {/* Data fetched being shown in. */}
         <div className="container-fluid pt-5">
         <div className="container pt-5 pb-3">
             <h1 className="display-4 text-uppercase mb-5">{name?.car?.company} {name?.car?.carName}</h1>
@@ -141,6 +144,7 @@ const ViewBooking = () => {
                         </div>
                     </div>
                 </div>
+                {/* Buttons to edit and/or delete the booking. */}
                 <div className="col-lg-4">
                     <div className="bg-secondary p-4 mb-5">
                         <h2 className="text-primary mb-4">Manage Booking</h2>

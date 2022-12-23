@@ -2,17 +2,17 @@ import moment from "moment/moment";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Loader from "./Loader";
 
 const MyListings = () => {
   const [name, setName] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  //Function being called that fetches data from api.
   useEffect(() => {
     names();
   }, []);
 
+  //Function defined to fetch data from api for all the bookings and store it in a variable.
   const names = async () => {
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
     console.log("User ID =>", userDetails);
@@ -21,9 +21,9 @@ const MyListings = () => {
     });
     const data = await response.json();
     setName(data.bookings);
-    setLoading(false);
   };
 
+  //Functions to navigate from one state to another upon the press of certain buttons.
   function goToDetails(id) {
     navigate("/viewBooking", { state: { id: id } });
   }
@@ -36,6 +36,7 @@ const MyListings = () => {
     navigate("/deleteBooking", { state: { id: id } });
   }
 
+  //Function that also passes the ID of the object to the navigated page.
   function showId(id) {
     goToDetails(id);
   }
@@ -51,11 +52,13 @@ const MyListings = () => {
   return (
     <>
       <div className="">
-        {loading===true? <Loader/>:name.length > 0 ? (
+        {/* This condition allows us to render all of the objects received from the Api. It runs for the count of objects received. */}
+        {name.length > 0 ? (
           name.map((data) => {
             if (data !== null) {
               return (
                 <>
+                {/* Data being fed into the list that we fetched from API. */}
                   <div
                     className="container pt-5 pb-3"
                     key={data.car?.carName}
@@ -96,11 +99,12 @@ const MyListings = () => {
                         </button>
                       </li>
                     </ul>
+                    {/* Moment plugin used to make the time and date format readable. */}
                     <div className="d-flex mb-4">
                       <div className="px-2">
                         <span>Pickup Date: {moment.utc(data?.pickupDate).format("llll")}</span>
                       </div>
-                      <div className="px-2 border-left">
+                      <div className="px-2 border-left border-right">
                         <span>Dropoff Date: {moment.utc(data?.dropOffDate).format("llll")}</span>
                       </div>
                     </div>
@@ -125,7 +129,8 @@ const MyListings = () => {
               return <div></div>;
             }
           })
-        ) :loading===true? <Loader/>: (
+        ) : (
+          // If no data is found from API, this is show.
           <div>
             <center>
               <h1>No Booking Found!</h1>
