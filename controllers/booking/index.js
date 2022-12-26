@@ -207,6 +207,12 @@ const updateBooking = async (req, res) => {
     return res.status(404).send({ msg: "Booking not found!" });
   }
 
+  if (bookingFound.updatedCount > 2) {
+    return res
+      .status(402)
+      .send({ msg: "Sorry, You have reached the limit for updating this booking!" });
+  }
+
   let user = await User.findById({ _id });
   if (!user) {
     return res.status(404).send({ msg: "User not found!" });
@@ -271,13 +277,14 @@ const updateBooking = async (req, res) => {
   ]);
 
   if (sameBooking.length > 0) {
-    if (sameBooking[0]._id.toString() !== id && sameBooking[0].lessee.toString() !== _id) {
+    let found = 0;
+    sameBooking.map((x) => {
+      if (x._id.toString() !== id || x.lessee.toString() !== _id) {
+        found = 1;
+      }
+    });
+    if (found === 1)
       return res.status(404).send({ msg: "This car is already booked in the chosen timeslot!" });
-    }
-
-    if (sameBooking.length !== 1) {
-      return res.status(404).send({ msg: "This car is already booked in the chosen timeslot!" });
-    }
   }
 
   let diff = (new Date(dropOffDate).getTime() - new Date(pickupDate).getTime()) / 1000;
@@ -295,6 +302,7 @@ const updateBooking = async (req, res) => {
     }
   );
 
+  const newUpdatedCount = bookingFound.updatedCount + 1;
   const bookingg = await booking.updateOne(
     {
       _id: id,
@@ -306,6 +314,7 @@ const updateBooking = async (req, res) => {
       dropOffDate,
       bookingDays,
       paymentDetails: payments._id,
+      updatedCount: newUpdatedCount,
     }
   );
 
