@@ -481,6 +481,21 @@ input:focus, select:focus{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
+}
+
+.img-card{
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #1c1e32bc;
+}
+
+.edit-del-btn{
+  float: right;
 }
 
 
