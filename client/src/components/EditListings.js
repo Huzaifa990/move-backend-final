@@ -1,18 +1,41 @@
 import React from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useState, useEffect} from "react";
+
 
 const EditListing = () => {
+    const [pictures, setPicture] = useState([]);
+  
+  
 
     const navigate = useNavigate();
+    
+    const location = useLocation();
+    var CarId = location.state.id;
+    var oldPictures = [];
+
+    useEffect(() => {
+      picture();
+
+      async function picture(){
+        var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+        const response = await fetch("http://localhost:8080/api/listing/" + location.state.id, {
+          // 👇️ Sending AUTH TOKEN to the API
+            headers: { Authorization: userDetails },
+        });
+        const data = await response.json();
+        
+        setPicture(data.item.picture);
+      }
+    },[location.state.id]);
 
     const goToListings = () => {
         // 👇️ navigate to my listings
         navigate('/myListings');
     };
  
-    const location = useLocation();
-    var CarId = location.state.id;
+    
 
     // 👇️ Get data form the API
     async function getData(){
@@ -30,6 +53,8 @@ const EditListing = () => {
     }
 
   getData();
+
+
     // 👇️filling data from API into the form
   function fillForm(data) {
     document.getElementById("model").value = data.carName;
@@ -38,6 +63,11 @@ const EditListing = () => {
     document.getElementById("mileage").value = data.mileage;
     document.getElementById("location").value = data.location;
     document.getElementById("userPrice").value = data.rentPerDay;
+    for(var i = 0; i < data.picture.length; i++){
+      oldPictures.push(data.picture[i]);
+    }
+
+    console.log(oldPictures);
     if(data.transmission === "auto"){
         document.getElementById("transmission").selectedIndex = 1;
     }
@@ -46,9 +76,37 @@ const EditListing = () => {
     }
   }
 
+  window.onload = function(){
+    document.querySelector("#inp").addEventListener("change", readFile);
+
+    function readFile(e) {
+      let files = e.target.files;
+      for (let i = 0; i < files.length; i++) {
+        (function (file) {
+          var reader = new FileReader();
+          reader.onload = () => {
+            document.getElementsByClassName("inpp")[i].value = reader.result;  
+          };
+          reader.readAsDataURL(file);
+        })(files[i]);
+      }
+      setTimeout(tranferData, 1000);   
+    }
+
+    function tranferData() {
+      var picture = [];
+      var space = document.getElementsByClassName("inpp");
+      for (var i = 0; i < space.length; i++) {
+        var data = space[i].value;
+        if (data !== "") {
+          picture.push(space[i].value);
+        }
+      } 
+      setPicture((previousData)=>previousData.concat(picture));
+    }
+  }
   // 👇️ Allows user to edit and update data 
   function editData(){
-
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
     const headers = {
       // 👇️ Sending AUTH TOKEN to the API
@@ -75,6 +133,7 @@ const EditListing = () => {
         transmission,
         location,
         rentPerDay,
+        picture: pictures
       },
       {
         headers: headers,
@@ -252,6 +311,37 @@ const EditListing = () => {
             />
           </div>
         </div>
+
+        <div className="col-6 form-group">
+            <label for="">Car Images:</label>
+            <input
+              type="file"
+              placeholder=""
+              required="required"
+              id="inp"
+              accept="image/*"
+              multiple
+            />
+            <br /> <br />
+            <div id="selected-images">
+                {pictures && pictures.map((data)=>{
+                  return(
+                    <div className="img-card" key={data}>
+                      <button onClick={()=>setPicture(pictures.filter((e)=> e !== data))} className="btn-primary">Remove</button>
+                      <input value={data} className="inpData" style={{visibility: "hidden"}}/>
+                      <img src={data} alt="car" id="img" height="150"/>  
+                    </div>   
+                  )
+                })}
+                
+            </div>
+            <input type="text" name="" value="" class="inpp" />
+            <input type="text" name="" value="" class="inpp" />
+            <input type="text" name="" value="" class="inpp" />
+            <input type="text" name="" value="" class="inpp" />
+            <input type="text" name="" value="" class="inpp" />
+            <input type="text" name="" value="" class="inpp" />
+          </div>
 
         <br />
         <p className="sub-form-heading">Pricing:</p>
