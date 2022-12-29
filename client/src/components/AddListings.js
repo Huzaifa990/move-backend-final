@@ -242,9 +242,10 @@ const sendData = () => {
             />
           </div>
 
-          <div className="col-6 form-group">
-            <label for="">Car Images:</label>
+          <div className="row">
+            <label for="" className="imagesLabelS">Car Images:</label>
             <input
+            className="imagesLabelS2"
               type="file"
               placeholder=""
               required="required"
