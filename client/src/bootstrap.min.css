@@ -605,7 +605,7 @@ mark,
 
 
 .img-fluid3 {
-    max-width: 50%;
+    max-width: 450px;
     height: auto;
     /* width: 30%; */
 }
@@ -613,8 +613,16 @@ mark,
 @media (max-width: 950px)
 {
     .img-fluid3{
-        max-width: 150%;
+        max-width: 450px;
         height: auto;
+    }
+}
+
+@media (max-width: 500px)
+{
+    .img-fluid3{
+        width: 150%;
+        height: 150%;
     }
 }
 
