@@ -5036,6 +5036,11 @@ input[type="button"].btn-block {
     border-bottom: 0
 }
 
+.rowLis{
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .card-header-pills {
     margin-right: -.625rem;
     margin-left: -.625rem

@@ -40,7 +40,7 @@ function Footer(){
             </div>
             <div className="col-lg-3 col-md-6 mb-5">
               <h4 className="text-uppercase text-light mb-4">Car Gallery</h4>
-              <div className="row mx-n1">
+              <div className="rowLis mx-n1">
                 <div className="col-4 px-1 mb-2">
                   <a href><img className="w-100" src={CG1} alt="" /></a>
                 </div>
