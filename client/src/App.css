@@ -347,9 +347,10 @@ h6,
   }
 }
 
+
 .signup-form-container{
   width: 60%;
-  margin: auto;
+  /* margin: auto; */
   margin-bottom: 100px;
   /* background-color: #2b2e4a; */
   background-image: linear-gradient(rgba(4,9,30,0.7), rgba(4,9,30,0.7)), url(img/bg-banner.jpg);
@@ -458,6 +459,13 @@ input:focus, select:focus{
   justify-content: space-around;
   width: 200%;
   flex-wrap: wrap;
+}
+
+@media (max-width: 600px)
+{
+  .imagesGrid{
+    display: grid;
+  }
 }
 
 #img{

@@ -87,7 +87,7 @@ const NavBar = () => {
                     : null
                 }
 
-{ 
+                { 
                   (userName !== null)
                     ?(accountType === "Lessee")? <Link to='/myBookings' className="nav-item nav-link active">My Bookings</Link>: null
                     : null
@@ -119,7 +119,7 @@ const NavBar = () => {
 
                 { 
                   (userName !== null)
-                    ? <button className="nav-item nav-link active" style={{background:"none", border:"none", paddingBottom:"35px"}} onClick={logout}>Logout</button>
+                    ? <button className="nav-item nav-link active" style={{background:"none", border:"none"}} onClick={logout}>Logout</button>
                     : null
                 }
 
@@ -128,7 +128,7 @@ const NavBar = () => {
                   (userName === null)
                     ? <Link to='/signin' className="nav-item nav-link active">Sign In</Link>
                     : <div>
-                        <Link to="/" className="nav-link btn-primary active">Welcome {userName}</Link>
+                        <Link to="/" className="nav-link btn-primary active">{userName}</Link>
                       </div>
                 }
 

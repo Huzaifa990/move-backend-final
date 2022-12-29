@@ -242,9 +242,9 @@ const sendData = () => {
             />
           </div>
 
-          <div className="col-6 form-group">
+          
             <label for="">Car Images:</label>
-            <input
+            <input className="imagesGrid"
               type="file"
               placeholder=""
               required="required"
@@ -260,7 +260,7 @@ const sendData = () => {
             <input type="text" name="" class="inpp" />
             <input type="text" name="" class="inpp" />
             <input type="text" name="" class="inpp" />
-          </div>
+          
         </div>
         <br />
         <div className="row">
