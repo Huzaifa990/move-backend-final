@@ -196,55 +196,77 @@ const deleteBooking = async (req, res) => {
 };
 
 const updateBooking = async (req, res) => {
+  // Get the booking id from the request parameters
   const id = req.params.id;
+  // Get the updated booking information from the request body
   const { car, pickupDate, dropOffDate, _id, accountType, paymentMethod } = req.body;
 
+  // Check if the id is a valid MongoDB ObjectId
   const valid = mongoose.isValidObjectId(id);
+  // Return an error if the id is invalid
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
+  // Find the booking using the id
   const bookingFound = await booking.findById(id);
+  // Return an error if the booking is not found
   if (!bookingFound) {
     return res.status(404).send({ msg: "Booking not found!" });
   }
 
+  // Return an error if the number of times the booking has been updated is greater than 3
   if (bookingFound.updatedCount > 2) {
     return res
       .status(402)
       .send({ msg: "Sorry, You have reached the limit for updating this booking!" });
   }
 
+  // Find the user associated with the booking
   let user = await User.findById({ _id });
+  // Return an error if the user is not found
   if (!user) {
     return res.status(404).send({ msg: "User not found!" });
   }
 
+  // Return an error if the user's account type is "Lessor"
   if (accountType === "Lessor") {
     return res.status(404).send({ msg: "This account type is not allowed to update a booking" });
   }
 
+  // Find the car listing using the car id
   let checkCar = await listing.findById(car);
+  // Return an error if the car listing is not found
   if (!checkCar) {
     return res.status(404).send({ msg: "Car Listing Not Found!" });
   }
 
+  // Get the current date and time
   const currentDate = moment(new Date());
+  // Get the pickup date and time as a moment object
   const bookingDate = moment(pickupDate);
+  // Get the drop off date and time as a moment object
   const dropOff = moment(dropOffDate);
 
+  // Return an error if the pickup date is in the past
   if (bookingDate < currentDate) {
     return res.status(404).send({ msg: "Booking Date/Time Cannot Be In Past" });
   }
+
+  // Return an error if the drop off date is before the pickup date
   if (dropOff <= bookingDate) {
     return res.status(404).send({ msg: "Drop Off Date/Time Cannot Be Before Booking Date/Time" });
   }
 
+  // Find bookings that conflict with the updated booking information
   const sameBooking = await booking.aggregate([
     {
       $match: {
+        // Find bookings with the same car id
         $and: [
           { car: mongoose.Types.ObjectId(car) },
+          // Find bookings with pickup or drop off times that overlap with the updated booking's pickup and drop off times
           {
             $or: [
+              // Pickup time is before the updated booking's pickup time and drop off time is after the updated booking's pickup time
               {
                 pickupDate: {
                   $lte: new Date(pickupDate),
@@ -253,6 +275,7 @@ const updateBooking = async (req, res) => {
                   $gte: new Date(pickupDate),
                 },
               },
+              // Pickup time is before the updated booking's drop off time and drop off time is after the updated booking's drop off time
               {
                 pickupDate: {
                   $lte: new Date(dropOffDate),
@@ -261,6 +284,7 @@ const updateBooking = async (req, res) => {
                   $gte: new Date(dropOffDate),
                 },
               },
+              // Pickup time is after the updated booking's pickup time and drop off time is before the updated booking's drop off time
               {
                 pickupDate: {
                   $gt: new Date(pickupDate),
@@ -277,23 +301,29 @@ const updateBooking = async (req, res) => {
   ]);
 
   if (sameBooking.length > 0) {
+    // Check if the car is already booked in the chosen timeslot
     let found = 0;
     sameBooking.map((x) => {
+      // Check if the overlapping booking is not the current one being updated
       if (x._id.toString() !== id || x.lessee.toString() !== _id) {
         found = 1;
       }
     });
     if (found === 1)
+      // Return an error if the car is already booked in the chosen timeslot
       return res.status(404).send({ msg: "This car is already booked in the chosen timeslot!" });
   }
 
+  // Calculate the number of days in the booking
   let diff = (new Date(dropOffDate).getTime() - new Date(pickupDate).getTime()) / 1000;
   diff = Math.abs(Math.round(diff));
   let hours = Math.round(diff / 3600);
   const bookingDays = Math.ceil(hours / 24);
 
+  // Calculate the rental cost for the booking
   const rent = checkCar.rentPerDay * bookingDays;
 
+  // Update the payment details for the booking
   const payments = await payment.updateOne(
     { _id: bookingFound.paymentDetails },
     {
@@ -302,6 +332,7 @@ const updateBooking = async (req, res) => {
     }
   );
 
+  // Update the booking itself
   const newUpdatedCount = bookingFound.updatedCount + 1;
   const bookingg = await booking.updateOne(
     {
@@ -319,7 +350,7 @@ const updateBooking = async (req, res) => {
   );
 
   // email sending on confirm booking can be sent.. to be added or not will decide.
-
+  // Return success message to the client
   return res.status(200).send({ msg: "Booking Updated Successfully" });
 };
 
