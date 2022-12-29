@@ -358,6 +358,20 @@ h6,
   border-radius: 10px;
 }
 
+@media (max-width: 700px)
+{
+  .signup-form-container{
+    width: 100%;
+    /* margin: auto; */
+    margin-bottom: 100px;
+    /* background-color: #2b2e4a; */
+    background-image: linear-gradient(rgba(4,9,30,0.7), rgba(4,9,30,0.7)), url(img/bg-banner.jpg);
+    background-attachment: fixed;
+    padding: 30px;
+    border-radius: 10px;
+  }
+}
+
 #password-lbl-error{
   color: red;
   visibility: hidden;
