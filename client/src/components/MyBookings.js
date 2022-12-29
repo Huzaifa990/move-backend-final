@@ -65,7 +65,7 @@ const MyListings = () => {
                 <>
                 {/* Data being fed into the list that we fetched from API. */}
                   <div
-                    className="container-fluid-listing pt-5 pb-3"
+                    className="container pt-5 pb-3"
                     key={data.car?.carName}
                     style={{ marginBottom: "50px", padding: "0px 100px" }}
                   >
@@ -73,11 +73,10 @@ const MyListings = () => {
                       {data?.car?.company} {data?.car?.carName}
                     </h1>
                     <img
-                      className="img-fluid2 mb-4 car-listings"
                       src={data?.car?.picture[0]}
                       alt="car"
                     />
-                    <ul style={{ float: "right" }} className="list-inline">
+                    <ul style={{ float: "right" }} className="list-inline m-0">
                       <li className="list-inline-item">
                         <button
                           className="btn btn-success btn-sm rounded-0 px-4"
@@ -105,7 +104,7 @@ const MyListings = () => {
                     </ul>
                     {/* Moment plugin used to make the time and date format readable. */}
                     <div className="d-flex mb-4">
-                      <div>
+                      <div className="px-2">
                         <span>Pickup Date: {moment.utc(data?.pickupDate).format("llll")}</span>
                       </div>
                       <div className="px-2 border-left border-right">
@@ -113,7 +112,9 @@ const MyListings = () => {
                       </div>
                     </div>
 
-                    <span className = "headingsRent" style={{}}>
+                    <span
+                      style={{ position: "relative", float: "right", bottom: "180px", right: "0" }}
+                    >
                       <h5>PKR {data?.car?.rentPerDay}/Day</h5>
                       <h5>
                         Booking Days: <span style={{ color: "rgb(197, 197, 197)" }}>{data?.bookingDays}</span>
