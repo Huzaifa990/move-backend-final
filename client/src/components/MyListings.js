@@ -68,10 +68,10 @@ const MyListings = () => {
                 if(data !== null){
                     return(
                         <>
-                        <div className="container pt-5 pb-3" key={data._id} style={{marginBottom: "50px", padding: "0px 100px"}}>
+                        <div className="container-fluid-listing pt-5 pb-3" key={data._id} style={{marginBottom: "50px", padding: "0px 100px"}}>
                     <h1 className="display-4 text-uppercase  mb-3">{data.company} {data.carName}</h1>
-                    <img className="img-fluid mb-4 car-listings" style={{width: "30%"}} src={data.picture[0]} alt="car"/>
-                    <ul style={{float: "right"}} className="list-inline m-0">
+                    <img className="img-fluid3 mb-4 car-listings" src={data.picture[0]} alt="car"/>
+                    <ul style={{ float: "right" }} className="list-inline">
     
                         <li className="list-inline-item">
                             <button className="btn btn-success btn-sm rounded-0 px-4" type="button" data-toggle="tooltip"
@@ -101,7 +101,7 @@ const MyListings = () => {
                         </div>
                     </div>
     
-                    <span style={{position: "relative", float: "right", bottom:"180px", right:"0"}}>
+                    <span >
                         <h5>PKR {data.rentPerDay}/Day</h5>
                             <h5>Status: <span style={{color: "rgb(197, 197, 197)"}}>Active</span></h5>
                             <br/>
