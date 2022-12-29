@@ -73,7 +73,7 @@ const MyListings = () => {
                       {data?.car?.company} {data?.car?.carName}
                     </h1>
                     <img
-                      className="img-fluid mb-4 car-listings"
+                      className="img-fluid2 mb-4 car-listings"
                       src={data?.car?.picture[0]}
                       alt="car"
                     />
