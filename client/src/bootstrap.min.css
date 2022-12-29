@@ -578,7 +578,7 @@ mark,
 .img-fluid {
     max-width: 100%;
     height: auto;
-    width: 30%;
+    /* width: 30%; */
 }
 
 @media (max-width: 600px)
