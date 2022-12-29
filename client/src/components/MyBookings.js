@@ -73,7 +73,7 @@ const MyListings = () => {
                       {data?.car?.company} {data?.car?.carName}
                     </h1>
                     <img
-                      className="img-fluid2 mb-4 car-listings"
+                      className="img-fluid3 mb-4 car-listings"
                       src={data?.car?.picture[0]}
                       alt="car"
                     />
@@ -105,7 +105,7 @@ const MyListings = () => {
                     </ul>
                     {/* Moment plugin used to make the time and date format readable. */}
                     <div className="d-flex mb-4">
-                      <div>
+                    <div className="px-2 border-left border-right">
                         <span>Pickup Date: {moment.utc(data?.pickupDate).format("llll")}</span>
                       </div>
                       <div className="px-2 border-left border-right">
