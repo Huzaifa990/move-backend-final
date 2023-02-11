@@ -80,46 +80,13 @@ const NavBar = () => {
 
 
                 <Link to='/listings' className="nav-item nav-link active">Car Listings</Link>
-
-                { 
-                  (userName !== null)
-                    ? (accountType === "Lessor")? <Link to='/addListings' className="nav-item nav-link active">List a Car</Link>: null
-                    : null
-                }
-
-{ 
-                  (userName !== null)
-                    ?(accountType === "Lessee")? <Link to='/myBookings' className="nav-item nav-link active">My Bookings</Link>: null
-                    : null
-                }
-
-                {
-                  (userName !== null)
-                ? (accountType === "Lessor")?  <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>: null
-                : null
-                }
-               
-                <div className="nav-item dropdown">
-                  <div className="dropdown-menu rounded-0 m-0">
-                    <a href="Greet.js" className="dropdown-item">
-                      The Team
-                    </a>
-                    <a href="Greet.js" className="dropdown-item">
-                      Testimonial
-                    </a>
-                  </div>
-                </div>
-
+             
                 <Link to='/Contact' className="nav-item nav-link active">Contact</Link>
-                {
-                  (userName !== null)
-                ? <Link to='/changepassword' className="nav-item nav-link active">Change Password</Link>
-                : null
-                }
+               
 
                 { 
                   (userName !== null)
-                    ? <button className="nav-item nav-link active" style={{background:"none", border:"none", paddingBottom:"35px"}} onClick={logout}>Logout</button>
+                    ? <button className="nav-item nav-link active" style={{background:"none",border:"none", paddingBottom:"35px"}} onClick={logout}>Logout</button>
                     : null
                 }
 
@@ -128,21 +95,39 @@ const NavBar = () => {
                   (userName === null)
                     ? <Link to='/signin' className="nav-item nav-link active">Sign In</Link>
                     : <div>
-                        <Link to="/" className="nav-link btn-primary active">Welcome {userName}</Link>
+                        <div className="dropdown nav-item nav-link active">
+                        <Link className="dropbtn"> {userName} 
+                           <i style={{paddingLeft:"10px"}} className="fa fa-caret-down"></i>
+                        </Link>
+                        <div className="dropdown-content">
+                          <Link to="/">My Profile</Link>
+                          {
+                            (userName !== null)
+                          ? <Link to='/changepassword'>Change Password</Link>
+                          : null
+                          }
+                          {
+                            (userName !== null)
+                          ? (accountType === "Lessor")?  <Link to='/myListings'>My Listings</Link>: null
+                          : null
+                          } 
+                          { 
+                            (userName !== null)
+                              ? (accountType === "Lessor")? <Link to='/addListings'>List a Car</Link>: null
+                              : null
+                          }
+
+                          { 
+                            (userName !== null)
+                              ?(accountType === "Lessee")? <Link to='/myBookings'>My Bookings</Link>: null
+                              : null
+                          }
+                     
+                        </div>
+                      </div> 
                       </div>
                 }
 
-                
-
-                
-                
-                {/* <Link to='/singup' className="nav-item nav-link active">Sign Up/ Login</Link>
-
-                <Link to='/myListings' className="nav-item nav-link active">My Listings</Link>
-                
-                <Link to='/' className="nav-link btn-primary">LIST YOUR CAR</Link> */}
-
-              
               </div>
             </div>
           </nav>
