@@ -107,8 +107,12 @@ const addBooking = async (req, res) => {
   });
   await payments.save();
 
+  const bookingAppliedDate = moment(new Date());
+  const lessor = checkCar.lessor;
   // Create a new booking object
   const bookingg = new booking({
+    bookingDate: bookingAppliedDate,
+    lessor: lessor,
     lessee: _id,
     car,
     pickupDate,

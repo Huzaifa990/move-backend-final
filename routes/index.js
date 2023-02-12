@@ -9,6 +9,7 @@ app.use("/auth", require("./auth"));
 app.use("/contact", require("./contact"));
 app.use("/listing", require("./listing"));
 app.use("/booking", require("./booking"));
+app.use("/analytics", require("./analytics"));
 
 app.use(dbError);
 

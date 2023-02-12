@@ -2,6 +2,9 @@
 const mongoose = require("mongoose");
 
 const Listings = new mongoose.Schema({
+  listingDate: {
+    type: Date,
+  },
   lessor: {
     type: mongoose.Types.ObjectId,
     required: true,

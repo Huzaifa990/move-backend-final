@@ -24,6 +24,14 @@ const User = new mongoose.Schema({
   otp: {
     type: String,
   },
+  status: {
+    type: String,
+    default: "active",
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 User.methods.generateAuthToken = function () {
