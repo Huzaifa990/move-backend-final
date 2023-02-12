@@ -2,6 +2,14 @@
 const mongoose = require("mongoose");
 
 const Booking = new mongoose.Schema({
+  bookingDate: {
+    type: Date,
+  },
+  lessor: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "users",
+  },
   lessee: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -32,6 +40,10 @@ const Booking = new mongoose.Schema({
   updatedCount: {
     type: Number,
     default: 0,
+  },
+  status: {
+    type: "String",
+    default: "pending",
   },
 });
 

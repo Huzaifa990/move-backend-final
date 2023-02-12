@@ -28,8 +28,11 @@ const addListing = async (req, res) => {
     return res.status(402).send({ msg: "This Account Cannot Add A Listing" });
   }
 
+  const listingAppliedDate = moment(new Date());
+
   // Create a new car listing
   const listedCar = new listing({
+    listingDate: listingAppliedDate,
     lessor: mongoose.Types.ObjectId(_id),
     carName,
     company,
