@@ -44,7 +44,7 @@ const lessorAnalytics = async (req, res) => {
 
   const allBookings = await booking.find({}).lean();
   let myListings = await listing
-    .find({ lessor: _id }, "listingDate company rentPerDay carName")
+    .find({ lessor: _id }, "listingDate company rentPerDay carName status")
     .lean();
 
   for (const listing of myListings) {
@@ -61,12 +61,49 @@ const lessorAnalytics = async (req, res) => {
 };
 
 const lesseeAnalytics = async (req, res) => {
-  const { accountType } = req.body;
+  const { accountType, _id } = req.body;
   if (accountType !== "Lessee") {
     return res.status(200).send({ msg: "Access Denied" });
   }
 
-  return res.status(200).send({ msg: "Lessee Analytics" });
+  const bookings = await booking.find({ lessee: _id }).populate("paymentDetails", "amount").lean();
+  const totalBookings = bookings.length;
+
+  const currentMonth = moment().month() + 1;
+  let lifetimeSpent = 0;
+  let currentMonthSpent = 0;
+  let currentMonthBookings = 0;
+  if (bookings.length > 0) {
+    for (const obj of bookings) {
+      if (obj.status == "completed") lifetimeSpent += obj.paymentDetails.amount;
+    }
+
+    const currentMonthData = bookings.filter((booking) => {
+      return moment(booking.bookingDate).month() + 1 === currentMonth;
+    });
+    if (currentMonthData.length > 0) {
+      currentMonthBookings = currentMonthData.length;
+      for (const obj of currentMonthData) {
+        if (obj.status == "completed") currentMonthSpent += obj.paymentDetails.amount;
+      }
+    }
+  }
+
+  const analytics = {
+    currentMonthBookings,
+    totalBookingsDone: totalBookings,
+    lifetimeSpent,
+    currentMonthSpent,
+  };
+
+  const allBookings = await booking.find({}).lean();
+  let myBookings = await booking
+    .find({ lessee: _id }, "bookingDate pickupDate dropOffDate paymentDetails car status")
+    .populate("paymentDetails", "amount")
+    .populate("car", "name company")
+    .lean();
+
+  return res.status(200).send({ analytics, myBookings });
 };
 
 const adminAnalytics = async (req, res) => {
