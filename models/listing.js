@@ -37,6 +37,10 @@ const Listings = new mongoose.Schema({
       type: String,
     },
   ],
+  status: {
+    type: String,
+    default: "active",
+  },
   // verified: {
   //   type: Boolean
   // }
