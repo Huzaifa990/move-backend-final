@@ -120,7 +120,14 @@ const NavBar = () => {
                             (userName !== null)
                           ? (accountType === "Lessor")?  <Link to='/lessorDashboard'>My Dashboard</Link>: null
                           : null
+                          }
+                          
+                          {
+                            (userName !== null)
+                          ? (accountType === "Lessee")?  <Link to='/lesseeDashboard'>My Dashboard</Link>: null
+                          : null
                           } 
+
                           { 
                             (userName !== null)
                               ? (accountType === "Lessor")? <Link to='/addListings'>List a Car</Link>: null
