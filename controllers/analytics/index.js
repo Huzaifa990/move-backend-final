@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const listing = require("../../models/listing");
 const booking = require("../../models/booking");
+const payment = require("../../models/payment");
 
 const lessorAnalytics = async (req, res) => {
   const { accountType, _id } = req.body;
@@ -100,7 +101,7 @@ const lesseeAnalytics = async (req, res) => {
   let myBookings = await booking
     .find({ lessee: _id }, "bookingDate pickupDate dropOffDate paymentDetails car status")
     .populate("paymentDetails", "amount")
-    .populate("car", "name company")
+    .populate("car", "carName company")
     .lean();
 
   return res.status(200).send({ analytics, myBookings });
@@ -112,8 +113,25 @@ const adminAnalytics = async (req, res) => {
     return res.status(200).send({ msg: "Access Denied" });
   }
 
-  return res.status(200).send({ msg: "Admin Analytics" });
+  const payments = await payment.find();
+  let totalRevenueGenerated = 0;
+  if (payments.length > 0) {
+    payments.map((x) => {
+      totalRevenueGenerated += x.amount;
+    });
+  }
+
+  // const totalMembers = await User;
+
+  const analytics = {
+    totalRevenueGenerated,
+  };
+
+  return res.status(200).send({ analytics });
 };
+
+// For admin, total revenue generated, total members, number of lessor and lessee
+// Total cars listed, total cars booked
 
 module.exports = {
   lessorAnalytics,
