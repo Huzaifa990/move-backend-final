@@ -251,7 +251,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="col-sm-6 col-lg-2">
+        <div className="col-sm-6 col-lg-4">
           <div className="overview-item overview-item--c2">
             <div className="overview__inner">
               <div className="overview-box clearfix">
