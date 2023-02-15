@@ -211,17 +211,6 @@ function App() {
           />
 
           <Route
-            path="lesseeDashboard"
-            element={
-              <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
-                <LesseeDashboard /> <Footer />{" "}
-              </>
-            }
-          />
-          
-
-          <Route
             path="lessorDashboard"
             element={
               <>
@@ -230,8 +219,17 @@ function App() {
               </>
             }
           />
+
+          <Route
+            path="lesseeDashboard"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
+                <LesseeDashboard /> <Footer />{" "}
+              </>
+            }
+          />
         </Routes>
-        
       </BrowserRouter>
     </>
   );

@@ -5,7 +5,7 @@ import { Bar, Line} from "react-chartjs-2";
 import "chart.js/auto";
 import Loader from "./Loader";
 
-export default function LessorDashboard() {
+export default function LesseeDashboard() {
   var [stats, setStats] = useState([]);
   var [anal, setAnal] = useState({});
   const [loading, setLoading] = useState(true);
