@@ -29,8 +29,8 @@ export default function LessorDashboard() {
     getData();
   }, [userDetails]);
 
-  function goToBookings() {
-    navigate("/myBookings");
+  function goToBookings(id) {
+    navigate("/viewBooking", { state: { id: id } });
   }
 
   return (
@@ -52,8 +52,8 @@ export default function LessorDashboard() {
                   backgroundColor: ["#F77D0A", "#343a40", "rgba(0,0,0,0.07)"],
                   
                   hoverBackgroundColor: [
-                    "#22253b",
-                    "#22253b",
+                    "#6f42c1",
+                    "#6f42c1",
                     "rgba(0, 123, 255,0.5)",
                     "rgba(0,0,0,0.07)",
                   ],
@@ -68,9 +68,29 @@ export default function LessorDashboard() {
               {
                 legend: {
                   labels: {
-                      backgroundColor:"#ffff"
+                      color:"white"
                   }
               },
+              
+              scales:{
+                y:{
+                  ticks: {
+                    color: "white",
+                    beginAtZero: true
+                  },
+                  grid:{
+                    color: "rgba(185, 185, 185, 0.427)"
+                  }
+                },
+
+                x:{
+                  
+                  ticks:{
+                    color:"white",
+                    beginAtZero: true
+                  }
+                }
+              }
               }
             }
             
@@ -84,18 +104,19 @@ export default function LessorDashboard() {
               datasets: [
                 {
                   label: "Booking Analysis",
-                  data: [anal.totalBookingsDone, anal.currentMonthBookings],
-                  backgroundColor: ["#343a40", "rgba(0,0,0,0.07)"],
+                  data: [ anal.currentMonthBookings,anal.totalBookingsDone],
+                  backgroundColor: ["#F77D0A", "white", "white"],
                   borderColor: '#F77D0A',  
                   hoverBackgroundColor: [
-                    "rgba(0, 123, 255,0.7)",
-                    "rgba(0, 123, 255,0.5)",
+                    "orange",
+                    "orange",
+                    "orange",
                     "rgba(0,0,0,0.07)",
                   ],
                 },
                 
               ],
-              labels: [ "Lifetime Bookings", "Current Month Bookings"],
+              labels: [  "Current Month Bookings", "Lifetime Bookings"],
             }}
             width={100}
             height={100}
@@ -106,6 +127,24 @@ export default function LessorDashboard() {
                       backgroundColor:"#ffff"
                   }
               },
+              scales:{
+                y:{
+                  ticks: {
+                    color: "white",
+                  },
+                  grid:{
+                    color: "rgba(185, 185, 185, 0.427)"
+                  }
+                },
+                
+                x:{
+                  ticks:{
+                    color:"white",
+                    beginAtZero: true
+                  },
+                
+                }
+              }
               }
             }
             
@@ -180,7 +219,7 @@ export default function LessorDashboard() {
                 <center>
                   <div className="text">
                     <h2>{anal.lifetimeSpent}</h2>
-                    <span>Total Money Spent</span>
+                    <span>Total Money Spent Overall</span>
                   </div>
                 </center>
               </div>
@@ -204,7 +243,7 @@ export default function LessorDashboard() {
           <tbody>
             {stats.map((item) => {
               return (
-                <tr onClick={goToBookings}>
+                <tr onClick={()=>goToBookings(item._id)}>
                   <td>{item.car.carName}</td>
                   <td>{item.car.company}</td>
                   <td>{moment.utc(item.listedDate).format("llll")}</td>
