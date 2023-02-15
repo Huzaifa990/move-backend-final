@@ -28,6 +28,7 @@ import MyBookings from "../components/MyBookings";
 import EditBooking from "../components/EditBooking";
 import ViewBooking from "../components/ViewBooking";
 import DeleteBooking from "../components/DeleteBooking";
+import LessorDashboard from "../components/LessorDashboard";
 function App() {
   return (
     <>
@@ -204,6 +205,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="Delete Bookings" />{" "}
                 <DeleteBooking /> <Footer />{" "}
+              </>
+            }
+          />
+
+          <Route
+            path="lessorDashboard"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
+                <LessorDashboard /> <Footer />{" "}
               </>
             }
           />
