@@ -1321,7 +1321,7 @@ input:focus, select:focus{
   color: white;
   min-height: 500px;
   display: flex;
-  background-color: #cfcfcf;
+  background-color: #1C1E32;
   border-radius: 10px;
   padding: 20px;
   justify-content: space-around;

@@ -52,8 +52,8 @@ export default function LessorDashboard() {
                   backgroundColor: ["#F77D0A", "#343a40", "rgba(0,0,0,0.07)"],
                   
                   hoverBackgroundColor: [
-                    "#22253b",
-                    "#22253b",
+                    "#6f42c1",
+                    "#6f42c1",
                     "rgba(0, 123, 255,0.5)",
                     "rgba(0,0,0,0.07)",
                   ],
@@ -68,9 +68,29 @@ export default function LessorDashboard() {
               {
                 legend: {
                   labels: {
-                      backgroundColor:"#ffff"
+                      color:"white"
                   }
               },
+              
+              scales:{
+                y:{
+                  ticks: {
+                    color: "white",
+                    beginAtZero: true
+                  },
+                  grid:{
+                    color: "rgba(185, 185, 185, 0.427)"
+                  }
+                },
+
+                x:{
+                  
+                  ticks:{
+                    color:"white",
+                    beginAtZero: true
+                  }
+                }
+              }
               }
             }
             
@@ -83,14 +103,14 @@ export default function LessorDashboard() {
             data={{
               datasets: [
                 {
-                  label: "Booking Analysis",
+                  label: "Your Activity",
                   data: [anal.carsListed, anal.currentMonthBookings, anal.totalBookingsReceived],
-                  backgroundColor: ["#F77D0A", "#343a40", "rgba(0,0,0,0.07)"],
+                  backgroundColor: ["#F77D0A", "white", "white"],
                   borderColor: '#F77D0A',  
                   hoverBackgroundColor: [
-                    "rgba(0, 123, 255,0.9)",
-                    "rgba(0, 123, 255,0.7)",
-                    "rgba(0, 123, 255,0.5)",
+                    "orange",
+                    "orange",
+                    "orange",
                     "rgba(0,0,0,0.07)",
                   ],
                 },
@@ -107,6 +127,24 @@ export default function LessorDashboard() {
                       backgroundColor:"#ffff"
                   }
               },
+              scales:{
+                y:{
+                  ticks: {
+                    color: "white",
+                  },
+                  grid:{
+                    color: "rgba(185, 185, 185, 0.427)"
+                  }
+                },
+                
+                x:{
+                  ticks:{
+                    color:"white",
+                    beginAtZero: true
+                  },
+                
+                }
+              }
               }
             }
             
