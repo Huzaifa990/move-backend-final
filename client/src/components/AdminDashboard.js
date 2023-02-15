@@ -35,8 +35,8 @@ export default function AdminDashboard() {
     navigate("/viewBooking", { state: { id: id } });
   }
 
-  function goToListings() {
-    navigate("/listings");
+  function goToListings(id) {
+    navigate("/viewListings", { state: { id: id } });
   }
 
   return (
@@ -315,7 +315,7 @@ export default function AdminDashboard() {
           <tbody>
             {listings.map((item) => {
               return (
-                <tr onClick={goToListings}>
+                <tr onClick={()=>goToListings(item._id)}>
                   <td>{item.carName}</td>
                   <td>{item.company}</td>
                   <td>{moment.utc(item.listedDate).format("llll")}</td>
