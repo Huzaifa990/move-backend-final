@@ -7,7 +7,7 @@ import Loader from "./Loader";
 
 export default function LesseeDashboard() {
   var [stats, setStats] = useState([]);
-  var [anal, setAnal] = useState({});
+  var [Analytics, setAnalytics] = useState({});
   const [loading, setLoading] = useState(true);
 
   var navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function LesseeDashboard() {
       var data = await response.json();
       console.log(data);
       setStats(data.myBookings);
-      setAnal(data.analytics);
+      setAnalytics(data.analytics);
       setLoading(false);
     }
 
@@ -48,7 +48,7 @@ export default function LesseeDashboard() {
               datasets: [
                 {
                   label: "My Spend",
-                  data: [anal.lifetimeSpent, anal.currentMonthSpent],
+                  data: [Analytics.lifetimeSpent, Analytics.currentMonthSpent],
                   backgroundColor: ["#F77D0A", "#343a40", "rgba(0,0,0,0.07)"],
                   
                   hoverBackgroundColor: [
@@ -104,7 +104,7 @@ export default function LesseeDashboard() {
               datasets: [
                 {
                   label: "Booking Analysis",
-                  data: [ anal.currentMonthBookings,anal.totalBookingsDone],
+                  data: [ Analytics.currentMonthBookings,Analytics.totalBookingsDone],
                   backgroundColor: ["#F77D0A", "white", "white"],
                   borderColor: '#F77D0A',  
                   hoverBackgroundColor: [
@@ -164,7 +164,7 @@ export default function LesseeDashboard() {
                 </div>
                 <center>
                   <div className="text">
-                    <h2>{anal.currentMonthBookings}</h2>
+                    <h2>{Analytics.currentMonthBookings}</h2>
                     <span>Current Month Bookings</span>
                   </div>
                 </center>
@@ -182,7 +182,7 @@ export default function LesseeDashboard() {
                 </div>
                 <center>
                   <div className="text">
-                    <h2>{anal.totalBookingsDone} PKR </h2>
+                    <h2>{Analytics.totalBookingsDone} PKR </h2>
                     <span>Total Bookings Done</span>
                   </div>
                 </center>
@@ -200,7 +200,7 @@ export default function LesseeDashboard() {
                 </div>
                 <center>
                   <div className="text">
-                    <h2>{anal.currentMonthSpent} PKR</h2>
+                    <h2>{Analytics.currentMonthSpent} PKR</h2>
                     <span>Money Spent This Month</span>
                   </div>
                 </center>
@@ -218,7 +218,7 @@ export default function LesseeDashboard() {
                 </div>
                 <center>
                   <div className="text">
-                    <h2>{anal.lifetimeSpent}</h2>
+                    <h2>{Analytics.lifetimeSpent}</h2>
                     <span>Total Money Spent Overall</span>
                   </div>
                 </center>
