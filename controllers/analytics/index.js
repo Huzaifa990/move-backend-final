@@ -3,6 +3,7 @@ const moment = require("moment");
 const listing = require("../../models/listing");
 const booking = require("../../models/booking");
 const payment = require("../../models/payment");
+const users = require("../../models/users");
 
 const lessorAnalytics = async (req, res) => {
   const { accountType, _id } = req.body;
@@ -121,17 +122,31 @@ const adminAnalytics = async (req, res) => {
     });
   }
 
-  // const totalMembers = await User;
+  const totalMembers = await users.find({}).count();
+  const totalLessors = await users.find({ accountType: "Lessor" }).count();
+  const totalLessees = await users.find({ accountType: "Lessee" }).count();
+  const totalCarListed = await listing.find({}).count();
+  const totalBookings = await booking.find({}).count();
 
   const analytics = {
     totalRevenueGenerated,
+    totalMembers: totalMembers - 1, //admin excluded
+    totalLessors,
+    totalLessees,
+    totalCarListed,
+    totalBookings,
   };
 
-  return res.status(200).send({ analytics });
-};
+  let allBookings = await booking
+    .find({}, "bookingDate pickupDate dropOffDate paymentDetails car status")
+    .populate("paymentDetails", "amount")
+    .populate("car", "carName company")
+    .lean();
 
-// For admin, total revenue generated, total members, number of lessor and lessee
-// Total cars listed, total cars booked
+  let allListings = await listing.find({}, "listingDate company rentPerDay carName status").lean();
+
+  return res.status(200).send({ analytics, allBookings, allListings });
+};
 
 module.exports = {
   lessorAnalytics,
