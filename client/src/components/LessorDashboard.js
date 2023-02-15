@@ -105,12 +105,12 @@ export default function LessorDashboard() {
                 {
                   label: "Your Activity",
                   data: [anal.carsListed, anal.currentMonthBookings, anal.totalBookingsReceived],
-                  backgroundColor: ["#F77D0A", "#343a40", "rgba(0,0,0,0.07)"],
+                  backgroundColor: ["#F77D0A", "white", "white"],
                   borderColor: '#F77D0A',  
                   hoverBackgroundColor: [
-                    "rgba(0, 123, 255,0.9)",
-                    "rgba(0, 123, 255,0.7)",
-                    "rgba(0, 123, 255,0.5)",
+                    "orange",
+                    "orange",
+                    "orange",
                     "rgba(0,0,0,0.07)",
                   ],
                 },
