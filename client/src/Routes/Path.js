@@ -30,6 +30,8 @@ import ViewBooking from "../components/ViewBooking";
 import DeleteBooking from "../components/DeleteBooking";
 import LessorDashboard from "../components/LessorDashboard";
 import LesseeDashboard from "../components/LesseeDashboard";
+import AdminDashboard from "../components/AdminDashboard";
+
 function App() {
   return (
     <>
@@ -226,6 +228,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
                 <LesseeDashboard /> <Footer />{" "}
+              </>
+            }
+          />
+
+<Route
+            path="adminDashboard"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
+                <AdminDashboard /> <Footer />{" "}
               </>
             }
           />
