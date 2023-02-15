@@ -43,8 +43,19 @@ const SignIn = () => {
 const navigate = useNavigate();
 
 const navigateToHome = () => {
+  var accountType= JSON.parse(localStorage.getItem("accountType")); 
+
+  if(accountType === "Lessor"){
+    navigate('/lessorDashboard');
+  }
+  else if(accountType === "Lessee"){
+    navigate('/lesseeDashboard');
+  }
+  else{
     // 👇️ navigate to /home page
     navigate('/');
+  }
+   
 };
 return (
 
