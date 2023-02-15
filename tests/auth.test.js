@@ -1,6 +1,13 @@
 const request = require("request");
 const assert = require("assert");
 
+const lesseeToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U5MjBkODVhNTYzY2JjYWFhNzBmNjEiLCJuYW1lIjoiTGVzc2VlIDEiLCJhY2NvdW50VHlwZSI6Ikxlc3NlZSIsImVtYWlsIjoibGVzc2VlMUBvdXRsb29rLmNvbSIsImlhdCI6MTY3NjQ5OTU0MiwiZXhwIjoxNjc2NzU4NzQyfQ.q-uEdkDA0kC6y1W-6zb-bSlY1eSoetXLuWGm56mb9gA";
+const lessorToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U5MjA4ZDljNmVlZTk4MDNhZjk4NWQiLCJuYW1lIjoiTGVzc29yIDEiLCJhY2NvdW50VHlwZSI6Ikxlc3NvciIsImVtYWlsIjoibGVzc29yMUBvdXRsb29rLmNvbSIsImlhdCI6MTY3NjQ5OTUyNywiZXhwIjoxNjc2NzU4NzI3fQ.RX0usC34eeTnyqtOaz_hF0LYwEcy4e99ZOR-T8JvQdY";
+const adminToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U5MjEwZTVhNTYzY2JjYWFhNzBmNjMiLCJuYW1lIjoiQWRtaW4gTW92ZSIsImFjY291bnRUeXBlIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluQG1vdmUuY29tIiwiaWF0IjoxNjc2NDk5NTA4LCJleHAiOjE2NzY3NTg3MDh9.wTskVb2F4hjVToojQaDbAyQySkIEOZQzueHV_Csy6h4";
+
 describe("Sign up", () => {
   it("Fails if email already exists", (done) => {
     request(
@@ -9,7 +16,7 @@ describe("Sign up", () => {
         url: "http://localhost:8080/api/auth/sign-up",
         form: {
           name: "Moaz Ahmed",
-          email: "moaz-ahmed@outlook.com",
+          email: "admin@move.com",
           password: "Admin@123",
           confirmPassword: "Admin@123",
           accountType: "Lessee",
@@ -42,7 +49,7 @@ describe("Sign up", () => {
     );
   });
 
-  it("Success in case everything is fine", (done) => {
+  it("Success in case everything is fine - make sure email does not exist in db", (done) => {
     request(
       {
         method: "POST",
@@ -72,7 +79,7 @@ describe("Login", () => {
         method: "POST",
         url: "http://localhost:8080/api/auth/login",
         form: {
-          email: "moaz-ahmed@outlook.com",
+          email: "admin@move.com",
           password: "Admin@123",
         },
       },
@@ -90,7 +97,7 @@ describe("Login", () => {
         method: "POST",
         url: "http://localhost:8080/api/auth/login",
         form: {
-          email: "moaz-ahmed@outlook.com",
+          email: "abcd@outlook.com",
           password: "Admin@12345",
         },
       },
@@ -102,18 +109,13 @@ describe("Login", () => {
   });
 });
 
-// ----- UPDATE PASSWORD TESTING -----
+// // ----- UPDATE PASSWORD TESTING -----
 
 // Variables for testing updatePassword
 const currentPassword = "Admin@123";
 const newPassword = "Admin@1234";
-const authToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2EwN2EwZmNlODc3ZGJkODlkY2I4MTgiLCJuYW1lIjoiTW9heiBBaG1lZCIsImFjY291bnRUeXBlIjoiTGVzc2VlIiwiZW1haWwiOiJtb2F6LWFobWVkQG91dGxvb2suY29tIiwiaWF0IjoxNjcyMzUwMDA4LCJleHAiOjE2NzI2MDkyMDh9.SBpSYBi7bWnhA76gnhWuUjmzHjv_RFy-ziHZpI87X_0";
 
-const lessorToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2E5ZGZkZTUzMzQxMjkyMDU4ZWI0ODUiLCJuYW1lIjoiTGVzc29yIDEiLCJhY2NvdW50VHlwZSI6Ikxlc3NvciIsImVtYWlsIjoibGVzc29yMUBvdXRsb29rLmNvbSIsImlhdCI6MTY3MjM1MTc4MiwiZXhwIjoxNjcyNjEwOTgyfQ.oSurOLU4nIxiqYPIRsPVDSGQwAtvdaCmwH3HAqHpaXU";
-
-// Test updatePassword API
+// // Test updatePassword API
 describe("Update Password", () => {
   // Test handling of missing token
   it("Token not found", (done) => {
@@ -145,7 +147,7 @@ describe("Update Password", () => {
           confirmNewPassword: "Admin@123",
         },
         headers: {
-          Authorization: authToken,
+          Authorization: lesseeToken,
         },
       },
       (err, res, body) => {
@@ -167,7 +169,7 @@ describe("Update Password", () => {
           confirmNewPassword: "Admin@123",
         },
         headers: {
-          Authorization: authToken,
+          Authorization: lesseeToken,
         },
       },
       (err, res, body) => {
@@ -189,7 +191,7 @@ describe("Update Password", () => {
           confirmNewPassword: "Admin@123",
         },
         headers: {
-          Authorization: authToken,
+          Authorization: lesseeToken,
         },
       },
       (err, res, body) => {
@@ -225,7 +227,7 @@ describe("Forgot password", () => {
         method: "POST",
         url: "http://localhost:8080/api/auth/forgotPassword",
         form: {
-          email: "moaz-ahmed@outlook.com",
+          email: "lessor1@outlook.com",
         },
       },
       (err, res, body) => {
@@ -280,19 +282,19 @@ describe("Contact Us", () => {
 });
 
 describe("Bookings", () => {
-  it("Add A New Bookings", (done) => {
+  it("Make A New Booking", (done) => {
     request(
       {
         method: "POST",
         url: "http://localhost:8080/api/booking",
         form: {
-          car: "6387c482c70acbf1fa018f6b",
-          pickupDate: "2033-01-20T09:00Z",
-          dropOffDate: "2033-01-22T23:00Z",
+          car: "63e9222e9c6eee9803af9863",
+          pickupDate: "2023-03-20T09:00Z",
+          dropOffDate: "2023-03-22T23:00Z",
           paymentMethod: "COD",
         },
         headers: {
-          Authorization: authToken,
+          Authorization: lesseeToken,
         },
       },
 
@@ -311,7 +313,7 @@ describe("Listing", () => {
         method: "GET",
         url: "http://localhost:8080/api/listing",
         headers: {
-          Authorization: authToken,
+          Authorization: lesseeToken,
         },
       },
 
@@ -328,7 +330,7 @@ describe("Listing", () => {
         method: "POST",
         url: "http://localhost:8080/api/listing",
         form: {
-          carName: "Testing",
+          carName: "Civic RS",
           company: "Honda",
           model: 2019,
           mileage: 35000,
@@ -356,6 +358,114 @@ describe("Listing", () => {
       {
         method: "GET",
         url: "http://localhost:8080/api/listing/my-listings",
+        headers: {
+          Authorization: lessorToken,
+        },
+      },
+
+      (err, res, body) => {
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      }
+    );
+  });
+});
+
+describe("Lessor Analytics", () => {
+  it("Returns Valid Data On Valid (Lessor) Request", (done) => {
+    request(
+      {
+        method: "GET",
+        url: "http://localhost:8080/api/analytics/lessorAnalytics",
+        headers: {
+          Authorization: lessorToken,
+        },
+      },
+
+      (err, res, body) => {
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      }
+    );
+  });
+
+  it("Returns Access Denied On Invalid (Non-Lessor) Request", (done) => {
+    request(
+      {
+        method: "GET",
+        url: "http://localhost:8080/api/analytics/lessorAnalytics",
+        headers: {
+          Authorization: lesseeToken,
+        },
+      },
+
+      (err, res, body) => {
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      }
+    );
+  });
+});
+
+describe("Lessee Analytics", () => {
+  it("Returns Valid Data On Valid (Lessee) Request", (done) => {
+    request(
+      {
+        method: "GET",
+        url: "http://localhost:8080/api/analytics/lesseeAnalytics",
+        headers: {
+          Authorization: lesseeToken,
+        },
+      },
+
+      (err, res, body) => {
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      }
+    );
+  });
+
+  it("Returns Access Denied On Invalid (Non-Lessee) Request", (done) => {
+    request(
+      {
+        method: "GET",
+        url: "http://localhost:8080/api/analytics/lesseeAnalytics",
+        headers: {
+          Authorization: lessorToken,
+        },
+      },
+
+      (err, res, body) => {
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      }
+    );
+  });
+});
+
+describe("Admin Analytics", () => {
+  it("Returns Valid Data On Valid (Admin) Request", (done) => {
+    request(
+      {
+        method: "GET",
+        url: "http://localhost:8080/api/analytics/adminAnalytics",
+        headers: {
+          Authorization: adminToken,
+        },
+      },
+
+      (err, res, body) => {
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      }
+    );
+  });
+
+  it("Returns Access Denied On Invalid (Non-Admin) Request", (done) => {
+    request(
+      {
+        method: "GET",
+        url: "http://localhost:8080/api/analytics/adminAnalytics",
         headers: {
           Authorization: lessorToken,
         },
