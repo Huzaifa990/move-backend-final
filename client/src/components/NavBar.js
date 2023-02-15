@@ -100,7 +100,11 @@ const NavBar = () => {
                            <i style={{paddingLeft:"10px"}} className="fa fa-caret-down"></i>
                         </Link>
                         <div className="dropdown-content">
-                          <Link to="/">My Profile</Link>
+                          {
+                            (userName !== null)
+                          ? (accountType === "Admin")?  <Link to='/adminDashboard'>Admin Dashboard</Link>: null
+                          : null
+                          } 
                           {
                             (userName !== null)
                           ? <Link to='/changepassword'>Change Password</Link>
