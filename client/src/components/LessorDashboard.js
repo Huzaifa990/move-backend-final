@@ -29,8 +29,8 @@ export default function LessorDashboard() {
     getData();
   }, [userDetails]);
 
-  function goToListings() {
-    navigate("/myListings");
+  function goToListings(id) {
+    navigate("/viewListings", { state: { id: id } });
   }
 
   return (
@@ -260,7 +260,7 @@ export default function LessorDashboard() {
           <tbody>
             {stats.map((item) => {
               return (
-                <tr onClick={goToListings}>
+                <tr onClick={()=>goToListings(item._id)}>
                   <td>{item.carName}</td>
                   <td>{item.company}</td>
                   <td>{moment.utc(item.listedDate).format("llll")}</td>
