@@ -143,7 +143,7 @@ export default function LessorDashboard() {
           <br />
           <h1 className="overview-heading">OVERVIEW:</h1>
           <div className="stats-container">
-            <div className="col-sm-6 col-lg-2">
+            <div className="col-sm-6 col-lg-3">
               <div className="overview-item overview-item--c1">
                 <div className="overview__inner">
                   <div className="overview-box clearfix">
@@ -161,7 +161,7 @@ export default function LessorDashboard() {
               </div>
             </div>
 
-            <div className="col-sm-6 col-lg-2">
+            <div className="col-sm-6 col-lg-3">
               <div className="overview-item overview-item--c2">
                 <div className="overview__inner">
                   <div className="overview-box clearfix">
@@ -179,7 +179,7 @@ export default function LessorDashboard() {
               </div>
             </div>
 
-            <div className="col-sm-8 col-lg-2">
+            <div className="col-sm-8 col-lg-3">
               <div className="overview-item overview-item--c3">
                 <div className="overview__inner">
                   <div className="overview-box clearfix">
@@ -197,25 +197,7 @@ export default function LessorDashboard() {
               </div>
             </div>
 
-            <div className="col-sm-6 col-lg-2">
-              <div className="overview-item overview-item--c4">
-                <div className="overview__inner">
-                  <div className="overview-box clearfix">
-                    <div className="icon">
-                      <i className="zmdi zmdi-account-o"></i>
-                    </div>
-                    <center>
-                      <div className="text">
-                        <h2>{anal.lifetimeRevenue} PKR</h2>
-                        <span>Life Time Revenue Generated</span>
-                      </div>
-                    </center>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-sm-6 col-lg-2">
+            <div className="col-sm-6 col-lg-3">
               <div className="overview-item overview-item--c1">
                 <div className="overview__inner">
                   <div className="overview-box clearfix">
@@ -232,6 +214,26 @@ export default function LessorDashboard() {
                 </div>
               </div>
             </div>
+
+            <div className="col-sm-6 col-lg-4">
+              <div className="overview-item overview-item--c4">
+                <div className="overview__inner">
+                  <div className="overview-box clearfix">
+                    <div className="icon">
+                      <i className="zmdi zmdi-account-o"></i>
+                    </div>
+                    <center>
+                      <div className="text">
+                        <h2>{anal.lifetimeRevenue} PKR</h2>
+                        <span>Life Time Revenue</span>
+                      </div>
+                    </center>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
           </div>
           <h1>Your Cars: </h1>
           <br /> <br />
