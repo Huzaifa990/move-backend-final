@@ -51,6 +51,9 @@ const navigateToHome = () => {
   else if(accountType === "Lessee"){
     navigate('/lesseeDashboard');
   }
+  else if(accountType === "Admin"){
+    navigate('/adminDashboard');
+  }
   else{
     // 👇️ navigate to /home page
     navigate('/');

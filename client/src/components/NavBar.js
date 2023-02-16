@@ -1,20 +1,20 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  function logout(){
-    localStorage.removeItem("userName")
+  function logout() {
+    localStorage.removeItem("userName");
     localStorage.removeItem("userDetails");
     localStorage.removeItem("accountType");
     navigate("/");
     window.location.reload();
   }
-  console.log(localStorage.getItem("userName"))
-  var userName= JSON.parse(localStorage.getItem("userName")); 
-  var accountType= JSON.parse(localStorage.getItem("accountType")); 
-  
+  console.log(localStorage.getItem("userName"));
+  var userName = JSON.parse(localStorage.getItem("userName"));
+  var accountType = JSON.parse(localStorage.getItem("accountType"));
+
   return (
     <div>
       <div className="container-fluid bg-dark py-3 px-lg-5 d-none d-lg-block">
@@ -71,80 +71,100 @@ const NavBar = () => {
               id="navbarCollapse"
             >
               <div className="navbar-nav ml-auto py-0">
+                {accountType !== "Admin" ? (
+                  <Link to="/" className="nav-item nav-link active">
+                    Home
+                  </Link>
+                ) : null}
 
-                <Link to='/' className="nav-item nav-link active">Home</Link>
-                
-                <Link to='/about' className="nav-item nav-link active">About</Link>
+                {accountType !== "Admin" ? (
+                  <Link to="/about" className="nav-item nav-link active">
+                    About
+                  </Link>
+                ) : null}
 
-                <Link to='/services' className="nav-item nav-link active">Services</Link>
+                {accountType !== "Admin" ? (
+                  <Link to="/services" className="nav-item nav-link active">
+                    Services
+                  </Link>
+                ) : null}
 
+                {accountType !== "Admin" ? (
+                  <Link to="/listings" className="nav-item nav-link active">
+                    Car Listings
+                  </Link>
+                ) : null}
 
-                <Link to='/listings' className="nav-item nav-link active">Car Listings</Link>
-             
-                <Link to='/Contact' className="nav-item nav-link active">Contact</Link>
-               
+                {accountType !== "Admin" ? (
+                  <Link to="/Contact" className="nav-item nav-link active">
+                    Contact
+                  </Link>
+                ) : null}
 
-                { 
-                  (userName !== null)
-                    ? <button className="nav-item nav-link active" style={{background:"none",border:"none", paddingBottom:"35px"}} onClick={logout}>Logout</button>
-                    : null
-                }
+                {userName !== null ? (
+                  <button
+                    className="nav-item nav-link active"
+                    style={{ background: "none", border: "none", paddingBottom: "35px" }}
+                    onClick={logout}
+                  >
+                    Logout
+                  </button>
+                ) : null}
 
+                {userName === null ? (
+                  <Link to="/signin" className="nav-item nav-link active">
+                    Sign In
+                  </Link>
+                ) : (
+                  <div>
+                    <div className="dropdown nav-item nav-link active">
+                      <Link className="dropbtn">
+                        {" "}
+                        {userName}
+                        <i style={{ paddingLeft: "10px" }} className="fa fa-caret-down"></i>
+                      </Link>
+                      <div className="dropdown-content">
+                        {userName !== null ? (
+                          accountType === "Admin" ? (
+                            <Link to="/adminDashboard">Admin Dashboard</Link>
+                          ) : null
+                        ) : null}
+                        {userName !== null ? (
+                          <Link to="/changepassword">Change Password</Link>
+                        ) : null}
+                        {userName !== null ? (
+                          accountType === "Lessor" ? (
+                            <Link to="/myListings">My Listings</Link>
+                          ) : null
+                        ) : null}
 
-                { 
-                  (userName === null)
-                    ? <Link to='/signin' className="nav-item nav-link active">Sign In</Link>
-                    : <div>
-                        <div className="dropdown nav-item nav-link active">
-                        <Link className="dropbtn"> {userName} 
-                           <i style={{paddingLeft:"10px"}} className="fa fa-caret-down"></i>
-                        </Link>
-                        <div className="dropdown-content">
-                          {
-                            (userName !== null)
-                          ? (accountType === "Admin")?  <Link to='/adminDashboard'>Admin Dashboard</Link>: null
-                          : null
-                          } 
-                          {
-                            (userName !== null)
-                          ? <Link to='/changepassword'>Change Password</Link>
-                          : null
-                          }
-                          {
-                            (userName !== null)
-                          ? (accountType === "Lessor")?  <Link to='/myListings'>My Listings</Link>: null
-                          : null
-                          } 
+                        {userName !== null ? (
+                          accountType === "Lessor" ? (
+                            <Link to="/lessorDashboard">My Dashboard</Link>
+                          ) : null
+                        ) : null}
 
-                          {
-                            (userName !== null)
-                          ? (accountType === "Lessor")?  <Link to='/lessorDashboard'>My Dashboard</Link>: null
-                          : null
-                          }
-                          
-                          {
-                            (userName !== null)
-                          ? (accountType === "Lessee")?  <Link to='/lesseeDashboard'>My Dashboard</Link>: null
-                          : null
-                          } 
+                        {userName !== null ? (
+                          accountType === "Lessee" ? (
+                            <Link to="/lesseeDashboard">My Dashboard</Link>
+                          ) : null
+                        ) : null}
 
-                          { 
-                            (userName !== null)
-                              ? (accountType === "Lessor")? <Link to='/addListings'>List a Car</Link>: null
-                              : null
-                          }
+                        {userName !== null ? (
+                          accountType === "Lessor" ? (
+                            <Link to="/addListings">List a Car</Link>
+                          ) : null
+                        ) : null}
 
-                          { 
-                            (userName !== null)
-                              ?(accountType === "Lessee")? <Link to='/myBookings'>My Bookings</Link>: null
-                              : null
-                          }
-                     
-                        </div>
-                      </div> 
+                        {userName !== null ? (
+                          accountType === "Lessee" ? (
+                            <Link to="/myBookings">My Bookings</Link>
+                          ) : null
+                        ) : null}
                       </div>
-                }
-
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </nav>
