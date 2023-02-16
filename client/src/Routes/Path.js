@@ -216,8 +216,8 @@ function App() {
             path="lessorDashboard"
             element={
               <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
-                <LessorDashboard /> <Footer />{" "}
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" /> <LessorDashboard />{" "}
+                <Footer />{" "}
               </>
             }
           />
@@ -226,17 +226,17 @@ function App() {
             path="lesseeDashboard"
             element={
               <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
-                <LesseeDashboard /> <Footer />{" "}
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" /> <LesseeDashboard />{" "}
+                <Footer />{" "}
               </>
             }
           />
 
-<Route
+          <Route
             path="adminDashboard"
             element={
               <>
-                <NavBar /> <Search /> <SubHeaderAbout headingText="Dashboard" />{" "}
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Admin Dashboard" />{" "}
                 <AdminDashboard /> <Footer />{" "}
               </>
             }
