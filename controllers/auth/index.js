@@ -58,7 +58,7 @@ const signUp = async (req, res) => {
   const emailSent = await nodeMailer({
     to: `${email}`,
     subject: "Welcome To MOVE",
-    html: `<h1>Welcome! Set Password Using this link: ${process.env.DOMAIN}/activateAccount?otp=${otp}</h1>`,
+    html: `<h1>Welcome! Verify Email Using this link: ${process.env.DOMAIN}/activateAccount?otp=${otp}</h1>`,
   });
 
   return res.status(200).send({
@@ -116,6 +116,44 @@ const updateName = async (req, res) => {
   res.status(200).send({ msg: "Name Updated Successfully." });
 };
 
+const updateEmail = async (req, res) => {
+  let { updatedEmail, _id } = req.body;
+
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  updatedEmail = updatedEmail.toLowerCase();
+  const emailExists = await User.findOne({ email: updatedEmail });
+  if (emailExists && emailExists._id.toString() !== _id) {
+    return res.status(422).send({ msg: "Email already exists!" });
+  }
+
+  const otp = Math.floor(Math.random() * 1000000000000);
+  await User.findOneAndUpdate(
+    { _id },
+    {
+      otp,
+      emailVerified: false,
+    }
+  );
+
+  const emailSent = await nodeMailer({
+    to: `${updatedEmail}`,
+    subject: "Update your MOVE account Password",
+    html: `<h1>Verify Email Using this link: ${process.env.DOMAIN}/activateAccount?otp=${otp}</h1>`,
+  });
+
+  return res.status(200).send({
+    msg: "Please verify your updated email!",
+    emailSent,
+  });
+};
+
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
@@ -161,19 +199,15 @@ const setPassword = async (req, res) => {
 };
 
 const activateAccount = async (req, res) => {
-  let { otp, password } = req.body;
+  let { otp } = req.body;
   const user = await User.findOne({ otp });
   if (!user) {
     return res.status(422).send({ msg: "OTP Link Expired!" });
   }
 
-  const salt = await bcrypt.genSalt(10);
-  password = await bcrypt.hash(password, salt);
-
   await User.findOneAndUpdate(
     { otp },
     {
-      password,
       emailVerified: true,
       $unset: { otp: 1 },
     }
@@ -186,6 +220,7 @@ module.exports = {
   login,
   signUp,
   updateName,
+  updateEmail,
   updatePassword,
   forgotPassword,
   setPassword,
