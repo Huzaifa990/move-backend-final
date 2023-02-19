@@ -24,10 +24,17 @@ const User = new mongoose.Schema({
   otp: {
     type: String,
   },
+  //to serve active/inactive purpose
   status: {
-    type: String,
-    default: "active",
+    type: Boolean,
+    default: true,
   },
+  //email verification
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  //user verification
   verified: {
     type: Boolean,
     default: false,
