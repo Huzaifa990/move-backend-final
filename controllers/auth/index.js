@@ -91,6 +91,31 @@ const updatePassword = async (req, res) => {
   res.status(200).send({ msg: "Password Updated Successfully." });
 };
 
+const updateName = async (req, res) => {
+  let { updatedName, _id } = req.body;
+
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  if (updatedName == "") {
+    return res.status(422).send({ msg: "Please enter a valid name!" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id },
+    {
+      name: updatedName,
+    }
+  );
+
+  res.status(200).send({ msg: "Name Updated Successfully." });
+};
+
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
@@ -160,6 +185,7 @@ const activateAccount = async (req, res) => {
 module.exports = {
   login,
   signUp,
+  updateName,
   updatePassword,
   forgotPassword,
   setPassword,
