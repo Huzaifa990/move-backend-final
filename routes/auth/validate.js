@@ -46,6 +46,10 @@ module.exports.validateForgotPassword = yup.object({
   email: yup.string().email().required().label("Email"),
 });
 
+module.exports.validateName = yup.object({
+  updatedName: yup.string().required().label("Name"),
+});
+
 module.exports.validateSetPassword = yup.object({
   otp: yup.string().required().label("OTP"),
   password: yup
