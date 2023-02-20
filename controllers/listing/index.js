@@ -102,10 +102,7 @@ const updateListing = async (req, res) => {
   const { carName, company, model, mileage, transmission, location, rentPerDay, picture } =
     req.body;
 
-  // Get the ID of the listing to be updated from the request parameters
   const id = req.params.id;
-
-  // Validate the ID
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
@@ -149,6 +146,36 @@ const myListings = async (req, res) => {
   res.status(200).send({ count: listings.length, listings });
 };
 
+const toggleListingStatus = async (req, res) => {
+  const id = req.params.id;
+  const { accountType, _id } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  if (accountType === "Lessee") {
+    return res.status(422).send({ msg: "Lessee(s) are not allowed to change status of listing" });
+  }
+
+  const listingExist = await listing.findById(id);
+  if (!listingExist) {
+    return res.status(404).send({ msg: "Listing not found" });
+  }
+
+  if (listingExist && listingExist.lessor.toString() !== _id && accountType !== "Admin") {
+    return res.status(422).send({ msg: "You are not allowed to change status of this listing" });
+  }
+
+  const newStatus = !listingExist.status;
+  await listing.updateOne(
+    { _id: id },
+    {
+      status: newStatus,
+    }
+  );
+
+  return res.status(200).send({ status: !listingExist.status });
+};
+
 module.exports = {
   getById,
   myListings,
@@ -156,4 +183,5 @@ module.exports = {
   addListing,
   deleteListing,
   updateListing,
+  toggleListingStatus,
 };

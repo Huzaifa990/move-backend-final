@@ -138,6 +138,7 @@ const updateEmail = async (req, res) => {
     { _id },
     {
       otp,
+      email: updatedEmail,
       emailVerified: false,
     }
   );

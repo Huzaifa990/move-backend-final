@@ -6,6 +6,7 @@ const {
   getById,
   updateListing,
   myListings,
+  toggleListingStatus,
 } = require("../../controllers/listing");
 const { Validator, ensureAuth } = require("../../middleware/ensure-auth");
 const { validateNew, validateUpdate } = require("./validate");
@@ -17,6 +18,7 @@ app.post("/", ensureAuth, Validator(validateNew, "body"), addListing);
 app.get("/my-listings", ensureAuth, myListings);
 app.get("/:id", ensureAuth, getById);
 app.delete("/:id", ensureAuth, deleteListing);
+app.put("/toggle/:id", ensureAuth, toggleListingStatus);
 app.put("/:id", ensureAuth, Validator(validateUpdate, "body"), updateListing);
 
 module.exports = app;
