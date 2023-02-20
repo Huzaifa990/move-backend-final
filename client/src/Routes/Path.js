@@ -31,6 +31,7 @@ import DeleteBooking from "../components/DeleteBooking";
 import LessorDashboard from "../components/LessorDashboard";
 import LesseeDashboard from "../components/LesseeDashboard";
 import AdminDashboard from "../components/AdminDashboard";
+import ActivateAccount from "../components/ActivateAccount";
 
 function App() {
   return (
@@ -238,6 +239,15 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="Admin Dashboard" />{" "}
                 <AdminDashboard /> <Footer />{" "}
+              </>
+            }
+          />
+
+          <Route
+            path="activateAccount"
+            element={
+              <>
+                <ActivateAccount />
               </>
             }
           />
