@@ -38,8 +38,8 @@ const Listings = new mongoose.Schema({
     },
   ],
   status: {
-    type: String,
-    default: "active",
+    type: Boolean,
+    default: true,
   },
   // verified: {
   //   type: Boolean
