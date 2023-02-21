@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const listing = require("../../models/listing");
 
 const getAllListings = async (req, res) => {
-  const listings = await listing.find({});
+  const listings = await listing.find({ status: true });
   //need to add in filters
   return res.status(200).send({ count: listings.length, listings });
 };
