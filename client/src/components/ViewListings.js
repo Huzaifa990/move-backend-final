@@ -238,8 +238,8 @@ const ViewListings = () => {
           </div>
         </div>
       </div>
-
-      <div className="container-fluid pb-5">
+      {name.status === true?<>
+        <div className="container-fluid pb-5">
         <div className="container">
           <div className="row">
             <div className="col-lg-8">
@@ -358,6 +358,8 @@ const ViewListings = () => {
           </div>
         </div>
       </div>
+      </>:<></>}
+      
     </>
   );
 };

@@ -303,7 +303,7 @@ export default function AdminDashboard() {
                       <td>{item.company}</td>
                       <td>{moment.utc(item.listedDate).format("llll")}</td>
                       <td class="text-right">{item.rentPerDay} PKR</td>
-                      <td class="text-right">{item.status}</td>
+                      <td class="text-right">{item.status===true?<><span style={{ color: "green" }}> Active</span></>: <span style={{ color: "#6c757d" }}> Inactive</span>} </td>
                     </tr>
                   );
                 })}

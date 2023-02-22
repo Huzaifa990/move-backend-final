@@ -1402,3 +1402,12 @@ input:focus, select:focus{
         justify-content: center;
         align-items: center;
       }
+
+      .status-box{
+        display: flex;
+        width: fit-content;
+        justify-content: space-between;
+      }
+      .switch{
+        padding-left: 10px;
+      }
