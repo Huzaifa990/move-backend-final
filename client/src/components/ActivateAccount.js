@@ -14,6 +14,11 @@ export default function ActivateAccount() {
     })
     .then(() => {
       console.log("Account Verified!");
+      document.getElementById("verifi").innerText = "Account Was Verified Successfully!";
+      document.getElementById("verifi").style.color = "#00ad5f";
+      document.getElementById("veri-img").style.visibility = "visible";
+      document.getElementById("veri-img").style.position = "relative";
+      document.getElementById("verifi-2").innerText = "Proceeding to log in ...";
       setTimeout(goToLogin, 1500);
     })
     .catch((e) => {
@@ -36,11 +41,9 @@ export default function ActivateAccount() {
   return (
     <div className="acc-verified">
       <center>
-        <h1 id="verifi" style={{ color: "#00ad5f" }}>
-          Account Was Verified Successfully
-        </h1>
-        <img src={verify} alt="ver" id="veri-img" width={300} />
-        <h2 id="verifi-2">Proceeding to log in ...</h2>
+        <h1 id="verifi"> Verifying... </h1>
+        <img src={verify} alt="ver" id="veri-img" width={300} style={{visibility:"hidden", position:"absolute"}}/>
+        <h2 id="verifi-2"> </h2>
       </center>
     </div>
   );
