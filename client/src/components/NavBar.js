@@ -130,7 +130,7 @@ const NavBar = () => {
                           ) : null
                         ) : null}
                         {userName !== null ? (
-                          <Link to="/changepassword">Change Password</Link>
+                          <Link to="/myProfile">My Profile</Link>
                         ) : null}
                         {userName !== null ? (
                           accountType === "Lessor" ? (

@@ -775,6 +775,11 @@ pre code {
     }
 }
 
+.gutters{
+    background-color: #212529;
+    padding: 25px;
+}
+
 .no-gutters {
     margin-right: 0;
     margin-left: 0
@@ -2800,6 +2805,13 @@ fieldset:disabled a.btn {
 
 .btn-primary {
     color: #fff;
+    background-color: #F77D0A;
+    border-color: #F77D0A;
+}
+
+.btn-editProfile {
+    color: #fff;
+    margin-top: 15px;
     background-color: #F77D0A;
     border-color: #F77D0A;
 }
@@ -4999,9 +5011,9 @@ input[type="button"].btn-block {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #fff;
+    background-color: #212529;
     background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125)
+    border: 1px solid var(--primary);
 }
 
 .card>hr {

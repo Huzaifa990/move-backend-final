@@ -14,6 +14,7 @@ const SignIn = () => {
         console.log(res);
         localStorage.setItem("userDetails", JSON.stringify(res.headers.authorization));
         localStorage.setItem("userName", JSON.stringify(res.data.user.name));
+        localStorage.setItem("userEmail", JSON.stringify(email));
         localStorage.setItem("accountType", JSON.stringify(res.data.user.accountType));
         navigateToHome();
       }).catch((e) =>{

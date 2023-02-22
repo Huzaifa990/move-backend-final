@@ -32,6 +32,7 @@ import LessorDashboard from "../components/LessorDashboard";
 import LesseeDashboard from "../components/LesseeDashboard";
 import AdminDashboard from "../components/AdminDashboard";
 import ActivateAccount from "../components/ActivateAccount";
+import MyProfile from "../components/MyProfile.js";
 
 function App() {
   return (
@@ -239,6 +240,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="Admin Dashboard" />{" "}
                 <AdminDashboard /> <Footer />{" "}
+              </>
+            }
+          />
+
+           <Route
+            path="myProfile"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="My Profile" />{" "}
+                <MyProfile /> <Footer />{" "}
               </>
             }
           />
