@@ -1351,8 +1351,8 @@ input:focus, select:focus{
         margin: 0 0 1rem 0;
       }
       .account-settings .user-profile .user-avatar img {
-        width: 90px;
-        height: 90px;
+        width: 175px;
+        height: 175px;
         -webkit-border-radius: 100px;
         -moz-border-radius: 100px;
         border-radius: 100px;
@@ -1372,7 +1372,7 @@ input:focus, select:focus{
       }
       .account-settings .about h5 {
         margin: 0 0 15px 0;
-        color: #007ae1;
+        color: #f77d0a;
       }
       .account-settings .about p {
         font-size: 0.825rem;
