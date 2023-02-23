@@ -6,45 +6,39 @@ const booking = require("../../models/booking");
 const payment = require("../../models/payment");
 
 const addBooking = async (req, res) => {
-  // Extract the necessary data from the request body
   const { car, pickupDate, dropOffDate, _id, accountType, paymentMethod } = req.body;
 
-  // Validate the ID
   const valid = mongoose.isValidObjectId(_id);
   if (!_id || _id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  // Find the user by ID
   let user = await User.findById({ _id });
   if (!user) {
     return res.status(404).send({ msg: "User not found!" });
   }
 
-  // Check if the user's account type is "Lessor" and stop him/her from booking.
   if (accountType === "Lessor") {
     return res.status(404).send({ msg: "This account type is not allowed to do a booking" });
   }
 
-  // Find the car by ID
   let checkCar = await listing.findById(car);
   if (!checkCar) {
     return res.status(404).send({ msg: "Car Listing Not Found!" });
   }
+  if (checkCar.status === false) {
+    return res.status(422).send({ msg: "Car Listing Is Inactive!" });
+  }
 
-  // Get the current date and the booking and drop-off dates
   const currentDate = moment(new Date());
   const bookingDate = moment(pickupDate);
   const dropOff = moment(dropOffDate);
 
-  // Check if the booking date is in the past
   if (bookingDate < currentDate) {
     return res.status(404).send({ msg: "Booking Date/Time Cannot Be In Past" });
   }
-  // Check if the drop-off date is before the booking date
   if (dropOff <= bookingDate) {
     return res.status(404).send({ msg: "Drop Off Date/Time Cannot Be Before Booking Date/Time" });
   }
 
-  // Check if the car is already booked for the given timeslot
   const sameBooking = await booking.aggregate([
     {
       // Match bookings that belong to the same car and satisfy any of the following conditions:
