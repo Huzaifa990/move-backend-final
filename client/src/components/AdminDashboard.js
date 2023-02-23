@@ -32,7 +32,7 @@ export default function AdminDashboard() {
   }, [userDetails]);
 
   function goToBookings(id) {
-    navigate("/viewBooking", { state: { id: id } });
+    navigate("/viewBookingDashboard", { state: { id: id } });
   }
 
   function goToListings(id) {
