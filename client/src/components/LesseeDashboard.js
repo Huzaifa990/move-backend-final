@@ -30,7 +30,7 @@ export default function LesseeDashboard() {
   }, [userDetails]);
 
   function goToBookings(id) {
-    navigate("/viewBooking", { state: { id: id } });
+    navigate("/viewBookingDashboard", { state: { id: id } });
   }
 
   return (

@@ -33,6 +33,7 @@ import LesseeDashboard from "../components/LesseeDashboard";
 import AdminDashboard from "../components/AdminDashboard";
 import ActivateAccount from "../components/ActivateAccount";
 import MyProfile from "../components/MyProfile.js";
+import ViewBookingDashBoard from "../components/ViewBookingDashboard";
 
 function App() {
   return (
@@ -250,6 +251,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="My Profile" />{" "}
                 <MyProfile /> <Footer />{" "}
+              </>
+            }
+          />
+
+          <Route
+            path="viewBookingDashboard"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="View Booking" />{" "}
+                <ViewBookingDashBoard /> <Footer />{" "}
               </>
             }
           />
