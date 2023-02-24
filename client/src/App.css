@@ -687,19 +687,19 @@ input:focus, select:focus{
 }
 
 .overview-item--c1:hover {
-  transform: scale(1.25);
+  transform: scale(1.10);
 }
 
 .overview-item--c2:hover {
-  transform: scale(1.25);
+  transform: scale(1.10);
 }
 
 .overview-item--c3:hover {
-  transform: scale(1.25);
+  transform: scale(1.10);
 }
 
 .overview-item--c4:hover {
-  transform: scale(1.25);
+  transform: scale(1.10);
 }
 
 .overview-item--c2 {
