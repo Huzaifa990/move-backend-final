@@ -182,8 +182,8 @@ export default function LesseeDashboard() {
                 </div>
                 <center>
                   <div className="text">
-                    <h2>{Analytics.totalBookingsDone} PKR </h2>
-                    <span>Total Bookings Done</span>
+                    <h2>{Analytics.totalBookingsDone}</h2>
+                    <span>Total Bookings Completed</span>
                   </div>
                 </center>
               </div>

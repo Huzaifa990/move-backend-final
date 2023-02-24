@@ -8,6 +8,7 @@ export default function MyProfile() {
     var userDetails= JSON.parse(localStorage.getItem("userDetails"));
     var userEmail= JSON.parse(localStorage.getItem("userEmail"));
     var accountType = JSON.parse(localStorage.getItem("accountType"));
+    // var [open,setOpen]=useState(false);
     var [Analytics, setAnalytics] = useState({});
     var [anal, setAnal] = useState({});
 
@@ -64,7 +65,9 @@ export default function MyProfile() {
             console.log(e);
           });
           localStorage.setItem("userName", JSON.stringify(updatedName));
-          window.location.reload(true);
+          setTimeout(function(){window.location.reload();}, 2500);
+          // setOpen(!open);
+          
     }
 
     const sendEmail = () =>{
