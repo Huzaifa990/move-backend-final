@@ -12,6 +12,7 @@ const {
   uploadCNIC,
   verifyUserApprove,
   verifyUserReject,
+  getById,
 
   // forgotPassword,
   // getById,
@@ -35,6 +36,7 @@ const {
 
 const app = express.Router();
 
+app.get("/user", ensureAuth, getById);
 app.post("/login", Validator(validateLogin, "body"), login);
 app.post("/sign-up", Validator(validateSignUp, "body"), signUp);
 app.put("/uploadCNIC", ensureAuth, Validator(cnicValidate, "body"), uploadCNIC);

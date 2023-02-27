@@ -308,6 +308,16 @@ const verifyUserReject = async (req, res) => {
   res.status(200).send({ msg: "User verification cancelled successfully" });
 };
 
+const getById = async (req, res) => {
+  const { _id } = req.body;
+  const user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User Not Found" });
+  }
+
+  return res.status(200).send({ user });
+};
+
 module.exports = {
   login,
   signUp,
@@ -320,4 +330,5 @@ module.exports = {
   activateAccount,
   verifyUserApprove,
   verifyUserReject,
+  getById,
 };
