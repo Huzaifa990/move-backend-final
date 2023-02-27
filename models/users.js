@@ -50,7 +50,13 @@ const User = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    cnicImages: [
+      {
+        type: String,
+      },
+    ],
   },
+
   {
     timestamps: true,
   }
