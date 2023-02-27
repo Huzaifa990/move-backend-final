@@ -21,6 +21,7 @@ module.exports.validateNew = yup.object({
     .array()
     .of(yup.string().matches(base64ImgPattern, "Uploaded File Must Be An Image"))
     .label("Picture"),
+  carNum: yup.string().required().label("Car Number"),
 });
 
 module.exports.validateUpdate = yup.object({
@@ -41,4 +42,5 @@ module.exports.validateUpdate = yup.object({
     .array()
     .of(yup.string().matches(base64ImgPattern, "Uploaded File Must Be An Image"))
     .label("Picture"),
+  carNum: yup.string().required().label("Car Number"),
 });

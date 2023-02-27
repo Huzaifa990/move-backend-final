@@ -9,7 +9,6 @@ const getAllListings = async (req, res) => {
 };
 
 const addListing = async (req, res) => {
-  // Destructure the request body
   const {
     carName,
     company,
@@ -20,13 +19,17 @@ const addListing = async (req, res) => {
     rentPerDay,
     picture,
     _id,
+    carNum,
     accountType,
   } = req.body;
 
-  // Check if the user is a lessee
   if (accountType === "Lessee") {
-    // Return an error if the user is a lessee
     return res.status(402).send({ msg: "This Account Cannot Add A Listing" });
+  }
+
+  const checkCarNum = await listing.findOne({ carNum: carNum });
+  if (checkCarNum) {
+    return res.status(422).send({ msg: "Listing with same car number already exists" });
   }
 
   const listingAppliedDate = moment(new Date());
@@ -42,6 +45,7 @@ const addListing = async (req, res) => {
     transmission,
     location,
     rentPerDay,
+    carNum,
     picture,
     // verified: false,
   });
@@ -49,68 +53,57 @@ const addListing = async (req, res) => {
 
   //need to cater admin side.. initially verified: false should be there...
 
-  // Return a success message to the client
   return res.status(200).send({ msg: "Listing Added Successfully" });
 };
 
 const deleteListing = async (req, res) => {
-  // Get the ID of the listing to be deleted from the request parameters
   const { id } = req.params;
 
-  // Validate the ID
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) {
-    // Return an error if the ID is invalid
     return res.status(403).send({ msg: "Invalid Id" });
   }
 
-  // Find the listing with the given ID
   const getById = await listing.findById(id);
   if (!getById) {
-    // Return an error if no such listing is found
     return res.status(422).send({ msg: "No Such Listing Found!" });
   }
 
-  // Delete the listing
   await listing.deleteOne({ _id: id });
 
-  // Return a success message to the client
   res.status(200).send({ msg: "Listing Deleted Successfully!" });
 };
 
 const getById = async (req, res) => {
-  // Get the ID of the listing to be retrieved from the request parameters
   const id = req.params.id;
 
-  // Validate the ID
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  // Find the listing with the given ID
   const item = await listing.findById(id);
   if (!item) {
-    // Return an error if no such listing is found
     return res.status(422).send({ msg: "No Such Listing Found!" });
   }
 
-  // Return the listing to the client
   res.status(200).send({ item });
 };
 
 const updateListing = async (req, res) => {
-  // Destructure the request body
-  const { carName, company, model, mileage, transmission, location, rentPerDay, picture } =
+  const { carName, company, model, mileage, transmission, carNum, location, rentPerDay, picture } =
     req.body;
 
   const id = req.params.id;
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  // Find the listing with the given ID
   const item = await listing.findById(id);
   if (!item) {
-    // Return an error if no such listing is found
     return res.status(422).send({ msg: "No Such Listing Found!" });
+  }
+
+  const checkCarNum = await listing.findOne({ carNum: carNum });
+  if (checkCarNum && checkCarNum._id.toString() !== id) {
+    return res.status(422).send({ msg: "Listing with same car number already exists" });
   }
 
   // Update the listing
@@ -121,6 +114,7 @@ const updateListing = async (req, res) => {
       company,
       model,
       mileage,
+      carNum,
       transmission,
       location,
       rentPerDay,
@@ -131,18 +125,14 @@ const updateListing = async (req, res) => {
 
   //need to cater admin side.. when will a listing go under reverification (in case of rentPerDay changed or location changed, or car details like model, name, company changed etc)
 
-  // Return a success message to the client
   return res.status(200).send({ msg: "Listing Updated Successfully!" });
 };
 
 const myListings = async (req, res) => {
-  // Get the user's ID from the request body
   const { _id } = req.body;
 
-  // Find all the listings belonging to the user
   const listings = await listing.find({ lessor: _id });
 
-  // Return the number of listings and the listings to the client
   res.status(200).send({ count: listings.length, listings });
 };
 

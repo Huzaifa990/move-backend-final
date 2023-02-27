@@ -99,3 +99,21 @@ module.exports.cnicValidate = yup.object({
 module.exports.verifyUser = yup.object({
   verified: yup.string().oneOf(["true", "false"]).required().label("Verified"),
 });
+
+module.exports.validateProfilePic = yup.object({
+  updatedProfilePic: yup
+    .string()
+    .matches(base64ImgPattern, "Uploaded File Must Be An Image")
+    .required()
+    .label("Profile Picture"),
+});
+
+module.exports.validatePhoneNumber = yup.object({
+  updatedPhoneNumber: yup
+    .number()
+    .integer()
+    .min(100000000000, "Phone length must be 12 digits")
+    .max(999999999999, "Phone length must be 12 digits")
+    .required()
+    .label("Phone Number"),
+});
