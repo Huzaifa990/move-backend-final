@@ -10,6 +10,8 @@ const {
   updateName,
   updateEmail,
   uploadCNIC,
+  verifyUserApprove,
+  verifyUserReject,
 
   // forgotPassword,
   // getById,
@@ -28,6 +30,7 @@ const {
   validateName,
   validateEmail,
   cnicValidate,
+  verifyUser,
 } = require("./validate");
 
 const app = express.Router();
@@ -35,6 +38,8 @@ const app = express.Router();
 app.post("/login", Validator(validateLogin, "body"), login);
 app.post("/sign-up", Validator(validateSignUp, "body"), signUp);
 app.put("/uploadCNIC", ensureAuth, Validator(cnicValidate, "body"), uploadCNIC);
+app.put("/verifyUser/approve/:id", ensureAuth, Validator(verifyUser, "body"), verifyUserApprove);
+app.put("/verifyUser/reject/:id", ensureAuth, Validator(verifyUser, "body"), verifyUserReject);
 app.put("/updatePassword", ensureAuth, Validator(validateChangePassword, "body"), updatePassword);
 app.put("/updateName", ensureAuth, Validator(validateName, "body"), updateName);
 app.put("/updateEmail", ensureAuth, Validator(validateEmail, "body"), updateEmail);

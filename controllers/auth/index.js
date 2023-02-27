@@ -256,6 +256,58 @@ const uploadCNIC = async (req, res) => {
     .send({ msg: "Images uploaded, please wait for verification to complete in next 48 hours" });
 };
 
+const verifyUserApprove = async (req, res) => {
+  const { accountType, verified } = req.body;
+  const { id } = req.params;
+
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id: id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  if (accountType !== "Admin") {
+    res.status(422).send({ msg: "You are not allowed to verify users" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id: id },
+    {
+      ...(verified && { verified }),
+    }
+  );
+
+  res.status(200).send({ msg: "User verified successfully" });
+};
+
+const verifyUserReject = async (req, res) => {
+  const { accountType, verified } = req.body;
+  const { id } = req.params;
+
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id: id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  if (accountType !== "Admin") {
+    res.status(422).send({ msg: "You are not allowed to verify users" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id: id },
+    {
+      ...(verified && { verified }),
+    }
+  );
+
+  res.status(200).send({ msg: "User verification cancelled successfully" });
+};
+
 module.exports = {
   login,
   signUp,
@@ -266,4 +318,6 @@ module.exports = {
   setPassword,
   uploadCNIC,
   activateAccount,
+  verifyUserApprove,
+  verifyUserReject,
 };
