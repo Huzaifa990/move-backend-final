@@ -34,11 +34,20 @@ const login = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  let { name, email, password, confirmPassword, accountType } = req.body;
+  let { name, email, password, confirmPassword, accountType, profilePicture, cnic, phoneNumber } =
+    req.body;
 
   email = email.toLowerCase();
   const emailCheck = await User.findOne({ email });
   if (emailCheck) return res.status(402).send({ msg: "Email Already Exists!" });
+
+  const cnicCheck = await User.findOne({ cnic });
+  if (cnicCheck && cnicCheck.accountType === accountType)
+    return res.status(402).send({ msg: "CNIC Already Exists!" });
+
+  const phoneCheck = await User.findOne({ phoneNumber });
+  if (phoneCheck && phoneCheck.accountType === accountType)
+    return res.status(402).send({ msg: "Phone Number Already Exists!" });
 
   if (password !== confirmPassword) {
     return res.status(401).send({ msg: "Passwords do not match!" });
@@ -52,6 +61,9 @@ const signUp = async (req, res) => {
     password,
     accountType,
     otp,
+    ...(profilePicture && { profilePicture }),
+    cnic,
+    phoneNumber,
   });
   await user.save();
 

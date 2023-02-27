@@ -37,13 +37,16 @@ const Listings = new mongoose.Schema({
       type: String,
     },
   ],
+  //to active/inactive listing
   status: {
     type: Boolean,
     default: true,
   },
-  // verified: {
-  //   type: Boolean
-  // }
+  //admin to verify it
+  approved: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Listings", Listings);

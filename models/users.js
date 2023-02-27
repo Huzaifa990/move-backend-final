@@ -3,43 +3,58 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const User = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const User = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    accountType: {
+      type: String,
+      required: true,
+    },
+    otp: {
+      type: String,
+    },
+    //to serve active/inactive purpose
+    status: {
+      type: Boolean,
+      default: true,
+    },
+    //email verification
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    //user verification
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    profilePicture: {
+      type: String,
+    },
+    cnic: {
+      type: Number,
+      required: true,
+    },
+    phoneNumber: {
+      type: Number,
+      required: true,
+    },
   },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  accountType: {
-    type: String,
-    required: true,
-  },
-  otp: {
-    type: String,
-  },
-  //to serve active/inactive purpose
-  status: {
-    type: Boolean,
-    default: true,
-  },
-  //email verification
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  //user verification
-  verified: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 User.methods.generateAuthToken = function () {
   const maxAge = 3 * 24 * 60 * 60;

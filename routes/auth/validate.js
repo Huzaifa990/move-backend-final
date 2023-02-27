@@ -1,5 +1,5 @@
 const yup = require("yup");
-const { passwordPattern } = require("./helper");
+const { passwordPattern, base64ImgPattern } = require("./helper");
 
 module.exports.validateLogin = yup.object({
   email: yup.string().email().required().label("Email"),
@@ -26,6 +26,24 @@ module.exports.validateSignUp = yup.object({
     .required()
     .label("Confirm Password"),
   accountType: yup.string().oneOf(["Lessor", "Lessee"]).required().label("Account Type"),
+  profilePicture: yup
+    .string()
+    .matches(base64ImgPattern, "Uploaded File Must Be An Image")
+    .label("Profile Picture"),
+  cnic: yup
+    .number()
+    .integer()
+    .min(1000000000000, "CNIC length must be 13 digits")
+    .max(9999999999999, "CNIC length must be 13 digits")
+    .required()
+    .label("CNIC"),
+  phoneNumber: yup
+    .number()
+    .integer()
+    .min(100000000000, "Phone length must be 12 digits")
+    .max(999999999999, "Phone length must be 12 digits")
+    .required()
+    .label("Phone Number"),
 });
 
 module.exports.validateChangePassword = yup.object({
