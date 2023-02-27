@@ -95,3 +95,7 @@ module.exports.cnicValidate = yup.object({
     .of(yup.string().matches(base64ImgPattern, "Uploaded File Must Be An Image"))
     .label("Picture"),
 });
+
+module.exports.verifyUser = yup.object({
+  verified: yup.string().oneOf(["true", "false"]).required().label("Verified"),
+});
