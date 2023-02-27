@@ -13,6 +13,8 @@ const {
   verifyUserApprove,
   verifyUserReject,
   getById,
+  updateProfilePic,
+  updatePhoneNumber,
 
   // forgotPassword,
   // getById,
@@ -32,6 +34,8 @@ const {
   validateEmail,
   cnicValidate,
   verifyUser,
+  validateProfilePic,
+  validatePhoneNumber,
 } = require("./validate");
 
 const app = express.Router();
@@ -44,6 +48,13 @@ app.put("/verifyUser/approve/:id", ensureAuth, Validator(verifyUser, "body"), ve
 app.put("/verifyUser/reject/:id", ensureAuth, Validator(verifyUser, "body"), verifyUserReject);
 app.put("/updatePassword", ensureAuth, Validator(validateChangePassword, "body"), updatePassword);
 app.put("/updateName", ensureAuth, Validator(validateName, "body"), updateName);
+app.put("/updatedProfilePic", ensureAuth, Validator(validateProfilePic, "body"), updateProfilePic);
+app.put(
+  "/updatePhoneNumber",
+  ensureAuth,
+  Validator(validatePhoneNumber, "body"),
+  updatePhoneNumber
+);
 app.put("/updateEmail", ensureAuth, Validator(validateEmail, "body"), updateEmail);
 app.post("/forgotPassword", Validator(validateForgotPassword, "body"), forgotPassword);
 app.put("/setPassword", Validator(validateSetPassword, "body"), setPassword);

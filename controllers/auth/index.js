@@ -39,15 +39,14 @@ const signUp = async (req, res) => {
 
   email = email.toLowerCase();
   const emailCheck = await User.findOne({ email });
-  if (emailCheck) return res.status(402).send({ msg: "Email Already Exists!" });
+  if (emailCheck) return res.status(422).send({ msg: "Email Already Exists!" });
 
   const cnicCheck = await User.findOne({ cnic });
   if (cnicCheck && cnicCheck.accountType === accountType)
-    return res.status(402).send({ msg: "CNIC Already Exists!" });
+    return res.status(422).send({ msg: "CNIC Already Exists!" });
 
   const phoneCheck = await User.findOne({ phoneNumber });
-  if (phoneCheck && phoneCheck.accountType === accountType)
-    return res.status(402).send({ msg: "Phone Number Already Exists!" });
+  if (phoneCheck) return res.status(422).send({ msg: "Phone Number Already Exists!" });
 
   if (password !== confirmPassword) {
     return res.status(401).send({ msg: "Passwords do not match!" });
@@ -318,6 +317,55 @@ const getById = async (req, res) => {
   return res.status(200).send({ user });
 };
 
+const updateProfilePic = async (req, res) => {
+  let { updatedProfilePic, _id } = req.body;
+
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id },
+    {
+      profilePicture: updatedProfilePic,
+    }
+  );
+
+  res.status(200).send({ msg: "Profile Picture Updated Successfully." });
+};
+
+const updatePhoneNumber = async (req, res) => {
+  let { updatedPhoneNumber, _id, accountType } = req.body;
+
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  const phoneExists = await User.findOne({ phoneNumber: updatedPhoneNumber });
+  if (phoneExists && phoneExists._id.toString() !== _id) {
+    return res.status(422).send({ msg: "Phone number already exists!" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id },
+    {
+      phoneNumber: updatedPhoneNumber,
+    }
+  );
+
+  return res.status(200).send({
+    msg: "Phone Number Updated Successfully!",
+  });
+};
+
 module.exports = {
   login,
   signUp,
@@ -331,4 +379,6 @@ module.exports = {
   verifyUserApprove,
   verifyUserReject,
   getById,
+  updateProfilePic,
+  updatePhoneNumber,
 };

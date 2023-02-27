@@ -26,6 +26,9 @@ const Listings = new mongoose.Schema({
   transmission: {
     type: String,
   },
+  carNum: {
+    type: String,
+  },
   location: {
     type: String,
   },
