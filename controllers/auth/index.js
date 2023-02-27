@@ -229,6 +229,33 @@ const activateAccount = async (req, res) => {
   res.status(200).send({ msg: "Account Activated Successfully" });
 };
 
+const uploadCNIC = async (req, res) => {
+  let { cnicImages, _id } = req.body;
+
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  if (user.verified === true) {
+    return res.status(422).send({ msg: "Your account is already verified!" });
+  }
+
+  await User.findOneAndUpdate(
+    { _id },
+    {
+      ...(cnicImages && { cnicImages }),
+    }
+  );
+
+  return res
+    .status(200)
+    .send({ msg: "Images uploaded, please wait for verification to complete in next 48 hours" });
+};
+
 module.exports = {
   login,
   signUp,
@@ -237,5 +264,6 @@ module.exports = {
   updatePassword,
   forgotPassword,
   setPassword,
+  uploadCNIC,
   activateAccount,
 };

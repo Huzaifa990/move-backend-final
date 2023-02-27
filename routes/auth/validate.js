@@ -88,3 +88,10 @@ module.exports.validateSetPassword = yup.object({
     .required()
     .label("Confirm Password"),
 });
+
+module.exports.cnicValidate = yup.object({
+  cnicImages: yup
+    .array()
+    .of(yup.string().matches(base64ImgPattern, "Uploaded File Must Be An Image"))
+    .label("Picture"),
+});
