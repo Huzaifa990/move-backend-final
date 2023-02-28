@@ -1434,3 +1434,45 @@ input:focus, select:focus{
       .switch{
         padding-left: 10px;
       }
+
+      #cnic,#phoneNumber{
+        background-color: #232627;
+        border: 1px solid #F77D0A;
+        color: white;
+      }
+      #cnic:active{
+        outline: none;
+        border: none;
+      }
+
+      #file-lbl {
+        display: block;
+        width: 60vw;
+        max-width: 200px;
+        margin: 0 auto;
+        background-color: #2B2E4A;
+        border-radius: 2px;
+        font-size: 1em;
+        line-height: 2.5em;
+        text-align: center;
+        transition: 0.4s;
+        cursor: pointer;
+        margin: 30px 0px;
+        border-radius: 30px;
+      }
+      
+      #file-lbl:hover {
+        background-color: #1C1E32;
+      }
+      
+      #apply {
+        border: 0;
+          clip: rect(1px, 1px, 1px, 1px);
+          height: 1px; 
+          margin: -1px;
+          overflow: hidden;
+          padding: 0;
+          position: absolute;
+          width: 1px;
+          cursor: pointer;
+      }
