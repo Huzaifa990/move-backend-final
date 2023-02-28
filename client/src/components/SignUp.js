@@ -4,8 +4,6 @@ import axios from "axios";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import { InputMask } from "primereact/inputmask";
-import { MDBCardImage } from "mdb-react-ui-kit";
-import user from "../img/user-2.png";
 
 const SignUp = () => {
   const sendData = () => {
@@ -17,19 +15,19 @@ const SignUp = () => {
     let accountType = account[account.selectedIndex].value;
     let initCnic = document.getElementById("cnic").value;
     let profilePicture = document.getElementById("profile-pic").value;
-    let phone=  document.getElementById("phoneNumber").value;
+    let phone = document.getElementById("phoneNumber").value;
 
     let phoneStrip = "";
-    for(var j = 0; j < phone.length; j++){
-      if(phone[j] !== "(" && phone[j] !== ")" && phone[j] !== "+" && phone[j] !== "-"){
-        phoneStrip+=phone[j];
+    for (var j = 0; j < phone.length; j++) {
+      if (phone[j] !== "(" && phone[j] !== ")" && phone[j] !== "+" && phone[j] !== "-") {
+        phoneStrip += phone[j];
       }
     }
     alert(phoneStrip);
     let phoneNumber = parseInt(phoneStrip);
     let cnic = "";
-    for(var i = 0 ; i < initCnic.length; i++){
-      if(initCnic[i] !== "-"){
+    for (var i = 0; i < initCnic.length; i++) {
+      if (initCnic[i] !== "-") {
         cnic += initCnic[i];
       }
     }
@@ -42,7 +40,7 @@ const SignUp = () => {
         accountType,
         profilePicture,
         phoneNumber,
-        cnic
+        cnic,
       })
       .then((res) => {
         console.log(res);
@@ -63,7 +61,6 @@ const SignUp = () => {
       })
       .catch((e) => {
         console.log(e);
-        // document.getElementById("emailError").innerText = e.response.data.error.email;
         if (e.response.data.msg !== undefined) {
           document.getElementById("name").style.border = "none";
           document.getElementById("password").style.border = "none";
@@ -101,8 +98,7 @@ const SignUp = () => {
           document.getElementById("errorMessage").innerText = e.response.data.error.confirmPassword;
           document.getElementById("errorApi").style.visibility = "visible";
           document.getElementById("errorApi").style.position = "relative";
-        }
-        else if (e.response.data.error.cnic !== undefined) {
+        } else if (e.response.data.error.cnic !== undefined) {
           document.getElementById("name").style.border = "none";
           document.getElementById("email").style.border = "none";
           document.getElementById("password").style.border = "none";
@@ -112,7 +108,7 @@ const SignUp = () => {
           document.getElementById("errorMessage").innerText = e.response.data.error.cnic;
           document.getElementById("errorApi").style.visibility = "visible";
           document.getElementById("errorApi").style.position = "relative";
-         } else if (e.response.data.error.phoneNumber !== undefined) {
+        } else if (e.response.data.error.phoneNumber !== undefined) {
           document.getElementById("name").style.border = "none";
           document.getElementById("email").style.border = "none";
           document.getElementById("password").style.border = "none";
@@ -123,7 +119,7 @@ const SignUp = () => {
           document.getElementById("errorMessage").innerText = e.response.data.error.phoneNumber;
           document.getElementById("errorApi").style.visibility = "visible";
           document.getElementById("errorApi").style.position = "relative";
-         }else if (e.response.data.error.accountType !== undefined) {
+        } else if (e.response.data.error.accountType !== undefined) {
           document.getElementById("name").style.border = "none";
           document.getElementById("email").style.border = "none";
           document.getElementById("password").style.border = "none";
@@ -145,8 +141,8 @@ const SignUp = () => {
       (function (file) {
         var reader = new FileReader();
         reader.onload = () => {
-          var img = document.getElementById("avatar")
-          img.src = reader.result;
+          var img = document.getElementById("b1");
+          img.style.backgroundImage = `url(${reader.result})`;
 
           document.getElementById("profile-pic").value = reader.result;
         };
@@ -157,26 +153,18 @@ const SignUp = () => {
 
   return (
     <div className="signup-form-container">
-      <h1 className="display text-uppercase text-white mb-3 text-center p-4">CREATE AN ACCOUNT</h1>
       <label htmlFor id="errorApi">
         {" "}
         <span id="errorMessage"></span>
       </label>
       <div class="user-avatar">
-        <center>        
-          <MDBCardImage
-          src={user}
-          alt="avatar"
-          id="avatar"
-          className="rounded-circle"
-          style={{ width: "175px", height:"175px"}}
-          fluid
-        /> <br/> 
-          <label id="file-lbl" for="apply"> <input type="file" name="" id="apply" accept="image/*" onChange={readFile}/> + Upload Image</label>
-	
-        
-        </center>
-
+        <div className="container-1">
+          <div className="box" id="b1">
+            <input onChange={readFile} type="file" id="file1" name="file1" accept="image/*" />
+            <label for="file1" className="camera-icon"></label>
+          </div>
+          <h4>Upload Profile Picture</h4>
+        </div>
       </div>
       <div className="row">
         <div className="col-6 form-group">
@@ -229,11 +217,11 @@ const SignUp = () => {
             placeholder="CNIC"
           />
         </div>
- 
+
         <div className="col-6 form-group">
           <InputMask
             className="form-control p-4 cnic-inp"
-            mask='(+99)-9999999999'
+            mask="(+99)-9999999999"
             id="phoneNumber"
             placeholder="Phone Number"
           />
@@ -241,8 +229,6 @@ const SignUp = () => {
       </div>
 
       <div className="row">
-       
-
         <div class="form-group col-12 ">
           <select
             class="custom-select px-4 mb-3 bg-dark"
@@ -261,7 +247,7 @@ const SignUp = () => {
         PASSWORD DOES NOT MATCH!
       </label>
 
-      <input type="text" id="profile-pic" hidden/>
+      <input type="text" id="profile-pic" hidden />
 
       <div>
         <button className="btn btn-primary py-3 px-5" onClick={sendData}>
