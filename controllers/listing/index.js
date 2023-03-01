@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const listing = require("../../models/listing");
 
 const getAllListings = async (req, res) => {
-  const listings = await listing.find({ status: true });
+  const listings = await listing.find({ status: true, approved: true });
   //need to add in filters
   return res.status(200).send({ count: listings.length, listings });
 };
@@ -47,7 +47,6 @@ const addListing = async (req, res) => {
     rentPerDay,
     carNum,
     picture,
-    // verified: false,
   });
   await listedCar.save();
 
@@ -166,6 +165,35 @@ const toggleListingStatus = async (req, res) => {
   return res.status(200).send({ status: !listingExist.status });
 };
 
+const verifyLessorListing = async (req, res) => {
+  const id = req.params.id;
+  const { accountType, _id } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  if (accountType !== "Admin") {
+    return res.status(422).send({ msg: "You are not allowed to approve a listing" });
+  }
+
+  const listingExist = await listing.findById(id);
+  if (!listingExist) {
+    return res.status(404).send({ msg: "Listing not found" });
+  }
+
+  if (listingExist.approved == true) {
+    return res.status(200).send({ msg: "Listing Already Approved!" });
+  }
+
+  await listing.updateOne(
+    { _id: id },
+    {
+      approved: true,
+    }
+  );
+
+  return res.status(200).send({ msg: "Listing Approved Successfully" });
+};
+
 module.exports = {
   getById,
   myListings,
@@ -174,4 +202,5 @@ module.exports = {
   deleteListing,
   updateListing,
   toggleListingStatus,
+  verifyLessorListing,
 };
