@@ -23,7 +23,6 @@ const SignUp = () => {
         phoneStrip += phone[j];
       }
     }
-    alert(phoneStrip);
     let phoneNumber = parseInt(phoneStrip);
     let cnic = "";
     for (var i = 0; i < initCnic.length; i++) {
@@ -163,7 +162,7 @@ const SignUp = () => {
             <input onChange={readFile} type="file" id="file1" name="file1" accept="image/*" />
             <label for="file1" className="camera-icon"></label>
           </div>
-          <h4>Upload Profile Picture</h4>
+          <p style={{fontWeight: "bold", color:"white"}}>Upload Profile Picture</p>
         </div>
       </div>
       <div className="row">
