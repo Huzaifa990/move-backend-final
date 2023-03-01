@@ -15,6 +15,9 @@ const {
   getById,
   updateProfilePic,
   updatePhoneNumber,
+  getAllUsers,
+  getAllPendingApprovalUsers,
+  getUserById,
 
   // forgotPassword,
   // getById,
@@ -41,6 +44,9 @@ const {
 const app = express.Router();
 
 app.get("/user", ensureAuth, getById);
+app.get("/getAllUsers", ensureAuth, getAllUsers);
+app.get("/getAllPendingApprovalUsers", ensureAuth, getAllPendingApprovalUsers);
+app.get("/getUserById", ensureAuth, getUserById);
 app.post("/login", Validator(validateLogin, "body"), login);
 app.post("/sign-up", Validator(validateSignUp, "body"), signUp);
 app.put("/uploadCNIC", ensureAuth, Validator(cnicValidate, "body"), uploadCNIC);
