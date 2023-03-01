@@ -5,6 +5,8 @@ import { Bar, Line } from "react-chartjs-2";
 import "chart.js/auto";
 import Loader from "./Loader";
 import Loader2 from "./Loader2";
+import approve from "../img/correct.png";
+import reject from "../img/remove.png";
 
 export default function AdminDashboard() {
   const [activeOption, setActiveOption] = useState("listings");
@@ -272,11 +274,18 @@ export default function AdminDashboard() {
                 className={`option ${activeOption === "bookings" ? "active-1" : ""}`}
                 onClick={() => handleOptionClick("bookings")}
               >
-                All Bookings
+                Active Bookings
+              </div>
+
+              <div
+                className={`option ${activeOption === "pendingBookings" ? "active-1" : ""}`}
+                onClick={() => handleOptionClick("pendingBookings")}
+              >
+                Pending Bookings
               </div>
             </div>
 
-            <div>{activeOption === "users" ? <UsersTable /> :activeOption === "listings"? <ListingsTable/>: activeOption === "bookings"? <BookingsTable/>: ""}</div>
+            <div>{activeOption === "users" ? <UsersTable /> :activeOption === "listings"? <ListingsTable/>: activeOption === "bookings"? <BookingsTable/>:  activeOption === "pendingBookings"? <PendingBookingsTable/>:""}</div>
           </div>
           <br /> <br />
      
@@ -415,15 +424,21 @@ function BookingsTable() {
         </thead>
         <tbody>
           {bookings.map((item) => {
-            return (
-              <tr onClick={() => goToBookings(item._id)}>
-                <td>{item.car.carName}</td>
-                <td>{item.car.company}</td>
-                <td>{moment.utc(item.listedDate).format("llll")}</td>
-                <td class="text-right">{item.paymentDetails.amount} PKR</td>
-                <td class="text-right">{item.status}</td>
-              </tr>
-            );
+            if(item.status === "accepted"){
+              return (
+                <tr onClick={() => goToBookings(item._id)}>
+                  <td>{item.car.carName}</td>
+                  <td>{item.car.company}</td>
+                  <td>{moment.utc(item.listedDate).format("llll")}</td>
+                  <td class="text-right">{item.paymentDetails.amount} PKR</td>
+                  <td class="text-right">{item.status}</td>
+                </tr>
+              );
+            }
+            else{
+              return(<></>);
+            }
+            
           })}
         </tbody>
         </> : <Loader2/>}
@@ -432,3 +447,75 @@ function BookingsTable() {
     </div>
   );
 }
+
+
+function PendingBookingsTable() {
+  const [loading, setLoading] = useState(true);
+  var navigate = useNavigate();
+  var [bookings, setBookings] = useState([]);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  function goToBookings(id) {
+    navigate("/viewBookingDashboard", { state: { id: id } });
+  }
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setBookings(data.allBookings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails]);
+
+
+  return (
+    <div>
+      <table class="table table-borderless table-striped table-earning">
+        {loading === false? <>
+          <thead>
+          <tr>
+            <th>Car Name</th>
+            <th>Company</th>
+            <th>Date Listed</th>
+            <th class="text-right">Rent Per Day</th>
+            <th>Status</th>
+            <th class="text-right">Accept/ Reject</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map((item) => {
+            if(item.status === "pending"){
+              return (
+                <tr onClick={() => goToBookings(item._id)}>
+                  <td>{item.car.carName}</td>
+                  <td>{item.car.company}</td>
+                  <td>{moment.utc(item.listedDate).format("llll")}</td>
+                  <td class="text-right">{item.paymentDetails.amount} PKR</td>
+                  <td>{item.status}</td>
+                  <td className="tr-flex">
+                    <img src={approve} width="35" alt=""/>
+                    <img src={reject} width="35" alt=""/>
+                  </td>
+
+                </tr>
+              );
+            }
+            else{
+              return(<></>);
+            }
+            
+          })}
+        </tbody>
+        </> : <Loader2/>}
+        
+      </table>
+    </div>
+  );
+}
+
