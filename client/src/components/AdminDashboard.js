@@ -6,7 +6,7 @@ import "chart.js/auto";
 import Loader from "./Loader";
 import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
-import reject from "../img/remove.png";
+import axios from "axios";
 
 export default function AdminDashboard() {
   const [activeOption, setActiveOption] = useState("listings");
@@ -473,6 +473,20 @@ function PendingBookingsTable() {
     getData();
   }, [userDetails]);
 
+  function approveBooking(id){
+      axios.put("http://localhost:8080/api/booking/approve/"+id, {
+        headers: { Authorization: userDetails },
+      }).then((res)=>{
+        console.log(res);
+        document.getElementById("tick").style.visibility = "hidden";
+        document.getElementById("tick").style.position = "absolute";
+        document.getElementById("approval").innerText = "Approved"
+        
+      }).catch((e)=>{
+        console.log(e);
+      });
+  }
+
 
   return (
     <div>
@@ -492,15 +506,14 @@ function PendingBookingsTable() {
           {bookings.map((item) => {
             if(item.status === "pending"){
               return (
-                <tr onClick={() => goToBookings(item._id)}>
-                  <td>{item.car.carName}</td>
-                  <td>{item.car.company}</td>
-                  <td>{moment.utc(item.listedDate).format("llll")}</td>
-                  <td class="text-right">{item.paymentDetails.amount} PKR</td>
-                  <td>{item.status}</td>
-                  <td className="tr-flex">
-                    <img src={approve} width="35" alt=""/>
-                    <img src={reject} width="35" alt=""/>
+                <tr>
+                  <td  onClick={() => goToBookings(item._id)}>{item.car.carName}</td>
+                  <td  onClick={() => goToBookings(item._id)}>{item.car.company}</td>
+                  <td  onClick={() => goToBookings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
+                  <td class="text-right"  onClick={() => goToBookings(item._id)}>{item.paymentDetails.amount} PKR</td>
+                  <td  onClick={() => goToBookings(item._id)}>{item.status}</td>
+                  <td className="tr-flex" id="approval">
+                    <img src={approve} width="35" alt="" id="tick" onClick={()=> approveBooking(item.id)}/>
                   </td>
 
                 </tr>
