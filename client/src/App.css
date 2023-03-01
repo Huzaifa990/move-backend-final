@@ -1675,3 +1675,8 @@ select:focus {
   background-color: #f77d0a;
   color: #fff;
 }
+
+.tr-flex{
+  display: flex;
+  justify-content: space-around;
+}
