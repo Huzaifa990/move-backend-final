@@ -46,7 +46,7 @@ const app = express.Router();
 app.get("/user", ensureAuth, getById);
 app.get("/getAllUsers", ensureAuth, getAllUsers);
 app.get("/getAllPendingApprovalUsers", ensureAuth, getAllPendingApprovalUsers);
-app.get("/getUserById", ensureAuth, getUserById);
+app.get("/getUserById/:id", ensureAuth, getUserById);
 app.post("/login", Validator(validateLogin, "body"), login);
 app.post("/sign-up", Validator(validateSignUp, "body"), signUp);
 app.put("/uploadCNIC", ensureAuth, Validator(cnicValidate, "body"), uploadCNIC);

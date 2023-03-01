@@ -366,6 +366,47 @@ const updatePhoneNumber = async (req, res) => {
   });
 };
 
+const getAllUsers = async (req, res) => {
+  const { accountType } = req.body;
+  if (accountType !== "Admin") {
+    return res.status(422).send({ msg: "Access Denied." });
+  }
+
+  const users = await User.find({ verified: true }, { password: 0 });
+
+  return res.status(200).send({ count: users.length, users });
+};
+
+const getAllPendingApprovalUsers = async (req, res) => {
+  const { accountType } = req.body;
+  if (accountType !== "Admin") {
+    return res.status(422).send({ msg: "Access Denied." });
+  }
+
+  const users = await User.find({ verified: false }, { password: 0 });
+
+  return res.status(200).send({ count: users.length, users });
+};
+
+const getUserById = async (req, res) => {
+  const { accountType } = req.body;
+  const { id } = req.params;
+
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(404).send({ msg: "Invalid Id" });
+
+  if (accountType !== "Admin") {
+    res.status(422).send({ msg: "Access Denied" });
+  }
+
+  let user = await User.findById({ _id: id }, { password: 0 });
+  if (!user) {
+    return res.status(404).send({ msg: "User not found!" });
+  }
+
+  res.status(200).send({ user });
+};
+
 module.exports = {
   login,
   signUp,
@@ -381,4 +422,7 @@ module.exports = {
   getById,
   updateProfilePic,
   updatePhoneNumber,
+  getAllUsers,
+  getAllPendingApprovalUsers,
+  getUserById,
 };
