@@ -1641,3 +1641,37 @@ select:focus {
   height: 100%;
 }
 
+.top-bar {
+  padding-top: 10px;
+  display: flex;
+  padding-left: 20px;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #2e323c8f;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  column-gap: 10px;
+}
+
+.option {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  transition: all 0.2s ease-in-out;
+  width: 200px;
+  text-align: center;
+  background-color: #333;
+  padding-top: 15px;
+}
+
+.option:hover {
+  background-color: #2b2e4a;
+}
+
+.active-1 {
+  background-color: #f77d0a;
+  color: #fff;
+}
