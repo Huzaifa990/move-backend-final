@@ -143,7 +143,9 @@ const adminAnalytics = async (req, res) => {
     .populate("car", "carName company")
     .lean();
 
-  let allListings = await listing.find({}, "listingDate company rentPerDay carName status").lean();
+  let allListings = await listing
+    .find({}, "listingDate company rentPerDay carName status approved")
+    .lean();
 
   return res.status(200).send({ analytics, allBookings, allListings });
 };
