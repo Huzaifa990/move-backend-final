@@ -194,19 +194,13 @@ const deleteBooking = async (req, res) => {
 };
 
 const updateBooking = async (req, res) => {
-  // Get the booking id from the request parameters
   const id = req.params.id;
-  // Get the updated booking information from the request body
   const { car, pickupDate, dropOffDate, _id, accountType, paymentMethod } = req.body;
 
-  // Check if the id is a valid MongoDB ObjectId
   const valid = mongoose.isValidObjectId(id);
-  // Return an error if the id is invalid
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  // Find the booking using the id
   const bookingFound = await booking.findById(id);
-  // Return an error if the booking is not found
   if (!bookingFound) {
     return res.status(404).send({ msg: "Booking not found!" });
   }
@@ -374,6 +368,39 @@ const getMyBookings = async (req, res) => {
   return res.status(200).send({ count: bookings.length, bookings });
 };
 
+const approveBooking = async (req, res) => {
+  const id = req.params.id;
+  const { accountType, _id } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  if (accountType == "Lessee") {
+    return res.status(422).send({ msg: "You are not allowed to approve a booking" });
+  }
+
+  const bookingFound = await booking.findById(id);
+  if (!bookingFound) {
+    return res.status(404).send({ msg: "Booking not found!" });
+  }
+
+  if (bookingFound.lessor.toString() !== _id && accountType !== "Admin") {
+    return res.status(422).send({ msg: "You are not allowed to approve this booking" });
+  }
+
+  if (bookingFound.status == "accepted") {
+    return res.status(422).send({ msg: "This booking is already approved" });
+  }
+
+  await booking.updateOne(
+    { _id: id },
+    {
+      status: "accepted",
+    }
+  );
+
+  return res.status(200).send({ msg: "Booking Approved Successfully" });
+};
+
 module.exports = {
   addBooking,
   deleteBooking,
@@ -381,4 +408,5 @@ module.exports = {
   getAllBookings,
   getBookingById,
   getMyBookings,
+  approveBooking,
 };
