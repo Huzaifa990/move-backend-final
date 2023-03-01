@@ -4,14 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
 import "chart.js/auto";
 import Loader from "./Loader";
+import Loader2 from "./Loader2";
 
 export default function AdminDashboard() {
-  var [bookings, setBookings] = useState([]);
-  var [listings, setListings] = useState([]);
+  const [activeOption, setActiveOption] = useState("listings");
+
+  function handleOptionClick(option) {
+    setActiveOption(option);
+  }
+
+
   var [anal, setAnal] = useState({});
   const [loading, setLoading] = useState(true);
 
-  var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
@@ -22,8 +27,7 @@ export default function AdminDashboard() {
 
       var data = await response.json();
       console.log(data);
-      setBookings(data.allBookings);
-      setListings(data.allListings);
+      
       setAnal(data.analytics);
       setLoading(false);
     }
@@ -31,13 +35,7 @@ export default function AdminDashboard() {
     getData();
   }, [userDetails]);
 
-  function goToBookings(id) {
-    navigate("/viewBookingDashboard", { state: { id: id } });
-  }
-
-  function goToListings(id) {
-    navigate("/viewListings", { state: { id: id } });
-  }
+ 
 
   return (
     <div className="stats-section">
@@ -253,65 +251,184 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-          <h1>All Bookings: </h1>
+          <h1>Your Business: </h1>
           <br /> <br />
           <div class="table-responsive table--no-card m-b-40">
-            <table class="table table-borderless table-striped table-earning">
-              <thead>
-                <tr>
-                  <th>Car Name</th>
-                  <th>Company</th>
-                  <th>Date Listed</th>
-                  <th class="text-right">Rent Per Day</th>
-                  <th class="text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookings.map((item) => {
-                  return (
-                    <tr onClick={() => goToBookings(item._id)}>
-                      <td>{item.car.carName}</td>
-                      <td>{item.car.company}</td>
-                      <td>{moment.utc(item.listedDate).format("llll")}</td>
-                      <td class="text-right">{item.paymentDetails.amount} PKR</td>
-                      <td class="text-right">{item.status}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="top-bar">
+              <div
+                className={`option ${activeOption === "users" ? "active-1" : ""}`}
+                onClick={() => handleOptionClick("users")}
+              >
+                Users
+              </div>
+              <div
+                className={`option ${activeOption === "listings" ? "active-1" : ""}`}
+                onClick={() => handleOptionClick("listings")}
+              >
+                Listings
+              </div>
+
+              <div
+                className={`option ${activeOption === "bookings" ? "active-1" : ""}`}
+                onClick={() => handleOptionClick("bookings")}
+              >
+                All Bookings
+              </div>
+            </div>
+
+            <div>{activeOption === "users" ? <UsersTable /> :activeOption === "listings"? <ListingsTable/>: activeOption === "bookings"? <BookingsTable/>: ""}</div>
           </div>
           <br /> <br />
-          <h1>All Listings: </h1>
-          <br /> <br />
-          <div class="table-responsive table--no-card m-b-40">
-            <table class="table table-borderless table-striped table-earning">
-              <thead>
-                <tr>
-                  <th>Car Name</th>
-                  <th>Company</th>
-                  <th>Date Listed</th>
-                  <th class="text-right">Rent Per Day</th>
-                  <th class="text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {listings.map((item) => {
-                  return (
-                    <tr onClick={() => goToListings(item._id)}>
-                      <td>{item.carName}</td>
-                      <td>{item.company}</td>
-                      <td>{moment.utc(item.listedDate).format("llll")}</td>
-                      <td class="text-right">{item.rentPerDay} PKR</td>
-                      <td class="text-right">{item.status===true?<><span style={{ color: "green" }}> Active</span></>: <span style={{ color: "#6c757d" }}> Inactive</span>} </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+     
         </>
       )}
+    </div>
+  );
+}
+
+function UsersTable() {
+  // const [loading, setLoading] = useState(true);
+  // var navigate = useNavigate();
+  // var [users, setUser] = useState([]);
+  // var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  // useEffect(() => {
+  //   async function getData() {
+  //     const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+  //       headers: { Authorization: userDetails },
+  //     });
+
+  //     var data = await response.json();
+  //     console.log(data);
+  //     setListings(data.allListings);
+  //     setLoading(false);
+  //   }
+
+  //   getData();
+  // }, [userDetails]);
+
+
+  return <div>This is the users table</div>;
+}
+
+function ListingsTable() {
+  const [loading, setLoading] = useState(true);
+  var navigate = useNavigate();
+  var [listings, setListings] = useState([]);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data);
+      setListings(data.allListings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails]);
+
+  function goToListings(id) {
+    navigate("/viewListings", { state: { id: id } });
+  }
+
+  return (
+    <div>
+      <table class="table table-borderless table-striped table-earning">
+        {loading === false? <>
+          <thead>
+          <tr>
+            <th>Car Name</th>
+            <th>Company</th>
+            <th>Date Listed</th>
+            <th class="text-right">Rent Per Day</th>
+            <th class="text-right">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {listings.map((item) => {
+            return (
+              <tr onClick={() => goToListings(item._id)}>
+                <td>{item.carName}</td>
+                <td>{item.company}</td>
+                <td>{moment.utc(item.listedDate).format("llll")}</td>
+                <td class="text-right">{item.rentPerDay} PKR</td>
+                <td class="text-right">
+                  {item.status === true ? (
+                    <>
+                      <span style={{ color: "green" }}> Active</span>
+                    </>
+                  ) : (
+                    <span style={{ color: "#6c757d" }}> Inactive</span>
+                  )}{" "}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        </> : <Loader2/>}
+      </table>
+    </div>
+  );
+}
+
+function BookingsTable() {
+  const [loading, setLoading] = useState(true);
+  var navigate = useNavigate();
+  var [bookings, setBookings] = useState([]);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  function goToBookings(id) {
+    navigate("/viewBookingDashboard", { state: { id: id } });
+  }
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setBookings(data.allBookings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails]);
+
+
+  return (
+    <div>
+      <table class="table table-borderless table-striped table-earning">
+        {loading === false? <>
+          <thead>
+          <tr>
+            <th>Car Name</th>
+            <th>Company</th>
+            <th>Date Listed</th>
+            <th class="text-right">Rent Per Day</th>
+            <th class="text-right">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map((item) => {
+            return (
+              <tr onClick={() => goToBookings(item._id)}>
+                <td>{item.car.carName}</td>
+                <td>{item.car.company}</td>
+                <td>{moment.utc(item.listedDate).format("llll")}</td>
+                <td class="text-right">{item.paymentDetails.amount} PKR</td>
+                <td class="text-right">{item.status}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+        </> : <Loader2/>}
+        
+      </table>
     </div>
   );
 }

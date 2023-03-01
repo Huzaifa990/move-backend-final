@@ -1,12 +1,45 @@
-// if (!this.files || !this.files[0]) return;
+import React, { useState } from "react";
 
-    // const FR = new FileReader();
+function TopBar() {
+  const [activeOption, setActiveOption] = useState("users");
 
-    // FR.addEventListener("load", function (evt) {
-    //     document.querySelector("#img").style.visibility = "visible";
-    //     document.querySelector("#img").style.position = "relative";
-    //     document.querySelector("#img").src = evt.target.result;
-    //     document.querySelector("#picBase64").value = evt.target.result;
-    // });
+  function handleOptionClick(option) {
+    setActiveOption(option);
+  }
 
-    // FR.readAsDataURL(this.files[0]);
+  return (
+    <>
+    <div className="top-bar">
+      <div
+        className={`option ${activeOption === "users" ? "active" : ""}`}
+        onClick={() => handleOptionClick("users")}
+      >
+        Users
+      </div>
+      <div
+        className={`option ${activeOption === "listings" ? "active" : ""}`}
+        onClick={() => handleOptionClick("listings")}
+      >
+        Listings
+      </div>
+      </div>
+      <div>
+      {activeOption === "users" ? (
+        <UsersTable />
+      ) : (
+        <ListingsTable />
+      )}
+    </div>
+    </>
+  );
+}
+
+function UsersTable() {
+  return <div>This is the users table</div>;
+}
+
+function ListingsTable() {
+  return <div>This is the listings table</div>;
+}
+
+export default TopBar;
