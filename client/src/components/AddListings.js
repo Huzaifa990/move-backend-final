@@ -66,6 +66,7 @@ const sendData = () => {
   let rentPerDay = parseInt(document.getElementById("userPrice").value);
   let transmissio = document.getElementById("transmission");
   let transmission = transmissio[transmissio.selectedIndex].value;
+  let carNum = document.getElementById("carNum").value;
   console.log(picture);
   axios
     .post(
@@ -79,6 +80,7 @@ const sendData = () => {
         location,
         rentPerDay,
         picture,
+        carNum,
       },
       {
         headers: headers,
@@ -239,6 +241,16 @@ const sendData = () => {
               placeholder=""
               required="required"
               id="mileage"
+            />
+          </div>
+          <div className="col-6 form-group">
+            <label for="">Number Plate:</label>
+            <input
+              type="text"
+              className="form-control p-4"
+              placeholder=""
+              required="required"
+              id="carNum"
             />
           </div>
 

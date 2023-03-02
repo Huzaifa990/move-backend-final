@@ -161,7 +161,8 @@ const MyListings = () => {
                         <br/>
                       <div className="status-box">
                         <h5>Change Status: </h5>
-                        <ReactSwitch className="switch" disabled={switchState} checked={data.status} onChange={()=>statusChange(data._id)} />
+                        {data.approved===true?<ReactSwitch className="switch" disabled={switchState} checked={data.status} onChange={()=>statusChange(data._id)} />:<h5>Processing</h5>}
+                        
                       </div> 
                       <br />
                       <button className="btn btn-primary px-3" onClick={() => showId(data._id)}>

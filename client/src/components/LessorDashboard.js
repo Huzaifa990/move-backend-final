@@ -4,11 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
 import "chart.js/auto";
 import Loader from "./Loader";
+import ReactSwitch from "react-switch";
+import axios from "axios";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 export default function LessorDashboard() {
   var [stats, setStats] = useState([]);
   var [anal, setAnal] = useState({});
   const [loading, setLoading] = useState(true);
+  const [switchState, setSwitchState] = useState(false);
 
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -33,8 +38,25 @@ export default function LessorDashboard() {
     navigate("/viewListings", { state: { id: id } });
   }
 
+  async function statusChange(id){
+    setSwitchState(true);
+    axios.put("http://localhost:8080/api/listing/toggle/"+id,  
+    {},
+    {
+        headers: { Authorization: userDetails },
+    }).then((res)=>{
+        console.log(res);
+        NotificationManager.success('Listing Updated');
+    }).catch((e)=>{
+        console.log(e);
+        NotificationManager.success('Listing Update Failed  ');
+    })
+    // forceUpdate();
+  }
+
   return (
     <div className="stats-section">
+      <NotificationContainer/>
       {loading === true ? (
         <Loader />
       ) : (
@@ -246,17 +268,19 @@ export default function LessorDashboard() {
                   <th>Date Listed</th>
                   <th class="text-right">Rent Per Day</th>
                   <th class="text-right">Status</th>
+                  <th class="text-right">Manage</th>
                 </tr>
               </thead>
               <tbody>
                 {stats.map((item) => {
                   return (
-                    <tr onClick={() => goToListings(item._id)}>
-                      <td>{item.carName}</td>
-                      <td>{item.company}</td>
-                      <td>{moment.utc(item.listedDate).format("llll")}</td>
-                      <td class="text-right">{item.rentPerDay} PKR</td>
+                    <tr>
+                      <td onClick={() => goToListings(item._id)}>{item.carName}</td>
+                      <td onClick={() => goToListings(item._id)}>{item.company}</td>
+                      <td onClick={() => goToListings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
+                      <td onClick={() => goToListings(item._id)} class="text-right">{item.rentPerDay} PKR</td>
                       <td class="text-right">{item.status===true?<><span style={{ color: "green" }}> Active</span></>: <span style={{ color: "#6c757d" }}> Inactive</span>} </td>
+                      <td class="text-right"><ReactSwitch className="switch" disabled={switchState} checked={item.status} onChange={()=>statusChange(item._id)} /></td>
                     </tr>
                   );
                 })}

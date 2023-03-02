@@ -5631,7 +5631,9 @@ a.badge-dark.focus {
     overflow: hidden;
     line-height: 0;
     font-size: .75rem;
-    background-color: #e9ecef
+    background-color: #e9ecef;
+    margin: 15px;
+    border-radius: 50px;
 }
 
 .progress-bar {
@@ -5643,7 +5645,7 @@ a.badge-dark.focus {
     text-align: center;
     white-space: nowrap;
     background-color: #F77D0A;
-    transition: width 0.6s ease
+    transition: width 0.6s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
