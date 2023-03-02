@@ -34,6 +34,7 @@ import AdminDashboard from "../components/AdminDashboard";
 import ActivateAccount from "../components/ActivateAccount";
 import MyProfile from "../components/MyProfile.js";
 import ViewBookingDashBoard from "../components/ViewBookingDashboard";
+import ViewUser from "../components/ViewUser";
 
 function App() {
   return (
@@ -261,6 +262,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="View Booking" />{" "}
                 <ViewBookingDashBoard /> <Footer />{" "}
+              </>
+            }
+          />
+
+          <Route
+            path="viewUser"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="View User" />{" "}
+                <ViewUser /> <Footer />{" "}
               </>
             }
           />
