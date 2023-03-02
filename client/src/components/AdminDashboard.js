@@ -334,15 +334,19 @@ function UsersTable() {
       headers: { Authorization: userDetails },
     }).then((res)=>{
       console.log(res);
+      NotificationManager.success('User Approved');
     }).catch((e)=>{
       console.log(e);
     });
 
-    const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
+    await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
         headers: { Authorization: userDetails },
+      }).then((res)=>{
+        console.log(res);
+        setLoading(false);
+      }).catch((e)=>{
+        console.log(e)
       });
-      var data = await response.json();
-      setUser(data.users);
       forceUpdate();
   }
 
@@ -495,6 +499,7 @@ function AllUsersTable() {
 
 
 function ListingsTable() {
+  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
   const [loading, setLoading] = useState(true);
   var navigate = useNavigate();
   var [listings, setListings] = useState([]);
@@ -514,7 +519,7 @@ function ListingsTable() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
 
   function goToListings(id) {
     navigate("/viewListings", { state: { id: id } });
@@ -532,7 +537,15 @@ function ListingsTable() {
     }).catch((e)=>{
         console.log(e);
     })
-    // forceUpdate();
+
+    await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      }).then(()=>{
+        setSwitchState(false)
+    }).catch((e)=>{
+        console.log(e);
+    });
+    forceUpdate();
   }
 
   async function statusChangeTwo(id){
@@ -543,11 +556,18 @@ function ListingsTable() {
         headers: { Authorization: userDetails },
     }).then((res)=>{
         console.log(res);
-        NotificationManager.success('Listing Updated');
     }).catch((e)=>{
         console.log(e);
     })
-    // forceUpdate();
+
+    await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      }).then(()=>{
+        setSwitchState(false)
+    }).catch((e)=>{
+        console.log(e);
+    });
+    forceUpdate();
   }
 
   return (
@@ -680,17 +700,18 @@ function PendingBookingsTable() {
         headers: { Authorization: userDetails },
       }).then((res)=>{
         console.log(res);
+        NotificationManager.success('Booking Approved');
       }).catch((e)=>{
         console.log(e);
       });
 
-      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+      await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
         headers: { Authorization: userDetails },
+      }).then((res)=>{
+        console.log(res);
+      }).catch((e)=>{
+        console.log(e)
       });
-      var data = await response.json();
-      console.log(data);
-      setBookings(data.allBookings);
-      setLoading(false);
 
       forceUpdate();
   }
