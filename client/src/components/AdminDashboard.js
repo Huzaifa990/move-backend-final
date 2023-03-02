@@ -8,6 +8,9 @@ import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
 // import reject from "../img/remove.png";
 import axios from "axios";
+import ReactSwitch from "react-switch";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 export default function AdminDashboard() {
   const [activeOption, setActiveOption] = useState("listings");
@@ -42,6 +45,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="stats-section">
+      <NotificationContainer/>
       {loading === true ? (
         <Loader />
       ) : (
@@ -495,6 +499,7 @@ function ListingsTable() {
   var navigate = useNavigate();
   var [listings, setListings] = useState([]);
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [switchState, setSwitchState] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -515,6 +520,36 @@ function ListingsTable() {
     navigate("/viewListings", { state: { id: id } });
   }
 
+  async function statusChange(id){
+    setSwitchState(true);
+    axios.put("http://localhost:8080/api/listing/verifyListing/"+id, 
+    {},
+    {
+        headers: { Authorization: userDetails },
+    }).then((res)=>{
+        console.log(res);
+        NotificationManager.success('Listing Approved');
+    }).catch((e)=>{
+        console.log(e);
+    })
+    // forceUpdate();
+  }
+
+  async function statusChangeTwo(id){
+    setSwitchState(true);
+    axios.put("http://localhost:8080/api/listing/toggle/"+id,  
+    {},
+    {
+        headers: { Authorization: userDetails },
+    }).then((res)=>{
+        console.log(res);
+        NotificationManager.success('Listing Updated');
+    }).catch((e)=>{
+        console.log(e);
+    })
+    // forceUpdate();
+  }
+
   return (
     <div>
       <table class="table table-borderless table-striped table-earning">
@@ -526,26 +561,21 @@ function ListingsTable() {
             <th>Date Listed</th>
             <th class="text-right">Rent Per Day</th>
             <th class="text-right">Status</th>
+            <th class="text-center">Approve Listing</th>
           </tr>
         </thead>
         <tbody>
           {listings.map((item) => {
             return (
-              <tr onClick={() => goToListings(item._id)}>
-                <td>{item.carName}</td>
-                <td>{item.company}</td>
-                <td>{moment.utc(item.listedDate).format("llll")}</td>
-                <td class="text-right">{item.rentPerDay} PKR</td>
-                <td class="text-right">
-                  {item.status === true ? (
-                    <>
-                      <span style={{ color: "green" }}> Active</span>
-                    </>
-                  ) : (
-                    <span style={{ color: "#6c757d" }}> Inactive</span>
-                  )}{" "}
-                </td>
+              <tr>
+                <td onClick={() => goToListings(item._id)}>{item.carName}</td>
+                <td onClick={() => goToListings(item._id)}>{item.company}</td>
+                <td onClick={() => goToListings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
+                <td onClick={() => goToListings(item._id)} class="text-right">{item.rentPerDay} PKR</td>
+                <td class="text-right"><ReactSwitch className="switch" disabled={switchState} checked={item.status} onChange={()=>statusChangeTwo(item._id)} /></td>
+                <td className="text-center" id="approval">{item.approved===false?<><img src={approve} width="35" alt="" id="tick" onClick={()=> statusChange(item._id)}/></>: <span style={{ color: "#6c757d" }}>Booking Approved</span>} </td>
               </tr>
+              
             );
           })}
         </tbody>
