@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
@@ -6,7 +6,8 @@ import "chart.js/auto";
 import Loader from "./Loader";
 import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
-import reject from "../img/remove.png";
+// import reject from "../img/remove.png";
+import axios from "axios";
 
 export default function AdminDashboard() {
   const [activeOption, setActiveOption] = useState("listings");
@@ -296,27 +297,115 @@ export default function AdminDashboard() {
 }
 
 function UsersTable() {
-  // const [loading, setLoading] = useState(true);
-  // var navigate = useNavigate();
-  // var [users, setUser] = useState([]);
-  // var userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  // useEffect(() => {
-  //   async function getData() {
-  //     const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+  const [loading, setLoading] = useState(true);
+  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
+  var navigate = useNavigate();
+  var [users, setUser] = useState([]);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data);
+      setUser(data.users);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails, ingnored]);
+
+  async function approveUser(id){
+    axios.put("http://localhost:8080/api/auth/verifyUser/approve/"+id,{
+      verified: true
+    }, {
+      headers: { Authorization: userDetails },
+    }).then((res)=>{
+      console.log(res);
+    }).catch((e)=>{
+      console.log(e);
+    });
+
+    const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data);
+      setUser(data.users);
+      setLoading(false);
+      forceUpdate();
+  }
+
+  // async function rejectUser(id){
+  //   axios.put("http://localhost:8080/api/auth/verifyUser/reject/"+id,{
+  //     verified: false
+  //   }, {
+  //     headers: { Authorization: userDetails },
+  //   }).then((res)=>{
+  //     console.log(res);
+      
+  //   }).catch((e)=>{
+  //     console.log(e);
+  //   });
+
+  //   const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
   //       headers: { Authorization: userDetails },
   //     });
 
   //     var data = await response.json();
   //     console.log(data);
-  //     setListings(data.allListings);
+  //     setUser(data.users);
   //     setLoading(false);
-  //   }
-
-  //   getData();
-  // }, [userDetails]);
+  //     forceUpdate();
+  // }
 
 
-  return <div>This is the users table</div>;
+  return (
+    <div>
+      <table class="table table-borderless table-striped table-earning">
+        {loading === false? <>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>CNIC</th>
+            <th class="text-right">Phone Number</th>
+            <th class="text-right">Email Verified</th>
+            <th>Accept</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((item) => {
+            return (
+              <tr>
+                <td>{item.name}</td>
+                <td>{item.email}</td>
+                <td>{item.cnic}</td>
+                <td class="text-right">{item.phoneNumber}</td>
+                <td class="text-right">
+                  {item.emailVerified === true ? (
+                    <>
+                      <span style={{ color: "green" }}> Active</span>
+                    </>
+                  ) : (
+                    <span style={{ color: "#6c757d" }}> Inactive</span>
+                  )}{" "}
+                </td>
+                <td className="tr-flex" id="approval">
+                    <img src={approve} width="35" alt="" id="tick" onClick={()=> approveUser(item._id)}/>
+                    {/* <img src={reject} width="35" alt="" id="cross" onClick={()=> rejectUser(item._id)}/> */}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        </> : <Loader2/>}
+      </table>
+    </div>
+  );
 }
 
 function ListingsTable() {
@@ -450,6 +539,7 @@ function BookingsTable() {
 
 
 function PendingBookingsTable() {
+  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
   const [loading, setLoading] = useState(true);
   var navigate = useNavigate();
   var [bookings, setBookings] = useState([]);
@@ -471,7 +561,27 @@ function PendingBookingsTable() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
+
+  async function approveBooking(id){
+      axios.put("http://localhost:8080/api/booking/approve/"+id,{}, {
+        headers: { Authorization: userDetails },
+      }).then((res)=>{
+        console.log(res);
+      }).catch((e)=>{
+        console.log(e);
+      });
+
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setBookings(data.allBookings);
+      setLoading(false);
+
+      forceUpdate();
+  }
 
 
   return (
@@ -485,22 +595,21 @@ function PendingBookingsTable() {
             <th>Date Listed</th>
             <th class="text-right">Rent Per Day</th>
             <th>Status</th>
-            <th class="text-right">Accept/ Reject</th>
+            <th class="text-right">Accept</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((item) => {
             if(item.status === "pending"){
               return (
-                <tr onClick={() => goToBookings(item._id)}>
-                  <td>{item.car.carName}</td>
-                  <td>{item.car.company}</td>
-                  <td>{moment.utc(item.listedDate).format("llll")}</td>
-                  <td class="text-right">{item.paymentDetails.amount} PKR</td>
-                  <td>{item.status}</td>
-                  <td className="tr-flex">
-                    <img src={approve} width="35" alt=""/>
-                    <img src={reject} width="35" alt=""/>
+                <tr>
+                  <td  onClick={() => goToBookings(item._id)}>{item.car.carName}</td>
+                  <td  onClick={() => goToBookings(item._id)}>{item.car.company}</td>
+                  <td  onClick={() => goToBookings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
+                  <td class="text-right"  onClick={() => goToBookings(item._id)}>{item.paymentDetails.amount} PKR</td>
+                  <td  onClick={() => goToBookings(item._id)} id="stat">{item.status}</td>
+                  <td className="tr-flex" id="approval">
+                    <img src={approve} width="35" alt="" id="tick" onClick={()=> approveBooking(item._id)}/>
                   </td>
 
                 </tr>
