@@ -383,7 +383,7 @@ const getAllPendingApprovalUsers = async (req, res) => {
     return res.status(422).send({ msg: "Access Denied." });
   }
 
-  const users = await User.find({ verified: false }, { password: 0 });
+  const users = await User.find({ verified: false, emailVerified: true }, { password: 0 });
 
   return res.status(200).send({ count: users.length, users });
 };
