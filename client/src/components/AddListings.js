@@ -101,6 +101,7 @@ const sendData = () => {
       document.getElementById("location").value = null;
       document.getElementById("userPrice").value = null;
       document.getElementById("inp").value = null;
+      document.getElementById("carNum").value = null;
       document.querySelector("#img").style.visibility = "hidden";
       document.querySelector("#img").style.position = "absolute";
       
@@ -143,11 +144,22 @@ const sendData = () => {
         document.getElementById("errorApi").style.visibility = "visible";
         document.getElementById("errorApi").style.position = "relative";
         document.getElementById("errorApi").style.width = "100%";
+      }else if (e.response.data.error.carNum !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("carNum").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.carNum;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
       } else if (e.response.data.error.transmission !== undefined) {
         document.getElementById("make").style.border = "none";
         document.getElementById("model").style.border = "none";
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("transmission").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.transmission;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -159,6 +171,7 @@ const sendData = () => {
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
         document.getElementById("transmission").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("location").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.location;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -170,6 +183,7 @@ const sendData = () => {
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
         document.getElementById("transmission").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("location").style.border = "none";
         document.getElementById("userPrice").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.rentPerDay;
@@ -182,6 +196,7 @@ const sendData = () => {
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
         document.getElementById("transmission").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("location").style.border = "none";
         document.getElementById("userPrice").style.border = "none";
         document.getElementById("errorMessage").innerText = e.response.data.error.picture;

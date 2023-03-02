@@ -63,6 +63,7 @@ const EditListing = () => {
     document.getElementById("mileage").value = data.mileage;
     document.getElementById("location").value = data.location;
     document.getElementById("userPrice").value = data.rentPerDay;
+    document.getElementById("carNum").value = data.carNum;
     for(var i = 0; i < data.picture.length; i++){
       oldPictures.push(data.picture[i]);
     }
@@ -121,6 +122,7 @@ const EditListing = () => {
     let rentPerDay = parseInt(document.getElementById("userPrice").value);
     let transmissio = document.getElementById("transmission");
     let transmission = transmissio[transmissio.selectedIndex].value;
+    let carNum = document.getElementById("carNum").value;
     // 👇️ Axios command to edit and update data 
     axios
     .put(
@@ -133,7 +135,8 @@ const EditListing = () => {
         transmission,
         location,
         rentPerDay,
-        picture: pictures
+        picture: pictures,
+        carNum,
       },
       {
         headers: headers,
@@ -156,6 +159,7 @@ const EditListing = () => {
       document.getElementById("mileage").value = null;
       document.getElementById("location").value = null;
       document.getElementById("userPrice").value = null;
+      document.getElementById("carNum").value = null;
 
       setTimeout(goToListings, 3000)
     })
@@ -197,11 +201,23 @@ const EditListing = () => {
         document.getElementById("errorApi").style.visibility = "visible";
         document.getElementById("errorApi").style.position = "relative";
         document.getElementById("errorApi").style.width = "100%";
-      } else if (e.response.data.error.transmission !== undefined) {
+      } 
+      else if (e.response.data.error.carNum !== undefined) {
         document.getElementById("make").style.border = "none";
         document.getElementById("model").style.border = "none";
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
+        document.getElementById("carNum").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.carNum;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      }else if (e.response.data.error.transmission !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("transmission").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.transmission;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -213,6 +229,7 @@ const EditListing = () => {
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
         document.getElementById("transmission").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("location").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.location;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -225,6 +242,7 @@ const EditListing = () => {
         document.getElementById("mileage").style.border = "none";
         document.getElementById("transmission").style.border = "none";
         document.getElementById("location").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
         document.getElementById("userPrice").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.rentPerDay;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -282,6 +300,17 @@ const EditListing = () => {
               placeholder=""
               required="required"
               id="mileage"
+            />
+          </div>
+
+          <div className="col-6 form-group">
+            <label for="">Number Plate:</label>
+            <input
+              type="text"
+              className="form-control p-4"
+              placeholder=""
+              required="required"
+              id="carNum"
             />
           </div>
         </div>
