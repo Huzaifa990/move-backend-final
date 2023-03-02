@@ -1,16 +1,20 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 import { MDBCardImage } from "mdb-react-ui-kit";
 import { InputMask } from "primereact/inputmask";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 export default function MyProfile() {
   var userName = JSON.parse(localStorage.getItem("userName"));
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   var userEmail = JSON.parse(localStorage.getItem("userEmail"));
   var accountType = JSON.parse(localStorage.getItem("accountType"));
+  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
+  
   // var [open,setOpen]=useState(false);
   var [Analytics, setAnalytics] = useState({});
   var [anal, setAnal] = useState({});
@@ -29,7 +33,7 @@ export default function MyProfile() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
 
   useEffect(() => {
     async function getData() {
@@ -103,7 +107,7 @@ export default function MyProfile() {
     }
   }
 
-  const sendName = () => {
+  async function sendName() {
     let updatedName = document.getElementById("Name").value;
 
     axios
@@ -118,19 +122,21 @@ export default function MyProfile() {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById("successApi").innerText = res.data.msg;
-        document.getElementById("successApi").style.visibility = "visible";
-        document.getElementById("successApi").style.position = "relative";
-        document.getElementById("successApi").style.width = "100%";
+        NotificationManager.success(res.data.msg);
       })
       .catch((e) => {
         console.log(e);
+        NotificationManager.error("Name Update Failed");
       });
+
+      const response = await fetch("http://localhost:8080/api/auth/user", {
+        headers: { Authorization: userDetails },
+      });
+
+      var uInfo = await response.json();
+      setUserInfo(uInfo.user);
+      forceUpdate();
     localStorage.setItem("userName", JSON.stringify(updatedName));
-    setTimeout(function () {
-      window.location.reload();
-    }, 2500);
-    // setOpen(!open);
   };
 
   const updateNumber = () => {
@@ -156,13 +162,11 @@ export default function MyProfile() {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById("successApi").innerText = res.data.msg;
-        document.getElementById("successApi").style.visibility = "visible";
-        document.getElementById("successApi").style.position = "relative";
-        document.getElementById("successApi").style.width = "100%";
+        NotificationManager.success(res.data.msg);
       })
       .catch((e) => {
         console.log(e);
+        NotificationManager.error('Phone Number Update Failed');
       });
   };
   const sendEmail = () => {
@@ -180,13 +184,11 @@ export default function MyProfile() {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById("successApi").innerText = res.data.msg;
-        document.getElementById("successApi").style.visibility = "visible";
-        document.getElementById("successApi").style.position = "relative";
-        document.getElementById("successApi").style.width = "100%";
+        NotificationManager.success(res.data.msg);
       })
       .catch((e) => {
         console.log(e);
+        NotificationManager.error("Email Update Unverified");
       });
     localStorage.setItem("userEmail", JSON.stringify(userEmail));
   };
@@ -226,7 +228,6 @@ export default function MyProfile() {
         document.getElementById("successApi").style.visibility = "visible";
         document.getElementById("successApi").style.position = "relative";
         document.getElementById("successApi").style.width = "100%";
-        // setTimeout(goToHome, 15000)
       })
       .catch((e) => {
         console.log(e);
@@ -275,6 +276,7 @@ export default function MyProfile() {
 
   return (
     <div>
+      <NotificationContainer/>
       <div class="container">
         <div class="row-gutters">
           {userInfo.verified === true ? (
@@ -435,7 +437,7 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="Name">Name</label>
-                      <input type="text" class="form-control" id="Name" placeholder={userName} />
+                      <input type="text" class="form-control" id="Name" placeholder={userInfo.name} defaultValue={userInfo.name} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendName}>
                           Update Name
@@ -451,7 +453,8 @@ export default function MyProfile() {
                         className="form-control p-4 cnic-inp"
                         mask="(+99)-9999999999"
                         id="Number"
-                        placeholder="Phone Number"
+                        placeholder={userInfo.phoneNumber}
+                        value={userInfo.phoneNumber}
                       />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={updateNumber}>
@@ -464,7 +467,7 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="Email">Email</label>
-                      <input type="email" class="form-control" id="Email" placeholder={userEmail} />
+                      <input type="email" class="form-control" id="Email" placeholder={userEmail} defaultValue={userInfo.email} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendEmail}>
                           Update Email
