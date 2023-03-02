@@ -33,7 +33,6 @@ export default function AdminDashboard() {
 
       var data = await response.json();
       console.log(data);
-      
       setAnal(data.analytics);
       setLoading(false);
     }
