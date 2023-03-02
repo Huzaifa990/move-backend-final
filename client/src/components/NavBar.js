@@ -1,8 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const NavBar = () => {
+  var [users, setUser] = useState(false);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/auth/user", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data)
+      setUser(data.user.verified);
+    }
+
+    getData();
+  }, [userDetails]);
+
   const navigate = useNavigate();
   function logout() {
     localStorage.removeItem("userName");
@@ -133,7 +150,7 @@ const NavBar = () => {
                           <Link to="/myProfile">My Profile</Link>
                         ) : null}
                         {userName !== null ? (
-                          accountType === "Lessor" ? (
+                          accountType === "Lessor" && users === true ? (
                             <Link to="/myListings">My Listings</Link>
                           ) : null
                         ) : null}
@@ -151,13 +168,13 @@ const NavBar = () => {
                         ) : null}
 
                         {userName !== null ? (
-                          accountType === "Lessor" ? (
+                          accountType === "Lessor" && users === true ? (
                             <Link to="/addListings">List a Car</Link>
                           ) : null
                         ) : null}
 
                         {userName !== null ? (
-                          accountType === "Lessee" ? (
+                          accountType === "Lessee" && users === true ? (
                             <Link to="/myBookings">My Bookings</Link>
                           ) : null
                         ) : null}

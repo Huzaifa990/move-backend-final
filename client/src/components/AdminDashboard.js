@@ -258,11 +258,17 @@ export default function AdminDashboard() {
           <br /> <br />
           <div class="table-responsive table--no-card m-b-40">
             <div className="top-bar">
+            <div
+                className={`option ${activeOption === "allUsers" ? "active-1" : ""}`}
+                onClick={() => handleOptionClick("allUsers")}
+              >
+                All Users
+              </div>
               <div
                 className={`option ${activeOption === "users" ? "active-1" : ""}`}
                 onClick={() => handleOptionClick("users")}
               >
-                Users
+                Pending Users
               </div>
               <div
                 className={`option ${activeOption === "listings" ? "active-1" : ""}`}
@@ -286,7 +292,7 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div>{activeOption === "users" ? <UsersTable /> :activeOption === "listings"? <ListingsTable/>: activeOption === "bookings"? <BookingsTable/>:  activeOption === "pendingBookings"? <PendingBookingsTable/>:""}</div>
+            <div>{activeOption === "users" ? <UsersTable /> :activeOption === "listings"? <ListingsTable/>: activeOption === "bookings"? <BookingsTable/>:  activeOption === "pendingBookings"? <PendingBookingsTable/>:activeOption === "allUsers"? <AllUsersTable/>:""}</div>
           </div>
           <br /> <br />
      
@@ -331,11 +337,8 @@ function UsersTable() {
     const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
         headers: { Authorization: userDetails },
       });
-
       var data = await response.json();
-      console.log(data);
       setUser(data.users);
-      setLoading(false);
       forceUpdate();
   }
 
@@ -362,7 +365,9 @@ function UsersTable() {
   //     forceUpdate();
   // }
 
-
+  function goToViewUser(id) {
+    navigate("/viewUser", { state: { id: id } });
+  }
   return (
     <div>
       <table class="table table-borderless table-striped table-earning">
@@ -381,9 +386,9 @@ function UsersTable() {
           {users.map((item) => {
             return (
               <tr>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
-                <td>{item.cnic}</td>
+                <td onClick={() => goToViewUser(item._id)}>{item.name}</td>
+                <td onClick={() => goToViewUser(item._id)}>{item.email}</td>
+                <td onClick={() => goToViewUser(item._id)}>{item.cnic}</td>
                 <td class="text-right">{item.phoneNumber}</td>
                 <td class="text-right">
                   {item.emailVerified === true ? (
@@ -407,6 +412,83 @@ function UsersTable() {
     </div>
   );
 }
+
+
+function AllUsersTable() {
+  const [loading, setLoading] = useState(true);
+  var navigate = useNavigate();
+  var [users, setUser] = useState([]);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/auth/getAllUsers", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data);
+      setUser(data.users);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails]);
+
+  function goToViewUser(id) {
+    navigate("/viewUser", { state: { id: id } });
+  }
+  return (
+    <div>
+      <table class="table table-borderless table-striped table-earning">
+        {loading === false? <>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>CNIC</th>
+            <th class="text-right">Phone Number</th>
+            <th class="text-right">Account Status</th>
+            <th>Email Verified</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((item) => {
+            return (
+              <tr   onClick={() => goToViewUser(item._id)}>
+                <td>{item.name}</td>
+                <td>{item.email}</td>
+                <td>{item.cnic}</td>
+                <td class="text-right">{item.phoneNumber}</td>
+                <td class="text-right">
+                  {item.status === true ? (
+                    <>
+                      <span style={{ color: "green" }}> Active</span>
+                    </>
+                  ) : (
+                    <span style={{ color: "#6c757d" }}> Inactive</span>
+                  )}{" "}
+                </td>
+
+                <td class="text-right">
+                  {item.emailVerified === true ? (
+                    <>
+                      <span style={{ color: "green" }}> Verified</span>
+                    </>
+                  ) : (
+                    <span style={{ color: "#6c757d" }}> Not Verified</span>
+                  )}{" "}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        </> : <Loader2/>}
+      </table>
+    </div>
+  );
+}
+
+
 
 function ListingsTable() {
   const [loading, setLoading] = useState(true);
