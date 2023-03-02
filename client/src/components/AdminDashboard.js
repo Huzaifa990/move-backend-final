@@ -6,7 +6,7 @@ import "chart.js/auto";
 import Loader from "./Loader";
 import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
-import reject from "../img/remove.png";
+// import reject from "../img/remove.png";
 import axios from "axios";
 
 export default function AdminDashboard() {
@@ -315,7 +315,7 @@ function UsersTable() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
 
   async function approveUser(id){
     axios.put("http://localhost:8080/api/auth/verifyUser/approve/"+id,{
@@ -328,39 +328,39 @@ function UsersTable() {
       console.log(e);
     });
 
-    // const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
-    //     headers: { Authorization: userDetails },
-    //   });
+    const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
+        headers: { Authorization: userDetails },
+      });
 
-    //   var data = await response.json();
-    //   console.log(data);
-    //   setUser(data.users);
-    //   setLoading(false);
+      var data = await response.json();
+      console.log(data);
+      setUser(data.users);
+      setLoading(false);
       forceUpdate();
   }
 
-  async function rejectUser(id){
-    axios.put("http://localhost:8080/api/auth/verifyUser/reject/"+id,{
-      verified: false
-    }, {
-      headers: { Authorization: userDetails },
-    }).then((res)=>{
-      console.log(res);
+  // async function rejectUser(id){
+  //   axios.put("http://localhost:8080/api/auth/verifyUser/reject/"+id,{
+  //     verified: false
+  //   }, {
+  //     headers: { Authorization: userDetails },
+  //   }).then((res)=>{
+  //     console.log(res);
       
-    }).catch((e)=>{
-      console.log(e);
-    });
+  //   }).catch((e)=>{
+  //     console.log(e);
+  //   });
 
-    // const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
-    //     headers: { Authorization: userDetails },
-    //   });
+  //   const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
+  //       headers: { Authorization: userDetails },
+  //     });
 
-    //   var data = await response.json();
-    //   console.log(data);
-    //   setUser(data.users);
-    //   setLoading(false);
-      forceUpdate();
-  }
+  //     var data = await response.json();
+  //     console.log(data);
+  //     setUser(data.users);
+  //     setLoading(false);
+  //     forceUpdate();
+  // }
 
 
   return (
@@ -396,7 +396,7 @@ function UsersTable() {
                 </td>
                 <td className="tr-flex" id="approval">
                     <img src={approve} width="35" alt="" id="tick" onClick={()=> approveUser(item._id)}/>
-                    <img src={reject} width="35" alt="" id="cross" onClick={()=> rejectUser(item._id)}/>
+                    {/* <img src={reject} width="35" alt="" id="cross" onClick={()=> rejectUser(item._id)}/> */}
                 </td>
               </tr>
             );
@@ -539,6 +539,7 @@ function BookingsTable() {
 
 
 function PendingBookingsTable() {
+  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
   const [loading, setLoading] = useState(true);
   var navigate = useNavigate();
   var [bookings, setBookings] = useState([]);
@@ -560,21 +561,26 @@ function PendingBookingsTable() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
 
-  function approveBooking(id){
+  async function approveBooking(id){
       axios.put("http://localhost:8080/api/booking/approve/"+id,{}, {
         headers: { Authorization: userDetails },
       }).then((res)=>{
         console.log(res);
-        document.getElementById("tick").style.visibility = "hidden";
-        document.getElementById("tick").style.position = "absolute";
-        document.getElementById("approval").innerText = "Approved";
-        document.getElementById("stat").innerText = "accepted";
-        
       }).catch((e)=>{
         console.log(e);
       });
+
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setBookings(data.allBookings);
+      setLoading(false);
+
+      forceUpdate();
   }
 
 
@@ -589,7 +595,7 @@ function PendingBookingsTable() {
             <th>Date Listed</th>
             <th class="text-right">Rent Per Day</th>
             <th>Status</th>
-            <th class="text-right">Accept/ Reject</th>
+            <th class="text-right">Accept</th>
           </tr>
         </thead>
         <tbody>
