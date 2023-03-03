@@ -1,39 +1,20 @@
 import React from "react";
 import axios from "axios";
-import moment from "moment";
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState } from "react";
 import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 import { MDBCardImage } from "mdb-react-ui-kit";
-import { InputMask } from "primereact/inputmask";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-
+import logo from "../img/info.png";
+import cnic1 from "../img/cnic1.jpg";
+import cnic2 from "../img/cnic2.jpg";
+import selfie from "../img/selfie.jpg";
 export default function MyProfile() {
   var userName = JSON.parse(localStorage.getItem("userName"));
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   var userEmail = JSON.parse(localStorage.getItem("userEmail"));
   var accountType = JSON.parse(localStorage.getItem("accountType"));
-  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
-  
   // var [open,setOpen]=useState(false);
   var [Analytics, setAnalytics] = useState({});
   var [anal, setAnal] = useState({});
-  var [userInfo, setUserInfo] = useState([]);
-  console.log(userDetails);
-
-  useEffect(() => {
-    async function getData() {
-      const response = await fetch("http://localhost:8080/api/auth/user", {
-        headers: { Authorization: userDetails },
-      });
-
-      var uInfo = await response.json();
-      setUserInfo(uInfo.user);
-      console.log(uInfo.user);
-    }
-
-    getData();
-  }, [userDetails, ingnored]);
 
   useEffect(() => {
     async function getData() {
@@ -46,6 +27,26 @@ export default function MyProfile() {
     }
 
     getData();
+
+    async function getPersonalInfo() {
+      const response = await fetch("http://localhost:8080/api/auth/user", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data);
+
+      if (data.user.cnicImages.length > 0) {
+        var images = data.user.cnicImages;
+        var box = document.getElementsByClassName("box");
+        for (var i = 0; i < images.length; i++) {
+          box[i].style.backgroundImage = `url(${images[i]})`;
+        }
+      } else {
+      }
+    }
+
+    getPersonalInfo();
   }, [userDetails]);
 
   const headers = {
@@ -66,14 +67,14 @@ export default function MyProfile() {
     getData();
   }, [userDetails]);
 
-  const sendProfielPicture = () => {
-    let updatedProfilePic = document.getElementById("profile-pic").value;
+  const sendName = () => {
+    let updatedName = document.getElementById("Name").value;
 
     axios
       .put(
-        "http://localhost:8080/api/auth/updatedProfilePic",
+        "http://localhost:8080/api/auth/updateName",
         {
-          updatedProfilePic,
+          updatedName,
         },
         {
           headers: headers,
@@ -89,86 +90,13 @@ export default function MyProfile() {
       .catch((e) => {
         console.log(e);
       });
-  };
-
-  function readFile(e) {
-    let files = e.target.files;
-    for (let i = 0; i < files.length; i++) {
-      (function (file) {
-        var reader = new FileReader();
-        reader.onload = () => {
-          var img = document.getElementById("b1");
-          img.style.backgroundImage = `url(${reader.result})`;
-
-          document.getElementById("profile-pic").value = reader.result;
-        };
-        reader.readAsDataURL(file);
-      })(files[i]);
-    }
-  }
-
-  async function sendName() {
-    let updatedName = document.getElementById("Name").value;
-
-    axios
-      .put(
-        "http://localhost:8080/api/auth/updateName",
-        {
-          updatedName,
-        },
-        {
-          headers: headers,
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        NotificationManager.success(res.data.msg);
-      })
-      .catch((e) => {
-        console.log(e);
-        NotificationManager.error("Name Update Failed");
-      });
-
-      const response = await fetch("http://localhost:8080/api/auth/user", {
-        headers: { Authorization: userDetails },
-      });
-
-      var uInfo = await response.json();
-      setUserInfo(uInfo.user);
-      forceUpdate();
     localStorage.setItem("userName", JSON.stringify(updatedName));
+    setTimeout(function () {
+      window.location.reload();
+    }, 2500);
+    // setOpen(!open);
   };
 
-  const updateNumber = () => {
-    let phone = document.getElementById("Number").value;
-    let phoneStrip = "";
-    for (var j = 0; j < phone.length; j++) {
-      if (phone[j] !== "(" && phone[j] !== ")" && phone[j] !== "+" && phone[j] !== "-") {
-        phoneStrip += phone[j];
-      }
-    }
-    let updatedPhoneNumber = parseInt(phoneStrip);
-    console.log(updatedPhoneNumber);
-
-    axios
-      .put(
-        "http://localhost:8080/api/auth/updatePhoneNumber",
-        {
-          updatedPhoneNumber,
-        },
-        {
-          headers: headers,
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        NotificationManager.success(res.data.msg);
-      })
-      .catch((e) => {
-        console.log(e);
-        NotificationManager.error('Phone Number Update Failed');
-      });
-  };
   const sendEmail = () => {
     let updatedEmail = document.getElementById("Email").value;
 
@@ -184,11 +112,13 @@ export default function MyProfile() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.success(res.data.msg);
+        document.getElementById("successApi").innerText = res.data.msg;
+        document.getElementById("successApi").style.visibility = "visible";
+        document.getElementById("successApi").style.position = "relative";
+        document.getElementById("successApi").style.width = "100%";
       })
       .catch((e) => {
         console.log(e);
-        NotificationManager.error("Email Update Unverified");
       });
     localStorage.setItem("userEmail", JSON.stringify(userEmail));
   };
@@ -228,6 +158,7 @@ export default function MyProfile() {
         document.getElementById("successApi").style.visibility = "visible";
         document.getElementById("successApi").style.position = "relative";
         document.getElementById("successApi").style.width = "100%";
+        // setTimeout(goToHome, 15000)
       })
       .catch((e) => {
         console.log(e);
@@ -274,39 +205,105 @@ export default function MyProfile() {
       });
   };
 
+  function readFile1(e) {
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      (function (file) {
+        var reader = new FileReader();
+        reader.onload = () => {
+          var img = document.getElementById("b1");
+          img.style.backgroundImage = `url(${reader.result})`;
+
+          document.getElementById("cnic1").value = reader.result;
+        };
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+  }
+
+  function readFile2(e) {
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      (function (file) {
+        var reader = new FileReader();
+        reader.onload = () => {
+          var img = document.getElementById("b2");
+          img.style.backgroundImage = `url(${reader.result})`;
+
+          document.getElementById("cnic2").value = reader.result;
+        };
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+  }
+
+  function readFile3(e) {
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      (function (file) {
+        var reader = new FileReader();
+        reader.onload = () => {
+          var img = document.getElementById("b3");
+          img.style.backgroundImage = `url(${reader.result})`;
+
+          document.getElementById("cnic3").value = reader.result;
+        };
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+  }
+  function togglePopup() {
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
+  }
+
+  function uploadCnic() {
+    var allPics = document.getElementsByClassName("cnic-pics");
+    var cnicImages = [];
+    for (var i = 0; i < allPics.length; i++) {
+      cnicImages.push(allPics[i].value);
+    }
+
+    console.log(cnicImages);
+    var payload = {
+      cnicImages,
+    };
+    axios
+      .put("http://localhost:8080/api/auth/uploadCNIC", payload, {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res);
+        document.getElementById("errorApi").style.visibility = "hidden";
+        document.getElementById("errorApi").style.position = "absolute";
+        document.getElementById("errorApi").style.width = "0%";
+        document.getElementById("successApi").innerText = res.data.msg;
+        document.getElementById("successApi").style.visibility = "visible";
+        document.getElementById("successApi").style.position = "relative";
+        document.getElementById("successApi").style.width = "100%";
+      })
+      .catch((e) => {
+        console.log(e);
+        document.getElementById("errorMessage").innerText =
+          "Please upload all three image or visit the info section";
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
+      });
+  }
+
   return (
     <div>
-      <NotificationContainer/>
       <div class="container">
-        <div class="row-gutters">
-          {userInfo.verified === true ? (
-            <div>
-              <h1 class="pl-3 mb-4 text-primary">Account Status: 100%</h1>
-              <div class="progress mb-4">
-                <div
-                  class="progress-bar w-100"
-                  role="progressbar"
-                  aria-valuenow="50"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <h1 class="pl-3 mb-4 text-primary">Account Status: 50%</h1>
-              <div class="progress mb-4">
-                <div
-                  class="progress-bar w-50"
-                  role="progressbar"
-                  aria-valuenow="50"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-            </div>
-          )}
-        </div>
         <div class="row gutters">
           <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
@@ -315,45 +312,23 @@ export default function MyProfile() {
                   <div class="user-profile">
                     <div class="user-avatar">
                       <MDBCardImage
-                        src={userInfo.profilePicture}
+                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
                         alt="avatar"
                         className="rounded-circle"
                         style={{ width: "175px" }}
                         fluid
                       />
-                      <div className="containers">
-                        <div className="box" id="b1">
-                          <input
-                            onChange={readFile}
-                            type="file"
-                            id="file1"
-                            name="file1"
-                            accept="image/*"
-                          />
-                          <label for="file1" className="camera-icon"></label>
-                        </div>
-                        <div class="text-right">
-                          <input type="text" id="profile-pic" hidden />
-                          <button className="btn btn-editProfile" onClick={sendProfielPicture}>
-                            Update Profile Picture
-                          </button>
-                        </div>
-                      </div>
                     </div>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
                     <h5 class="mb-4 text-primary">User Information</h5>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
-                    <h1 class="user-name">{userInfo.name}</h1>
+                    <h1 class="user-name">{userName}</h1>
+                    <h7 class="user-name">{userEmail}</h7>
                     <br></br>
-                    <h7 class="user-name">{userInfo.email}</h7>
+                    <h7 class="user-name">03451234617</h7>
                     <br></br>
-                    <h7 class="user-name">+{userInfo.phoneNumber}</h7>
-                    <br></br>
-                    <h7 class="user-name">
-                      Date Joined: {moment.utc(userInfo.createdAt).format("llll")}
-                    </h7>
-                    <br></br>
-                    <br></br>
+                    <h7 class="user-name">Age: 22</h7>
+
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
                     <h5 class="mb-4 text-primary">User Address</h5>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
@@ -437,7 +412,7 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="Name">Name</label>
-                      <input type="text" class="form-control" id="Name" placeholder={userInfo.name} defaultValue={userInfo.name} />
+                      <input type="text" class="form-control" id="Name" placeholder={userName} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendName}>
                           Update Name
@@ -448,26 +423,8 @@ export default function MyProfile() {
 
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
-                      <label for="updatedNumber">Phone Number</label>
-                      <InputMask class="form-control"
-                        className="form-control p-4 cnic-inp"
-                        mask="(+99)-9999999999"
-                        id="Number"
-                        placeholder={userInfo.phoneNumber}
-                        value={userInfo.phoneNumber}
-                      />
-                      <div class="text-right">
-                        <button className="btn btn-editProfile" onClick={updateNumber}>
-                          Update Number
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="form-group">
                       <label for="Email">Email</label>
-                      <input type="email" class="form-control" id="Email" placeholder={userEmail} defaultValue={userInfo.email} />
+                      <input type="email" class="form-control" id="Email" placeholder={userEmail} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendEmail}>
                           Update Email
@@ -477,6 +434,102 @@ export default function MyProfile() {
                   </div>
                 </div>
                 <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
+
+                <div className="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <label htmlFor id="errorApi">
+                      {" "}
+                      <span id="errorMessage"></span>
+                    </label>
+                    <label htmlFor id="successApi">
+                      {" "}
+                      <span id="successMessage"></span>
+                    </label>
+                    <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>What to upload?</h2>
+                        <br />
+                        <p>1. Upload CNIC Front Picture</p>
+                        <p>2. Upload CNIC Back Picture</p>
+                        <p>3. Upload Your Most Recent Selfie</p>
+
+                        <h3 style={{ color: "#f77d0a" }}>Example: </h3>
+
+                        <div className="sample-cnic">
+                          <div className="sample-1">
+                            <img alt="cnic1" src={cnic1} />
+                          </div>
+
+                          <div className="sample-1">
+                            <img alt="cnic2" src={cnic2} />
+                          </div>
+
+                          <div className="sample-1">
+                            <img alt="selfie" src={selfie} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="warning-container">
+                      <h1 class="mb-4 text-primary">CNIC VERIFICATION</h1>
+                      <div class="logo-x" onClick={togglePopup}>
+                        <img src={logo} alt="info" className="info-logo" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="container-2">
+                    <div className="cnic-lbl">
+                      <div className="box box-cnic" id="b1">
+                        <input
+                          type="file"
+                          id="file1"
+                          name="file1"
+                          accept="image/*"
+                          onChange={readFile1}
+                        />
+                        <label for="file1" className="camera-icon"></label>
+                      </div>
+                    </div>
+
+                    <div className="cnic-lbl">
+                      <div className="box box-cnic" id="b2">
+                        <input
+                          type="file"
+                          id="file2"
+                          name="file1"
+                          accept="image/*"
+                          onChange={readFile2}
+                        />
+                        <label for="file2" className="camera-icon"></label>
+                      </div>
+                    </div>
+
+                    <div className="cnic-lbl">
+                      <div className="box box-cnic" id="b3">
+                        <input
+                          type="file"
+                          id="file3"
+                          name="file1"
+                          accept="image/*"
+                          onChange={readFile3}
+                        />
+                        <label for="file3" className="camera-icon"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <button className="btn btn-editProfile" onClick={uploadCnic}>
+                    Request Verification
+                  </button>
+                </div>
+                <input type="text" id="cnic1" className="cnic-pics" hidden />
+                <input type="text" id="cnic2" className="cnic-pics" hidden />
+                <input type="text" id="cnic3" className="cnic-pics" hidden />
+
+                <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
+
                 <div class="row gutters">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <label htmlFor id="errorApi">
