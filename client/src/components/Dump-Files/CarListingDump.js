@@ -7,6 +7,9 @@ import { InputMask } from "primereact/inputmask";
 import { MDBCardImage } from "mdb-react-ui-kit";
 import user from "../img/user-2.png";
 
+
+
+
 const SignUp = () => {
   const sendData = () => {
     let name = document.getElementById("name").value;
