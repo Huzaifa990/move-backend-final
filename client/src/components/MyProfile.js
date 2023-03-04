@@ -7,6 +7,9 @@ import logo from "../img/info.png";
 import cnic1 from "../img/cnic1.jpg";
 import cnic2 from "../img/cnic2.jpg";
 import selfie from "../img/selfie.jpg";
+import { InputMask } from "primereact/inputmask";
+import moment from "moment";
+
 export default function MyProfile() {
   var userName = JSON.parse(localStorage.getItem("userName"));
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -15,6 +18,7 @@ export default function MyProfile() {
   // var [open,setOpen]=useState(false);
   var [Analytics, setAnalytics] = useState({});
   var [anal, setAnal] = useState({});
+  var [userInfo, setUserInfo] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -38,7 +42,7 @@ export default function MyProfile() {
 
       if (data.user.cnicImages.length > 0) {
         var images = data.user.cnicImages;
-        var box = document.getElementsByClassName("box");
+        var box = document.getElementsByClassName("box-cnic");
         for (var i = 0; i < images.length; i++) {
           box[i].style.backgroundImage = `url(${images[i]})`;
         }
@@ -47,6 +51,16 @@ export default function MyProfile() {
     }
 
     getPersonalInfo();
+
+    async function getUserData(){
+      const response = await fetch("http://localhost:8080/api/auth/user", {
+        headers: { Authorization: userDetails },
+      });
+      var uInfo = await response.json();
+      setUserInfo(uInfo.user);
+      console.log(uInfo.user);
+    }
+    getUserData();
   }, [userDetails]);
 
   const headers = {
@@ -95,6 +109,39 @@ export default function MyProfile() {
       window.location.reload();
     }, 2500);
     // setOpen(!open);
+  };
+
+  const updateNumber = () => {
+    let phone = document.getElementById("Number").value;
+    let phoneStrip = "";
+    for (var j = 0; j < phone.length; j++) {
+      if (phone[j] !== "(" && phone[j] !== ")" && phone[j] !== "+" && phone[j] !== "-") {
+        phoneStrip += phone[j];
+      }
+    }
+    let updatedPhoneNumber = parseInt(phoneStrip);
+    console.log(updatedPhoneNumber);
+
+    axios
+      .put(
+        "http://localhost:8080/api/auth/updatePhoneNumber",
+        {
+          updatedPhoneNumber,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        document.getElementById("successApi").innerText = res.data.msg;
+        document.getElementById("successApi").style.visibility = "visible";
+        document.getElementById("successApi").style.position = "relative";
+        document.getElementById("successApi").style.width = "100%";
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const sendEmail = () => {
@@ -205,13 +252,54 @@ export default function MyProfile() {
       });
   };
 
+    const sendProfielPicture = () => {
+    let updatedProfilePic = document.getElementById("profile-pic").value;
+
+    axios
+      .put(
+        "http://localhost:8080/api/auth/updatedProfilePic",
+        {
+          updatedProfilePic,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        document.getElementById("successApi").innerText = res.data.msg;
+        document.getElementById("successApi").style.visibility = "visible";
+        document.getElementById("successApi").style.position = "relative";
+        document.getElementById("successApi").style.width = "100%";
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  function readFile(e) {
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      (function (file) {
+        var reader = new FileReader();
+        reader.onload = () => {
+          var img = document.getElementById("uPp");
+          img.style.backgroundImage = `url(${reader.result})`;
+
+          document.getElementById("profile-pic").value = reader.result;
+        };
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+  }
+
   function readFile1(e) {
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
       (function (file) {
         var reader = new FileReader();
         reader.onload = () => {
-          var img = document.getElementById("b1");
+          var img = document.getElementById("b2");
           img.style.backgroundImage = `url(${reader.result})`;
 
           document.getElementById("cnic1").value = reader.result;
@@ -227,7 +315,7 @@ export default function MyProfile() {
       (function (file) {
         var reader = new FileReader();
         reader.onload = () => {
-          var img = document.getElementById("b2");
+          var img = document.getElementById("b3");
           img.style.backgroundImage = `url(${reader.result})`;
 
           document.getElementById("cnic2").value = reader.result;
@@ -243,7 +331,7 @@ export default function MyProfile() {
       (function (file) {
         var reader = new FileReader();
         reader.onload = () => {
-          var img = document.getElementById("b3");
+          var img = document.getElementById("b4");
           img.style.backgroundImage = `url(${reader.result})`;
 
           document.getElementById("cnic3").value = reader.result;
@@ -304,6 +392,35 @@ export default function MyProfile() {
   return (
     <div>
       <div class="container">
+      <div class="row-gutters">
+          {userInfo.verified === true ? (
+            <div>
+              <h1 class="pl-3 mb-4 text-primary">Account Status: 100%</h1>
+              <div class="progress mb-4">
+                <div
+                  class="progress-bar w-100"
+                  role="progressbar"
+                  aria-valuenow="50"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <h1 class="pl-3 mb-4 text-primary">Account Status: 50%</h1>
+              <div class="progress mb-4">
+                <div
+                  class="progress-bar w-50"
+                  role="progressbar"
+                  aria-valuenow="50"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          )}
+        </div>
         <div class="row gutters">
           <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
@@ -311,23 +428,45 @@ export default function MyProfile() {
                 <div class="account-settings">
                   <div class="user-profile">
                     <div class="user-avatar">
-                      <MDBCardImage
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                    <MDBCardImage
+                        src={userInfo.profilePicture}
                         alt="avatar"
                         className="rounded-circle"
                         style={{ width: "175px" }}
                         fluid
                       />
+                       <div className="containers">
+                        <div className="box" id="uPp">
+                          <input
+                            onChange={readFile}
+                            type="file"
+                            id="fileImg"
+                            name="file1"
+                            accept="image/*"
+                          />
+                          <label for="fileImg" className="camera-icon"></label>
+                        </div>
+                        <div class="text-right">
+                          <input type="text" id="profile-pic" hidden />
+                          <button className="btn btn-editProfile" onClick={sendProfielPicture}>
+                            Update Profile Picture
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
                     <h5 class="mb-4 text-primary">User Information</h5>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
-                    <h1 class="user-name">{userName}</h1>
-                    <h7 class="user-name">{userEmail}</h7>
+                    <h1 class="user-name">{userInfo.name}</h1>
                     <br></br>
-                    <h7 class="user-name">03451234617</h7>
+                    <h7 class="user-name">{userInfo.email}</h7>
                     <br></br>
-                    <h7 class="user-name">Age: 22</h7>
+                    <h7 class="user-name">+{userInfo.phoneNumber}</h7>
+                    <br></br>
+                    <h7 class="user-name">
+                      Date Joined: {moment.utc(userInfo.createdAt).format("llll")}
+                    </h7>
+                    <br></br>
 
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
                     <h5 class="mb-4 text-primary">User Address</h5>
@@ -412,7 +551,7 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="Name">Name</label>
-                      <input type="text" class="form-control" id="Name" placeholder={userName} />
+                      <input type="text" class="form-control" id="Name" value={userName} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendName}>
                           Update Name
@@ -423,8 +562,25 @@ export default function MyProfile() {
 
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
+                      <label for="updatedNumber">Phone Number</label>
+                      <InputMask class="form-control"
+                        className="form-control p-4 cnic-inp"
+                        mask="(+99)-9999999999"
+                        id="Number"
+                        value={userInfo.phoneNumber}
+                      />
+                      <div class="text-right">
+                        <button className="btn btn-editProfile" onClick={updateNumber}>
+                          Update Number
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
                       <label for="Email">Email</label>
-                      <input type="email" class="form-control" id="Email" placeholder={userEmail} />
+                      <input type="email" class="form-control" id="Email" value={userEmail} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendEmail}>
                           Update Email
@@ -480,7 +636,7 @@ export default function MyProfile() {
                   </div>
                   <div className="container-2">
                     <div className="cnic-lbl">
-                      <div className="box box-cnic" id="b1">
+                      <div className="box box-cnic" id="b2">
                         <input
                           type="file"
                           id="file1"
@@ -493,7 +649,7 @@ export default function MyProfile() {
                     </div>
 
                     <div className="cnic-lbl">
-                      <div className="box box-cnic" id="b2">
+                      <div className="box box-cnic" id="b3">
                         <input
                           type="file"
                           id="file2"
@@ -506,7 +662,7 @@ export default function MyProfile() {
                     </div>
 
                     <div className="cnic-lbl">
-                      <div className="box box-cnic" id="b3">
+                      <div className="box box-cnic" id="b4">
                         <input
                           type="file"
                           id="file3"
