@@ -7,6 +7,7 @@ import logo from "../img/info.png";
 import cnic1 from "../img/cnic1.jpg";
 import cnic2 from "../img/cnic2.jpg";
 import selfie from "../img/selfie.jpg";
+import { InputMask } from "primereact/inputmask";
 import moment from "moment";
 
 export default function MyProfile() {
@@ -108,6 +109,39 @@ export default function MyProfile() {
       window.location.reload();
     }, 2500);
     // setOpen(!open);
+  };
+
+  const updateNumber = () => {
+    let phone = document.getElementById("Number").value;
+    let phoneStrip = "";
+    for (var j = 0; j < phone.length; j++) {
+      if (phone[j] !== "(" && phone[j] !== ")" && phone[j] !== "+" && phone[j] !== "-") {
+        phoneStrip += phone[j];
+      }
+    }
+    let updatedPhoneNumber = parseInt(phoneStrip);
+    console.log(updatedPhoneNumber);
+
+    axios
+      .put(
+        "http://localhost:8080/api/auth/updatePhoneNumber",
+        {
+          updatedPhoneNumber,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        document.getElementById("successApi").innerText = res.data.msg;
+        document.getElementById("successApi").style.visibility = "visible";
+        document.getElementById("successApi").style.position = "relative";
+        document.getElementById("successApi").style.width = "100%";
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const sendEmail = () => {
@@ -517,7 +551,7 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="Name">Name</label>
-                      <input type="text" class="form-control" id="Name" placeholder={userName} />
+                      <input type="text" class="form-control" id="Name" value={userName} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendName}>
                           Update Name
@@ -528,8 +562,25 @@ export default function MyProfile() {
 
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
+                      <label for="updatedNumber">Phone Number</label>
+                      <InputMask class="form-control"
+                        className="form-control p-4 cnic-inp"
+                        mask="(+99)-9999999999"
+                        id="Number"
+                        value={userInfo.phoneNumber}
+                      />
+                      <div class="text-right">
+                        <button className="btn btn-editProfile" onClick={updateNumber}>
+                          Update Number
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
                       <label for="Email">Email</label>
-                      <input type="email" class="form-control" id="Email" placeholder={userEmail} />
+                      <input type="email" class="form-control" id="Email" value={userEmail} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendEmail}>
                           Update Email
