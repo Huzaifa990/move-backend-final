@@ -7,7 +7,6 @@ import logo from "../img/info.png";
 import cnic1 from "../img/cnic1.jpg";
 import cnic2 from "../img/cnic2.jpg";
 import selfie from "../img/selfie.jpg";
-import { InputMask } from "primereact/inputmask";
 import moment from "moment";
 
 export default function MyProfile() {
