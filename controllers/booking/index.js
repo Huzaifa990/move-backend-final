@@ -205,37 +205,28 @@ const updateBooking = async (req, res) => {
     return res.status(404).send({ msg: "Booking not found!" });
   }
 
-  // Return an error if the number of times the booking has been updated is greater than 3
   if (bookingFound.updatedCount > 2) {
     return res
       .status(402)
       .send({ msg: "Sorry, You have reached the limit for updating this booking!" });
   }
 
-  // Find the user associated with the booking
   let user = await User.findById({ _id });
-  // Return an error if the user is not found
   if (!user) {
     return res.status(404).send({ msg: "User not found!" });
   }
 
-  // Return an error if the user's account type is "Lessor"
   if (accountType === "Lessor") {
     return res.status(404).send({ msg: "This account type is not allowed to update a booking" });
   }
 
-  // Find the car listing using the car id
   let checkCar = await listing.findById(car);
-  // Return an error if the car listing is not found
   if (!checkCar) {
     return res.status(404).send({ msg: "Car Listing Not Found!" });
   }
 
-  // Get the current date and time
   const currentDate = moment(new Date());
-  // Get the pickup date and time as a moment object
   const bookingDate = moment(pickupDate);
-  // Get the drop off date and time as a moment object
   const dropOff = moment(dropOffDate);
 
   // Return an error if the pickup date is in the past
@@ -306,16 +297,13 @@ const updateBooking = async (req, res) => {
       return res.status(404).send({ msg: "This car is already booked in the chosen timeslot!" });
   }
 
-  // Calculate the number of days in the booking
   let diff = (new Date(dropOffDate).getTime() - new Date(pickupDate).getTime()) / 1000;
   diff = Math.abs(Math.round(diff));
   let hours = Math.round(diff / 3600);
   const bookingDays = Math.ceil(hours / 24);
 
-  // Calculate the rental cost for the booking
   const rent = checkCar.rentPerDay * bookingDays;
 
-  // Update the payment details for the booking
   const payments = await payment.updateOne(
     { _id: bookingFound.paymentDetails },
     {
@@ -324,7 +312,6 @@ const updateBooking = async (req, res) => {
     }
   );
 
-  // Update the booking itself
   const newUpdatedCount = bookingFound.updatedCount + 1;
   const bookingg = await booking.updateOne(
     {
@@ -341,22 +328,16 @@ const updateBooking = async (req, res) => {
     }
   );
 
-  // email sending on confirm booking can be sent.. to be added or not will decide.
-  // Return success message to the client
   return res.status(200).send({ msg: "Booking Updated Successfully" });
 };
 
 const getMyBookings = async (req, res) => {
-  // Extract the user ID and account type from the request body
   const { _id, accountType } = req.body;
 
-  // If the user is a lessor, return an error message
   if (accountType === "Lessor") {
     return res.status(402).send({ msg: "Only Lessees Can View Their Bookings!" });
   }
 
-  // Find bookings that were made by the user and sort them by the pickupDate field in ascending order
-  // Populate the lessee, car, and paymentDetails fields with the corresponding documents
   const bookings = await booking
     .find({ lessee: _id })
     .sort({ pickupDate: 1 })
@@ -364,7 +345,6 @@ const getMyBookings = async (req, res) => {
     .populate("car")
     .populate("paymentDetails");
 
-  // Return the number of bookings and the bookings array to the client
   return res.status(200).send({ count: bookings.length, bookings });
 };
 
@@ -383,7 +363,7 @@ const approveBooking = async (req, res) => {
     return res.status(404).send({ msg: "Booking not found!" });
   }
 
-  if (bookingFound.lessor.toString() !== _id && accountType !== "Admin") {
+  if (bookingFound.lessor.toString() !== _id) {
     return res.status(422).send({ msg: "You are not allowed to approve this booking" });
   }
 
