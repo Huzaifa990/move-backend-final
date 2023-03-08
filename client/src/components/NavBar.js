@@ -12,6 +12,7 @@ const NavBar = () => {
     navigate("/");
     window.location.reload();
   }
+  
   console.log(localStorage.getItem("userName"));
   var userName = JSON.parse(localStorage.getItem("userName"));
   var accountType = JSON.parse(localStorage.getItem("accountType"));

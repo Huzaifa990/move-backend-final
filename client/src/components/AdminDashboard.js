@@ -482,8 +482,8 @@ function AllUsersTable() {
                 <th>Name</th>
                 <th>Email</th>
                 <th>CNIC</th>
-                <th class="text-right">Phone Number</th>
-                <th class="text-right">Account Status</th>
+                <th>Phone Number</th>
+                <th>Account Status</th>
                 <th>Email Verified</th>
               </tr>
             </thead>
@@ -494,8 +494,8 @@ function AllUsersTable() {
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     <td>{item.cnic}</td>
-                    <td class="text-right">{item.phoneNumber}</td>
-                    <td class="text-right">
+                    <td>{item.phoneNumber}</td>
+                    <td align="center">
                       {item.status === true ? (
                         <>
                           <span style={{ color: "green" }}> Active</span>
@@ -505,7 +505,7 @@ function AllUsersTable() {
                       )}{" "}
                     </td>
 
-                    <td class="text-right">
+                    <td align="center">
                       {item.emailVerified === true ? (
                         <>
                           <span style={{ color: "green" }}> Verified</span>
