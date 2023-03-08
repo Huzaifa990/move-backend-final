@@ -551,7 +551,7 @@ function ListingsTable() {
   }, [userDetails, ingnored]);
 
   function goToListings(id) {
-    navigate("/viewListings", { state: { id: id } });
+    navigate("/viewListingDashboard", { state: { id: id } });
   }
 
   async function statusChange(id) {

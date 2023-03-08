@@ -35,6 +35,7 @@ import ActivateAccount from "../components/ActivateAccount";
 import MyProfile from "../components/MyProfile.js";
 import ViewBookingDashBoard from "../components/ViewBookingDashboard";
 import ViewUser from "../components/ViewUser";
+import ViewListingsDashboard from "../components/ViewListingsDashboard";
 
 function App() {
   return (
@@ -262,6 +263,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="View Booking" />{" "}
                 <ViewBookingDashBoard /> <Footer />{" "}
+              </>
+            }
+          />
+
+          <Route
+            path="viewListingDashboard"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="View Listing" />{" "}
+                <ViewListingsDashboard /> <Footer />{" "}
               </>
             }
           />
