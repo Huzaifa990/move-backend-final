@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
@@ -10,6 +10,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 export default function LessorDashboard() {
+  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
   var [stats, setStats] = useState([]);
   var [anal, setAnal] = useState({});
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ export default function LessorDashboard() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
 
   function goToListings(id) {
     navigate("/viewListings", { state: { id: id } });
@@ -50,8 +51,18 @@ export default function LessorDashboard() {
     }).catch((e)=>{
         console.log(e);
         NotificationManager.success('Listing Update Failed  ');
-    })
-    // forceUpdate();
+    });
+
+    await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+        headers: { Authorization: userDetails },
+      })
+      .then(() => {
+        setSwitchState(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+      forceUpdate();
   }
 
   return (
