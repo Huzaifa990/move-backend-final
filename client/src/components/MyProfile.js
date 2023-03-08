@@ -1,24 +1,26 @@
 import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 import { MDBCardImage } from "mdb-react-ui-kit";
 import logo from "../img/info.png";
 import cnic1 from "../img/cnic1.jpg";
 import cnic2 from "../img/cnic2.jpg";
-import selfie from "../img/selfie.jpg";
+import selfie from "../img/cnic-sample.jpg";
 import { InputMask } from "primereact/inputmask";
 import moment from "moment";
+import loadingLogo from "../img/loader.gif";
 
 export default function MyProfile() {
   var userName = JSON.parse(localStorage.getItem("userName"));
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   var userEmail = JSON.parse(localStorage.getItem("userEmail"));
   var accountType = JSON.parse(localStorage.getItem("accountType"));
-  // var [open,setOpen]=useState(false);
   var [Analytics, setAnalytics] = useState({});
   var [anal, setAnal] = useState({});
   var [userInfo, setUserInfo] = useState([]);
+  var [cnicImg, setCnincImg] = useState([]);
+  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     async function getData() {
@@ -39,12 +41,13 @@ export default function MyProfile() {
 
       var data = await response.json();
       console.log(data);
+      setCnincImg(data.user.cnicImages);
 
       if (data.user.cnicImages.length > 0) {
         var images = data.user.cnicImages;
-        var box = document.getElementsByClassName("box-cnic");
+        var box = document.getElementsByClassName("imgHolder");
         for (var i = 0; i < images.length; i++) {
-          box[i].style.backgroundImage = `url(${images[i]})`;
+          box[i].src = images[i];
         }
       } else {
       }
@@ -52,7 +55,7 @@ export default function MyProfile() {
 
     getPersonalInfo();
 
-    async function getUserData(){
+    async function getUserData() {
       const response = await fetch("http://localhost:8080/api/auth/user", {
         headers: { Authorization: userDetails },
       });
@@ -61,7 +64,7 @@ export default function MyProfile() {
       console.log(uInfo.user);
     }
     getUserData();
-  }, [userDetails]);
+  }, [userDetails, ingnored]);
 
   const headers = {
     Authorization: userDetails,
@@ -252,7 +255,7 @@ export default function MyProfile() {
       });
   };
 
-    const sendProfielPicture = () => {
+  const sendProfielPicture = () => {
     let updatedProfilePic = document.getElementById("profile-pic").value;
 
     axios
@@ -265,12 +268,15 @@ export default function MyProfile() {
           headers: headers,
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
         document.getElementById("successApi").innerText = res.data.msg;
         document.getElementById("successApi").style.visibility = "visible";
         document.getElementById("successApi").style.position = "relative";
         document.getElementById("successApi").style.width = "100%";
+        var img = document.getElementById("uPp");
+        img.style.background = "none";
+        forceUpdate();
       })
       .catch((e) => {
         console.log(e);
@@ -392,7 +398,7 @@ export default function MyProfile() {
   return (
     <div>
       <div class="container">
-      <div class="row-gutters">
+        <div class="row-gutters">
           {userInfo.verified === true ? (
             <div>
               <h1 class="pl-3 mb-4 text-primary">Account Status: 100%</h1>
@@ -428,14 +434,14 @@ export default function MyProfile() {
                 <div class="account-settings">
                   <div class="user-profile">
                     <div class="user-avatar">
-                    <MDBCardImage
+                      <MDBCardImage
                         src={userInfo.profilePicture}
                         alt="avatar"
                         className="rounded-circle"
                         style={{ width: "175px" }}
                         fluid
                       />
-                       <div className="containers">
+                      <div className="containers">
                         <div className="box" id="uPp">
                           <input
                             onChange={readFile}
@@ -563,7 +569,8 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="updatedNumber">Phone Number</label>
-                      <InputMask class="form-control"
+                      <InputMask
+                        class="form-control"
                         className="form-control p-4 cnic-inp"
                         mask="(+99)-9999999999"
                         id="Number"
@@ -607,7 +614,7 @@ export default function MyProfile() {
                         <br />
                         <p>1. Upload CNIC Front Picture</p>
                         <p>2. Upload CNIC Back Picture</p>
-                        <p>3. Upload Your Most Recent Selfie</p>
+                        <p>3. Upload a selfie with your CNIC</p>
 
                         <h3 style={{ color: "#f77d0a" }}>Example: </h3>
 
@@ -634,52 +641,75 @@ export default function MyProfile() {
                       </div>
                     </div>
                   </div>
-                  <div className="container-2">
-                    <div className="cnic-lbl">
-                      <div className="box box-cnic" id="b2">
-                        <input
-                          type="file"
-                          id="file1"
-                          name="file1"
-                          accept="image/*"
-                          onChange={readFile1}
-                        />
-                        <label for="file1" className="camera-icon"></label>
-                      </div>
-                    </div>
+                  {cnicImg.length === 0 ? (
+                    <>
+                      <div className="container-2">
+                        <div className="cnic-lbl">
+                          <div className="box box-cnic" id="b2">
+                            <input
+                              type="file"
+                              id="file1"
+                              name="file1"
+                              accept="image/*"
+                              onChange={readFile1}
+                            />
+                            <label for="file1" className="camera-icon"></label>
+                          </div>
+                        </div>
 
-                    <div className="cnic-lbl">
-                      <div className="box box-cnic" id="b3">
-                        <input
-                          type="file"
-                          id="file2"
-                          name="file1"
-                          accept="image/*"
-                          onChange={readFile2}
-                        />
-                        <label for="file2" className="camera-icon"></label>
-                      </div>
-                    </div>
+                        <div className="cnic-lbl">
+                          <div className="box box-cnic" id="b3">
+                            <input
+                              type="file"
+                              id="file2"
+                              name="file1"
+                              accept="image/*"
+                              onChange={readFile2}
+                            />
+                            <label for="file2" className="camera-icon"></label>
+                          </div>
+                        </div>
 
-                    <div className="cnic-lbl">
-                      <div className="box box-cnic" id="b4">
-                        <input
-                          type="file"
-                          id="file3"
-                          name="file1"
-                          accept="image/*"
-                          onChange={readFile3}
-                        />
-                        <label for="file3" className="camera-icon"></label>
+                        <div className="cnic-lbl">
+                          <div className="box box-cnic" id="b4">
+                            <input
+                              type="file"
+                              id="file3"
+                              name="file1"
+                              accept="image/*"
+                              onChange={readFile3}
+                            />
+                            <label for="file3" className="camera-icon"></label>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="sample-cnic">
+                        <div className="sample-1">
+                          <img alt="cnic1" className="imgHolder" src={loadingLogo} />
+                        </div>
+
+                        <div className="sample-1">
+                          <img alt="cnic2" className="imgHolder" src={loadingLogo} />
+                        </div>
+
+                        <div className="sample-1">
+                          <img alt="selfie" className="imgHolder" src={loadingLogo} />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {cnicImg.length === 0 ? (
+                  <div class="text-right">
+                    <button className="btn btn-editProfile" onClick={uploadCnic}>
+                      Request Verification
+                    </button>
                   </div>
-                </div>
-                <div class="text-right">
-                  <button className="btn btn-editProfile" onClick={uploadCnic}>
-                    Request Verification
-                  </button>
-                </div>
+                ) : null}
+
                 <input type="text" id="cnic1" className="cnic-pics" hidden />
                 <input type="text" id="cnic2" className="cnic-pics" hidden />
                 <input type="text" id="cnic3" className="cnic-pics" hidden />

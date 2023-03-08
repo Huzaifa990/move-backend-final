@@ -10,8 +10,18 @@ const ViewBooking = () => {
     const [name, setName] = useState([]);
 
   useEffect(() => {
+    const names = async () => {
+        var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+        console.log("User ID =>", userDetails);
+        const response = await fetch("http://localhost:8080/api/booking/" + location.state.id,{
+          headers: { Authorization: userDetails },
+        });
+        const data = await response.json();
+        console.log("Response is: ", data)
+        setName(data.carBooking);
+      };
     names();
-  },);
+  },[location.state.id]);
   
   //Functions to navigate from one state to another upon the press of certain buttons.
   function goToEdit(id) {
@@ -32,16 +42,7 @@ const ViewBooking = () => {
   }
 
   //Function defined to fetch data from api for the specific booking and store it in a variable.
-  const names = async () => {
-    var userDetails = JSON.parse(localStorage.getItem("userDetails"));
-    console.log("User ID =>", userDetails);
-    const response = await fetch("http://localhost:8080/api/booking/" + location.state.id,{
-      headers: { Authorization: userDetails },
-    });
-    const data = await response.json();
-    console.log("Response is: ", data)
-    setName(data.carBooking);
-  };
+  
 
   return (
     <>    
