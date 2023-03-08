@@ -441,6 +441,47 @@ const getLessorPendingBookings = async (req, res) => {
   return res.status(200).send({ count: bookings.length, bookings });
 };
 
+const markAsComplete = async (req, res) => {
+  const id = req.params.id;
+  const { accountType, _id } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  if (accountType == "Lessee") {
+    return res.status(422).send({ msg: "You are not allowed to mark a booking as complete" });
+  }
+
+  const bookingFound = await booking.findById(id);
+  if (!bookingFound) {
+    return res.status(404).send({ msg: "Booking not found!" });
+  }
+
+  if (bookingFound.lessor.toString() !== _id && accountType !== "Admin") {
+    return res.status(422).send({ msg: "You are not allowed to mark this booking as complete" });
+  }
+
+  if (bookingFound.status == "Rejected") {
+    return res.status(422).send({ msg: "You cannot mark a rejected booking as complete" });
+  }
+
+  if (bookingFound.status == "pending") {
+    return res.status(422).send({ msg: "Please approve the booking first" });
+  }
+
+  if (bookingFound.status == "Completed") {
+    return res.status(422).send({ msg: "Booking already marked as complete" });
+  }
+
+  await booking.updateOne(
+    { _id: id },
+    {
+      status: "Completed",
+    }
+  );
+
+  return res.status(200).send({ msg: "Booking marked as complete successfully" });
+};
+
 module.exports = {
   addBooking,
   deleteBooking,
@@ -450,6 +491,7 @@ module.exports = {
   getMyBookings,
   approveBooking,
   rejectBooking,
+  markAsComplete,
   getLessorBookings,
   getLessorPendingBookings,
 };
