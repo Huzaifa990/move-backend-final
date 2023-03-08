@@ -6,7 +6,7 @@ import "chart.js/auto";
 import Loader from "./Loader";
 import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
-// import reject from "../img/remove.png";
+import reject from "../img/remove.png";
 import axios from "axios";
 import ReactSwitch from "react-switch";
 import { NotificationContainer, NotificationManager } from "react-notifications";
@@ -328,6 +328,7 @@ function UsersTable() {
       });
 
       var data = await response.json();
+      console.log("Pending Users:");
       console.log(data);
       setUser(data.users);
       setLoading(false);
@@ -336,31 +337,28 @@ function UsersTable() {
     getData();
   }, [userDetails, ingnored]);
 
-  async function approveUser(id) {
-    axios
-      .put(
-        "http://localhost:8080/api/auth/verifyUser/approve/" + id,
-        {
-          verified: true,
-        },
-        {
-          headers: { Authorization: userDetails },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        NotificationManager.success("User Approved");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  async function approveUser(id){
+    axios.put("http://localhost:8080/api/auth/verifyUser/approve/"+id,
+    {
+      verified: true,
+    },
+    {
+      headers: { Authorization: userDetails },
+    }
+    )
+    .then((res)=>{
+      console.log(res);
+      NotificationManager.error("User Approved");
+
+    }).catch((e)=>{
+      console.log(e);
+    });
 
     await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
-      headers: { Authorization: userDetails },
-    })
+        headers: { Authorization: userDetails },
+      })
       .then((res) => {
         console.log(res);
-        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
@@ -368,28 +366,34 @@ function UsersTable() {
     forceUpdate();
   }
 
-  // async function rejectUser(id){
-  //   axios.put("http://localhost:8080/api/auth/verifyUser/reject/"+id,{
-  //     verified: false
-  //   }, {
-  //     headers: { Authorization: userDetails },
-  //   }).then((res)=>{
-  //     console.log(res);
+  async function rejectUser(id){
+    axios.put("http://localhost:8080/api/auth/verifyUser/reject/"+id,
+    {
+      verified: false,
+    },
+    {
+      headers: { Authorization: userDetails },
+    }
+    )
+    .then((res)=>{
+      console.log(res);
+      NotificationManager.error("User Rejected");
 
-  //   }).catch((e)=>{
-  //     console.log(e);
-  //   });
+    }).catch((e)=>{
+      console.log(e);
+    });
 
-  //   const response = await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
-  //       headers: { Authorization: userDetails },
-  //     });
-
-  //     var data = await response.json();
-  //     console.log(data);
-  //     setUser(data.users);
-  //     setLoading(false);
-  //     forceUpdate();
-  // }
+    await fetch("http://localhost:8080/api/auth/getAllPendingApprovalUsers", {
+        headers: { Authorization: userDetails },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    forceUpdate();
+  }
 
   function goToViewUser(id) {
     navigate("/viewUser", { state: { id: id } });
@@ -407,6 +411,7 @@ function UsersTable() {
                 <th class="text-right">Phone Number</th>
                 <th class="text-right">Email Verified</th>
                 <th>Accept</th>
+                <th>Reject</th>
               </tr>
             </thead>
             <tbody>
@@ -434,7 +439,15 @@ function UsersTable() {
                         id="tick"
                         onClick={() => approveUser(item._id)}
                       />
-                      {/* <img src={reject} width="35" alt="" id="cross" onClick={()=> rejectUser(item._id)}/> */}
+                    </td>
+                    <td class="text-center">
+                      <img
+                        src={reject}
+                        width="35"
+                        alt=""
+                        id="tick"
+                        onClick={() => rejectUser(item._id)}
+                      />
                     </td>
                   </tr>
                 );
@@ -765,10 +778,10 @@ function PendingBookingsTable() {
     getData();
   }, [userDetails, ingnored]);
 
-  async function approveBooking(id) {
+  async function rejectBooking(id) {
     axios
       .put(
-        "http://localhost:8080/api/booking/approve/" + id,
+        "http://localhost:8080/api/booking/reject/" + id,
         {},
         {
           headers: { Authorization: userDetails },
@@ -776,7 +789,7 @@ function PendingBookingsTable() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.success("Booking Approved");
+        NotificationManager.error("Booking Rejected");
       })
       .catch((e) => {
         console.log(e);
@@ -807,7 +820,7 @@ function PendingBookingsTable() {
                 <th>Date Listed</th>
                 <th class="text-right">Rent Per Day</th>
                 <th>Status</th>
-                <th class="text-right">Accept</th>
+                <th class="text-right">Reject</th>
               </tr>
             </thead>
             <tbody>
@@ -826,13 +839,13 @@ function PendingBookingsTable() {
                       <td onClick={() => goToBookings(item._id)} id="stat">
                         {item.status}
                       </td>
-                      <td className="tr-flex" id="approval">
+                      <td className="text-right">
                         <img
-                          src={approve}
+                          src={reject}
                           width="35"
                           alt=""
                           id="tick"
-                          onClick={() => approveBooking(item._id)}
+                          onClick={() => rejectBooking(item._id)}
                         />
                       </td>
                     </tr>
