@@ -145,6 +145,7 @@ const adminAnalytics = async (req, res) => {
 
   let allListings = await listing
     .find({}, "listingDate company rentPerDay carName status approved")
+    .sort({ approved: 1 })
     .lean();
 
   return res.status(200).send({ analytics, allBookings, allListings });
