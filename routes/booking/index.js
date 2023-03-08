@@ -10,6 +10,7 @@ const {
   rejectBooking,
   getLessorBookings,
   getLessorPendingBookings,
+  markAsComplete,
 } = require("../../controllers/booking");
 const { Validator, ensureAuth } = require("../../middleware/ensure-auth");
 const { validateNew, validateUpdate } = require("./validate");
@@ -25,6 +26,7 @@ app.get("/:id", ensureAuth, getBookingById);
 app.delete("/:id", ensureAuth, deleteBooking);
 app.put("/approve/:id", ensureAuth, approveBooking);
 app.put("/reject/:id", ensureAuth, rejectBooking);
+app.put("/markAsComplete/:id", ensureAuth, markAsComplete);
 app.put("/:id", ensureAuth, Validator(validateUpdate, "body"), updateBooking);
 
 module.exports = app;
