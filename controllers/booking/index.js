@@ -144,17 +144,15 @@ const getAllBookings = async (req, res) => {
 };
 
 const getBookingById = async (req, res) => {
-  // Extract the booking ID from the request params
   const id = req.params.id;
 
-  // Validate the ID
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  // Find the booking by ID and populate the associated data for the lessee, car, and payment details
   const carBooking = await booking
     .findById(id)
     .populate("lessee", "name email _id accountType")
+    .populate("lessor", "name email _id accountType")
     .populate("car")
     .populate("paymentDetails");
   if (!carBooking) {
@@ -163,19 +161,15 @@ const getBookingById = async (req, res) => {
 
   // TODO: Update the model of the car listing and add a check here to ensure that only the lessor of the car, the lessee who booked it, and the admin can see the booking, not everyone.
 
-  // Return the booking details
   return res.status(200).send({ carBooking });
 };
 
 const deleteBooking = async (req, res) => {
-  // Extract the booking ID from the request params
   const id = req.params.id;
 
-  // Validate the ID
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  // Find the booking by ID
   const carBooking = await booking.findById(id);
   if (!carBooking) {
     return res.status(404).send({ msg: "Booking not found!" });
@@ -189,7 +183,6 @@ const deleteBooking = async (req, res) => {
 
   // TODO: Add a status field (e.g., "Cancelled", "Confirmed") to the booking model rather than deleting the booking as a whole.
 
-  // Return a success message
   return res.status(200).send({ msg: "Booking Cancelled Successfully" });
 };
 
@@ -367,18 +360,51 @@ const approveBooking = async (req, res) => {
     return res.status(422).send({ msg: "You are not allowed to approve this booking" });
   }
 
-  if (bookingFound.status == "accepted") {
+  if (bookingFound.status == "Accepted") {
     return res.status(422).send({ msg: "This booking is already approved" });
   }
 
   await booking.updateOne(
     { _id: id },
     {
-      status: "accepted",
+      status: "Accepted",
     }
   );
 
   return res.status(200).send({ msg: "Booking Approved Successfully" });
+};
+
+const rejectBooking = async (req, res) => {
+  const id = req.params.id;
+  const { accountType, _id } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  if (accountType == "Lessee") {
+    return res.status(422).send({ msg: "You are not allowed to reject a booking" });
+  }
+
+  const bookingFound = await booking.findById(id);
+  if (!bookingFound) {
+    return res.status(404).send({ msg: "Booking not found!" });
+  }
+
+  if (bookingFound.lessor.toString() !== _id && accountType !== "Admin") {
+    return res.status(422).send({ msg: "You are not allowed to reject this booking" });
+  }
+
+  if (bookingFound.status == "Rejected") {
+    return res.status(422).send({ msg: "This booking is already rejected" });
+  }
+
+  await booking.updateOne(
+    { _id: id },
+    {
+      status: "Rejected",
+    }
+  );
+
+  return res.status(200).send({ msg: "Booking Rejected Successfully" });
 };
 
 module.exports = {
@@ -389,4 +415,5 @@ module.exports = {
   getBookingById,
   getMyBookings,
   approveBooking,
+  rejectBooking,
 };
