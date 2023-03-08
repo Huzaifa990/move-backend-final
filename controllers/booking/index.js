@@ -407,6 +407,23 @@ const rejectBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Rejected Successfully" });
 };
 
+const getLessorBookings = async (req, res) => {
+  const { _id, accountType } = req.body;
+
+  if (accountType !== "Lessor") {
+    return res.status(402).send({ msg: "Access Denied!" });
+  }
+
+  const bookings = await booking
+    .find({ lessor: _id, status: { $ne: "pending" } })
+    .sort({ status: 1, dropOffDate: 1 })
+    .populate("lessee", "name email _id accountType")
+    .populate("car", "_id carName company model rentPerDay")
+    .populate("paymentDetails");
+
+  return res.status(200).send({ count: bookings.length, bookings });
+};
+
 module.exports = {
   addBooking,
   deleteBooking,
@@ -416,4 +433,5 @@ module.exports = {
   getMyBookings,
   approveBooking,
   rejectBooking,
+  getLessorBookings,
 };
