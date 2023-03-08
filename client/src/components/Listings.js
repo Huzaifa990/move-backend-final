@@ -7,7 +7,7 @@ import c180 from "../img/c180.jpg";
 import m3 from "../img/m3.jpg";
 import loader from "../img/loader.gif";
 
-const ListingsTemp = () => {
+const Listings = () => {
   const navigate = useNavigate();
   const [name, setName] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,10 +41,8 @@ const ListingsTemp = () => {
         {loading === true ? (
           <Loader />
         ) : name.length > 0 ? (
-          name.map((data) => {
           
-            if (data !== null) {
-                return (
+          
 
                     <>
                 
@@ -227,11 +225,7 @@ const ListingsTemp = () => {
                       </div>
                     </div>
                     </>
-                  );
-            } else {
-              return <div></div>;
-            }
-          })
+          
         ) : loading === true ? (
           <Loader />
         ) : (
@@ -246,4 +240,4 @@ const ListingsTemp = () => {
   );
 };
 
-export default ListingsTemp;
+export default Listings;
