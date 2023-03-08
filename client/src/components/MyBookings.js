@@ -24,6 +24,7 @@ const MyListings = () => {
       headers: { Authorization: userDetails },
     });
     const data = await response.json();
+    console.log(data);
     setName(data.bookings);
     setLoading(false);
   };
@@ -119,10 +120,14 @@ const MyListings = () => {
                         Booking Days: <span style={{ color: "rgb(197, 197, 197)" }}>{data?.bookingDays}</span>
                       </h5>
                       <h5>Location: {data?.car?.location}</h5>
-                      <br />
-                      <button className="btn btn-primary px-3" onClick={() => showId(data._id)}>
+                      <h5>
+                            Current Status:{data.status==="Accepted"?<><span style={{ color: "green" }}> Active</span></>: <span style={{ color: "#6c757d" }}> Processing</span>} 
+                        </h5>
+                        <br></br>
+                        {data.status==="Accepted"?<><button className="btn btn-primary px-3" onClick={() => showId(data._id)}>
                         View Booking
-                      </button>
+                      </button></>:<div></div>}
+                      
                     </span>
                   </div>
                 </>
