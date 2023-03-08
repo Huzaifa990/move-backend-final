@@ -143,7 +143,6 @@ const adminAnalytics = async (req, res) => {
     .populate("car", "carName company")
     .populate("lessor", "email")
     .populate("lessee", "email")
-
     .lean();
 
   let allListings = await listing
@@ -152,11 +151,97 @@ const adminAnalytics = async (req, res) => {
     .sort({ approved: 1 })
     .lean();
 
-  return res.status(200).send({ analytics, allBookings, allListings });
+  return res.status(200).send({
+    analytics,
+    allBookings,
+    allListings,
+  });
+};
+
+const getAllListings = async (req, res) => {
+  const { accountType } = req.body;
+  if (accountType !== "Admin") {
+    return res.status(200).send({ msg: "Access Denied" });
+  }
+
+  let allListings = await listing
+    .find(
+      { approved: { $ne: false } },
+      "listingDate company rentPerDay carName status approved lessor"
+    )
+    .populate("lessor", "email name")
+    .sort({ carName: 1, company: 1 })
+    .lean();
+
+  return res.status(200).send({ count: allListings.length, allListings });
+};
+
+const getAllPendingListings = async (req, res) => {
+  const { accountType } = req.body;
+  if (accountType !== "Admin") {
+    return res.status(200).send({ msg: "Access Denied" });
+  }
+
+  let pendingListings = await listing
+    .find(
+      { approved: { $eq: false } },
+      "listingDate company rentPerDay carName status approved lessor"
+    )
+    .populate("lessor", "email name")
+    .sort({ listingDate: 1 })
+    .lean();
+
+  return res.status(200).send({ count: pendingListings.length, pendingListings });
+};
+
+const getAllBookings = async (req, res) => {
+  const { accountType } = req.body;
+  if (accountType !== "Admin") {
+    return res.status(200).send({ msg: "Access Denied" });
+  }
+
+  let allBookings = await booking
+    .find(
+      { status: { $ne: "pending" } },
+      "bookingDate pickupDate dropOffDate paymentDetails car status lessor lessee"
+    )
+    .populate("paymentDetails", "amount paymentMethod")
+    .populate("car", "carName company")
+    .populate("lessor", "email")
+    .populate("lessee", "email")
+    .sort({ bookingDate: -1, "car.carName": 1, "car.company": 1 })
+    .lean();
+
+  return res.status(200).send({ count: allBookings.length, allBookings });
+};
+
+const getAllPendingBookings = async (req, res) => {
+  const { accountType } = req.body;
+  if (accountType !== "Admin") {
+    return res.status(200).send({ msg: "Access Denied" });
+  }
+
+  let pendingBookings = await booking
+    .find(
+      { status: { $eq: "pending" } },
+      "bookingDate pickupDate dropOffDate paymentDetails car status lessor lessee"
+    )
+    .populate("paymentDetails", "amount paymentMethod")
+    .populate("car", "carName company")
+    .populate("lessor", "email")
+    .populate("lessee", "email")
+    .sort({ bookingDate: -1, "car.carName": 1, "car.company": 1 })
+    .lean();
+
+  return res.status(200).send({ count: pendingBookings.length, pendingBookings });
 };
 
 module.exports = {
   lessorAnalytics,
   lesseeAnalytics,
   adminAnalytics,
+  getAllListings,
+  getAllBookings,
+  getAllPendingListings,
+  getAllPendingBookings,
 };
