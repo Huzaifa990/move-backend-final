@@ -9,6 +9,7 @@ const {
   approveBooking,
   rejectBooking,
   getLessorBookings,
+  getLessorPendingBookings,
 } = require("../../controllers/booking");
 const { Validator, ensureAuth } = require("../../middleware/ensure-auth");
 const { validateNew, validateUpdate } = require("./validate");
@@ -19,6 +20,7 @@ app.get("/", ensureAuth, getAllBookings);
 app.post("/", ensureAuth, Validator(validateNew, "body"), addBooking);
 app.get("/myBookings", ensureAuth, getMyBookings);
 app.get("/getLessorBookings", ensureAuth, getLessorBookings);
+app.get("/getLessorPendingBookings", ensureAuth, getLessorPendingBookings);
 app.get("/:id", ensureAuth, getBookingById);
 app.delete("/:id", ensureAuth, deleteBooking);
 app.put("/approve/:id", ensureAuth, approveBooking);
