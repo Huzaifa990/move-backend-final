@@ -137,24 +137,8 @@ const adminAnalytics = async (req, res) => {
     totalBookings,
   };
 
-  let allBookings = await booking
-    .find({}, "bookingDate pickupDate dropOffDate paymentDetails car status lessor lessee")
-    .populate("paymentDetails", "amount")
-    .populate("car", "carName company")
-    .populate("lessor", "email")
-    .populate("lessee", "email")
-    .lean();
-
-  let allListings = await listing
-    .find({}, "listingDate company rentPerDay carName status approved lessor")
-    .populate("lessor", "email")
-    .sort({ approved: 1 })
-    .lean();
-
   return res.status(200).send({
     analytics,
-    allBookings,
-    allListings,
   });
 };
 
