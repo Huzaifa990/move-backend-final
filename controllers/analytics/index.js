@@ -46,7 +46,7 @@ const lessorAnalytics = async (req, res) => {
 
   const allBookings = await booking.find({}).lean();
   let myListings = await listing
-    .find({ lessor: _id }, "listingDate company rentPerDay carName status")
+    .find({ lessor: _id }, "listingDate company rentPerDay carName status approved")
     .lean();
 
   for (const listing of myListings) {
