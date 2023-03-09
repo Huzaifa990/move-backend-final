@@ -156,9 +156,9 @@ const MyListings = () => {
                       <h5>PKR {data.rentPerDay}/Day</h5>
                       {data.approved === true?<><h3>
                         {data.status === true ? <><span style={{ color: "green" }}> Active</span></> : <span style={{ color: "#6c757d" }}> Inactive</span>}
-                        {data.approved===true?<><ReactSwitch className="switch" disabled={switchState} checked={data.status} onChange={()=>statusChange(data._id)} /></>:<h1></h1>}
+                        <ReactSwitch className="switch" disabled={switchState} checked={data.status} onChange={()=>statusChange(data._id)}/>
                       </h3>  
-                      <br /></>:<div><h2>Processing Booking!</h2></div>}
+                      <br /></>:<div><h2>Processing Listing!</h2></div>}
                       <br />
                       <button className="btn btn-primary px-3" onClick={() => showId(data._id)}>
                         View Listing

@@ -276,6 +276,7 @@ export default function MyProfile() {
         document.getElementById("successApi").style.width = "100%";
         var img = document.getElementById("uPp");
         img.style.background = "none";
+        toggleOffPP();
         forceUpdate();
       })
       .catch((e) => {
@@ -360,6 +361,21 @@ export default function MyProfile() {
     popupContainer.style.display = "none";
   }
 
+  function togglePopupPP() {
+    const popupContainer = document.getElementById("popPP");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOffPP() {
+    const popupContainer = document.getElementById("popPP");
+    popupContainer.style.display = "none";
+  }
+ 
+
   function uploadCnic() {
     var allPics = document.getElementsByClassName("cnic-pics");
     var cnicImages = [];
@@ -433,6 +449,9 @@ export default function MyProfile() {
               <div class="card-body">
                 <div class="account-settings">
                   <div class="user-profile">
+                  <div class="logoxTwo" onClick={togglePopupPP}>
+                        <img src={logo} alt="info" className="info-logo" />
+                      </div>
                     <div class="user-avatar">
                       <MDBCardImage
                         src={userInfo.profilePicture}
@@ -441,8 +460,10 @@ export default function MyProfile() {
                         style={{ width: "175px" }}
                         fluid
                       />
+                      <div class="popup-containerTwo" id="popPP">
+                      <div class="popupPP">
                       <div className="containers">
-                        <div className="box" id="uPp">
+                      <div className="boxPP" id="uPp">
                           <input
                             onChange={readFile}
                             type="file"
@@ -452,13 +473,18 @@ export default function MyProfile() {
                           />
                           <label for="fileImg" className="camera-icon"></label>
                         </div>
-                        <div class="text-right">
+                        
                           <input type="text" id="profile-pic" hidden />
                           <button className="btn btn-editProfile" onClick={sendProfielPicture}>
                             Update Profile Picture
                           </button>
-                        </div>
+                          <button className="btn btn-deletePhoto" onClick={toggleOffPP}>
+                            Cancel
+                          </button>
+                        
                       </div>
+                      </div>
+                    </div>
                     </div>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
                     <h5 class="mb-4 text-primary">User Information</h5>
@@ -557,7 +583,7 @@ export default function MyProfile() {
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-group">
                       <label for="Name">Name</label>
-                      <input type="text" class="form-control" id="Name" value={userName} />
+                      <input type="text" class="form-control" id="Name" defaultValue={userName} />
                       <div class="text-right">
                         <button className="btn btn-editProfile" onClick={sendName}>
                           Update Name

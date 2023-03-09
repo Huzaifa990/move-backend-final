@@ -372,21 +372,21 @@ function AllListings() {
                       {item.rentPerDay} PKR
                     </td>
                     <td class="text-right">
-                      {item.status === true ? (
+                      {item.status === true && item.approved === true ? (
                         <>
                           <span style={{ color: "green" }}> Active</span>
                         </>
-                      ) : (
+                      ) : item.status === false && item.approved === true ?(
                         <span style={{ color: "#6c757d" }}> Inactive</span>
-                      )}{" "}
+                      ):<span style={{ color: "#6c757d" }}> Processing</span>}{" "}
                     </td>
                     <td class="text-right">
-                      <ReactSwitch
+                      {item.approved === true ? (<ReactSwitch
                         className="switch"
                         disabled={switchState}
                         checked={item.status}
                         onChange={() => statusChange(item._id)}
-                      />
+                      />):<></>}
                     </td>
                   </tr>
                 );
