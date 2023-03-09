@@ -6,17 +6,23 @@ import "chart.js/auto";
 import Loader from "./Loader";
 import ReactSwitch from "react-switch";
 import axios from "axios";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import "react-notifications/lib/notifications.css";
+import Loader2 from "./Loader2";
+import approve from "../img/correct.png";
+import unable from "../img/unable3.png";
+
 
 export default function LessorDashboard() {
-  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
-  var [stats, setStats] = useState([]);
+  const [activeOption, setActiveOption] = useState("allListings");
+
+  function handleOptionClick(option) {
+    setActiveOption(option);
+  }
+
   var [anal, setAnal] = useState({});
   const [loading, setLoading] = useState(true);
-  const [switchState, setSwitchState] = useState(false);
 
-  var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
@@ -27,47 +33,16 @@ export default function LessorDashboard() {
 
       var data = await response.json();
       console.log(data);
-      setStats(data.myListings);
       setAnal(data.analytics);
       setLoading(false);
     }
 
     getData();
-  }, [userDetails, ingnored]);
-
-  function goToListings(id) {
-    navigate("/viewListings", { state: { id: id } });
-  }
-
-  async function statusChange(id){
-    setSwitchState(true);
-    axios.put("http://localhost:8080/api/listing/toggle/"+id,  
-    {},
-    {
-        headers: { Authorization: userDetails },
-    }).then((res)=>{
-        console.log(res);
-        NotificationManager.success('Listing Updated');
-    }).catch((e)=>{
-        console.log(e);
-        NotificationManager.success('Listing Update Failed  ');
-    });
-
-    await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
-        headers: { Authorization: userDetails },
-      })
-      .then(() => {
-        setSwitchState(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-      forceUpdate();
-  }
+  }, [userDetails]);
 
   return (
     <div className="stats-section">
-      <NotificationContainer/>
+      <NotificationContainer />
       {loading === true ? (
         <Loader />
       ) : (
@@ -265,41 +240,386 @@ export default function LessorDashboard() {
                 </div>
               </div>
             </div>
-
-            
           </div>
           <h1>Your Cars: </h1>
           <br /> <br />
-          <div class="table-responsive table--no-card m-b-40">
-            <table class="table table-borderless table-striped table-earning">
-              <thead>
-                <tr>
-                  <th>Car Name</th>
-                  <th>Company</th>
-                  <th>Date Listed</th>
-                  <th class="text-right">Rent Per Day</th>
-                  <th class="text-right">Status</th>
-                  <th class="text-right">Manage</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.map((item) => {
-                  return (
-                    <tr>
-                      <td onClick={() => goToListings(item._id)}>{item.carName}</td>
-                      <td onClick={() => goToListings(item._id)}>{item.company}</td>
-                      <td onClick={() => goToListings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
-                      <td onClick={() => goToListings(item._id)} class="text-right">{item.rentPerDay} PKR</td>
-                      <td class="text-right">{item.status===true?<><span style={{ color: "green" }}> Active</span></>: <span style={{ color: "#6c757d" }}> Inactive</span>} </td>
-                      <td class="text-right"><ReactSwitch className="switch" disabled={switchState} checked={item.status} onChange={()=>statusChange(item._id)} /></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="table-responsive table--no-card m-b-40">
+            <div className="table-responsive table--no-card m-b-40">
+              <div className="top-bar">
+                <div
+                  className={`option ${activeOption === "allListings" ? "active-1" : ""}`}
+                  onClick={() => handleOptionClick("allListings")}
+                >
+                  All Listings
+                </div>
+                <div
+                  className={`option ${activeOption === "bookingsCurrent" ? "active-1" : ""}`}
+                  onClick={() => handleOptionClick("bookingsCurrent")}
+                >
+                  All Bookings
+                </div>
+
+                <div
+                  className={`option ${activeOption === "bookingsPending" ? "active-1" : ""}`}
+                  onClick={() => handleOptionClick("bookingsPending")}
+                >
+                  Booking Requests
+                </div>
+              </div>
+
+              <div>
+                {activeOption === "allListings" ? (
+                  <AllListings />
+                ) : activeOption === "bookingsCurrent" ? (
+                  <AllBookings />
+                ) : activeOption === "bookingsPending" ? (
+                  <PendingBookings/>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
           </div>
         </>
       )}
     </div>
+  );
+}
+
+function AllListings() {
+  var [stats, setStats] = useState([]);
+  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [switchState, setSwitchState] = useState(false);
+
+  var navigate = useNavigate();
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setStats(data.myListings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails, ingnored]);
+
+  function goToListings(id) {
+    navigate("/viewListings", { state: { id: id } });
+  }
+
+  async function statusChange(id) {
+    setSwitchState(true);
+    axios
+      .put(
+        "http://localhost:8080/api/listing/toggle/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.success("Listing Updated");
+      })
+      .catch((e) => {
+        console.log(e);
+        NotificationManager.success("Listing Update Failed  ");
+      });
+
+    await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+      headers: { Authorization: userDetails },
+    })
+      .then(() => {
+        setSwitchState(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    forceUpdate();
+  }
+
+  return (
+    <>
+      <table class="table table-borderless table-striped table-earning lessorTable">
+        {loading === false ? (
+          <>
+            <thead>
+              <tr>
+                <th>Car Name</th>
+                <th>Company</th>
+                <th>Date Listed</th>
+                <th class="text-right">Rent Per Day</th>
+                <th class="text-right">Status</th>
+                <th class="text-right">Manage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.map((item) => {
+                return (
+                  <tr>
+                    <td onClick={() => goToListings(item._id)}>{item.carName}</td>
+                    <td onClick={() => goToListings(item._id)}>{item.company}</td>
+                    <td onClick={() => goToListings(item._id)}>
+                      {moment.utc(item.listedDate).format("llll")}
+                    </td>
+                    <td onClick={() => goToListings(item._id)} class="text-right">
+                      {item.rentPerDay} PKR
+                    </td>
+                    <td class="text-right">
+                      {item.status === true ? (
+                        <>
+                          <span style={{ color: "green" }}> Active</span>
+                        </>
+                      ) : (
+                        <span style={{ color: "#6c757d" }}> Inactive</span>
+                      )}{" "}
+                    </td>
+                    <td class="text-right">
+                      <ReactSwitch
+                        className="switch"
+                        disabled={switchState}
+                        checked={item.status}
+                        onChange={() => statusChange(item._id)}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </>
+        ) : (
+          <Loader2 />
+        )}
+      </table>
+    </>
+  );
+}
+
+function AllBookings() {
+  var [stats, setStats] = useState([]);
+  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  var navigate = useNavigate();
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/booking/getLessorBookings", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setStats(data.bookings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails, ingnored]);
+
+  function goToBookings(id) {
+    navigate("/viewListings", { state: { id: id } });
+  }
+
+  
+  async function statusChange(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/markAsComplete/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.success("Order Completed!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    await fetch("http://localhost:8080/api/booking/getLessorBookings", {
+      headers: { Authorization: userDetails },
+    })
+      .then((res) => {
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    forceUpdate();
+  }
+
+  return (
+    <>
+      <table class="table table-borderless table-striped table-earning lessorTable">
+        {loading === false ? (
+          <>
+            <thead>
+              <tr>
+                <th>Car Name</th>
+                <th>Pickup Date</th>
+                <th>Delivery Date</th>
+                <th class="text-center">Earnings</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Mark As Complete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.map((item) => {
+                return (
+                  <tr>
+                    <td onClick={() => goToBookings(item.car._id)}>{item.car.carName}</td>
+                    <td onClick={() => goToBookings(item.car._id)}>
+                      {moment.utc(item.pickUpDate).format("llll")}
+                    </td>
+                    <td onClick={() => goToBookings(item.car._id)}>
+                      {moment.utc(item.dropOffDate).format("llll")}
+                    </td>
+                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>{item.paymentDetails.amount} PKR</td>
+                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>{item.status}</td>
+                    {item.status === "Accepted" ? (
+                      <>
+                        <td class="text-center">
+                          <img
+                            src={approve}
+                            width="35"
+                            alt=""
+                            id="tick"
+                            onClick={() => statusChange(item._id)}
+                          />
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                      <td class="text-center">
+                          <img
+                            src={unable}
+                            width="28"
+                            alt=""
+                            id="unable"
+                          />
+                        </td></>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </>
+        ) : (
+          <Loader2 />
+        )}
+      </table>
+    </>
+  );
+}
+
+
+function PendingBookings() {
+  var [stats, setStats] = useState([]);
+  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  var navigate = useNavigate();
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
+        headers: { Authorization: userDetails },
+      });
+      var data = await response.json();
+      console.log(data);
+      setStats(data.bookings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails, ingnored]);
+
+  function goToBookings(id) {
+    navigate("/viewListings", { state: { id: id } });
+  }
+
+  
+  async function statusChange(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/approve/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.success("Booking Approved!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
+      headers: { Authorization: userDetails },
+    })
+      .then(() => {
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    forceUpdate();
+  }
+
+  return (
+    <>
+      <table class="table table-borderless table-striped table-earning lessorTable">
+        {loading === false ? (
+          <>
+            <thead>
+              <tr>
+                <th>Car Name</th>
+                <th>Pickup Date</th>
+                <th>Delivery Date</th>
+                <th class="text-center">Earnings</th>
+                <th class="text-center">Accept</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.map((item) => {
+                return (
+                  <tr>
+                    <td onClick={() => goToBookings(item.car._id)}>{item.car.carName}</td>
+                    <td onClick={() => goToBookings(item.car._id)}>
+                      {moment.utc(item.pickUpDate).format("llll")}
+                    </td>
+                    <td onClick={() => goToBookings(item.car._id)}>
+                      {moment.utc(item.dropOffDate).format("llll")}
+                    </td>
+                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>{item.paymentDetails.amount} PKR</td>
+                    <td className="text-center">
+                      <img
+                      src={approve}
+                      width="35"
+                      alt=""
+                      id="tick"
+                      onClick={() => statusChange(item._id)}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </>
+        ) : (
+          <Loader2 />
+        )}
+      </table>
+    </>
   );
 }
