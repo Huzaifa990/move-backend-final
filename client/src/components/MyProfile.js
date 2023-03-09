@@ -4,6 +4,7 @@ import { useEffect, useState, useReducer } from "react";
 import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 import { MDBCardImage } from "mdb-react-ui-kit";
 import logo from "../img/info.png";
+import edit from "../img/edit-round-line-icon.png";
 import cnic1 from "../img/cnic1.jpg";
 import cnic2 from "../img/cnic2.jpg";
 import selfie from "../img/cnic-sample.jpg";
@@ -450,7 +451,7 @@ export default function MyProfile() {
                 <div class="account-settings">
                   <div class="user-profile">
                   <div class="logoxTwo" onClick={togglePopupPP}>
-                        <img src={logo} alt="info" className="info-logo" />
+                        <img src={edit} alt="info" className="edit-logo" />
                       </div>
                     <div class="user-avatar">
                       <MDBCardImage
@@ -462,8 +463,8 @@ export default function MyProfile() {
                       />
                       <div class="popup-containerTwo" id="popPP">
                       <div class="popupPP">
-                      <div className="containers">
-                      <div className="boxPP" id="uPp">
+                      <div className="container-3">
+                      <div className="box" id="uPp">
                           <input
                             onChange={readFile}
                             type="file"
