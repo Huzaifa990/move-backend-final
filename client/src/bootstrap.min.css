@@ -2816,6 +2816,13 @@ fieldset:disabled a.btn {
     border-color: #F77D0A;
 }
 
+.btn-deletePhoto {
+    color: #fff;
+    margin-top: 15px;
+    background-color: #ff3019;
+    border-color: #ff3019;
+}
+
 .btn-primaryDelete {
     color: #fff;
     background-color: #F77D0A;

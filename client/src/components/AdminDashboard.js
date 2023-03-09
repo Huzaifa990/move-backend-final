@@ -274,7 +274,14 @@ export default function AdminDashboard() {
                 className={`option ${activeOption === "listings" ? "active-1" : ""}`}
                 onClick={() => handleOptionClick("listings")}
               >
-                Listings
+                Active Listings
+              </div>
+
+              <div
+                className={`option ${activeOption === "pendingListings" ? "active-1" : ""}`}
+                onClick={() => handleOptionClick("pendingListings")}
+              >
+                Pending Listings
               </div>
 
               <div
@@ -297,7 +304,10 @@ export default function AdminDashboard() {
                 <UsersTable />
               ) : activeOption === "listings" ? (
                 <ListingsTable />
-              ) : activeOption === "bookings" ? (
+              ):
+                 activeOption ==="pendingListings" ? (
+                <PendingListingsTable/>
+              ): activeOption === "bookings" ? (
                 <BookingsTable />
               ) : activeOption === "pendingBookings" ? (
                 <PendingBookingsTable />
@@ -348,7 +358,7 @@ function UsersTable() {
     )
     .then((res)=>{
       console.log(res);
-      NotificationManager.error("User Approved");
+      NotificationManager.success("User Approved");
 
     }).catch((e)=>{
       console.log(e);
@@ -410,8 +420,7 @@ function UsersTable() {
                 <th>CNIC</th>
                 <th class="text-right">Phone Number</th>
                 <th class="text-right">Email Verified</th>
-                <th>Accept</th>
-                <th>Reject</th>
+                <th class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -437,10 +446,9 @@ function UsersTable() {
                         width="35"
                         alt=""
                         id="tick"
+                        // class="pendingBtns"
                         onClick={() => approveUser(item._id)}
                       />
-                    </td>
-                    <td class="text-center">
                       <img
                         src={reject}
                         width="35"
@@ -449,6 +457,7 @@ function UsersTable() {
                         onClick={() => rejectUser(item._id)}
                       />
                     </td>
+                    
                   </tr>
                 );
               })}
@@ -541,7 +550,7 @@ function AllUsersTable() {
 }
 
 function ListingsTable() {
-  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [ingnored, forceUpdate] = useReducer(x=>x+1,0);
   const [loading, setLoading] = useState(true);
   var navigate = useNavigate();
   var [listings, setListings] = useState([]);
@@ -550,13 +559,108 @@ function ListingsTable() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllListings", {
         headers: { Authorization: userDetails },
       });
 
       var data = await response.json();
       console.log(data);
       setListings(data.allListings);
+      setLoading(false);
+    }
+
+    getData();
+  }, [userDetails, ingnored, switchState]);
+
+  async function statusChangeTwo(id) {
+    axios.put(
+        "http://localhost:8080/api/listing/toggle/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        NotificationManager.success("Listing Updated");
+        setSwitchState(!switchState)
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+      
+    forceUpdate();
+  }
+
+  function goToListings(id) {
+    navigate("/viewListingDashboard", { state: { id: id } });
+  }
+
+  
+
+  return (
+    <div>
+      <table class="table table-borderless table-striped table-earning">
+        {loading === false ? (
+          <>
+            <thead>
+              <tr>
+                <th>Car Name</th>
+                <th>Company</th>
+                <th>Date Listed</th>
+                <th class="text-right">Rent Per Day</th>
+                <th class="text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {listings.map((item) => {
+                return (
+                  <tr>
+                    <td onClick={() => goToListings(item._id)}>{item.carName}</td>
+                    <td onClick={() => goToListings(item._id)}>{item.company}</td>
+                    <td onClick={() => goToListings(item._id)}>
+                      {moment.utc(item.listedDate).format("llll")}
+                    </td>
+                    <td onClick={() => goToListings(item._id)} class="text-right">
+                      {item.rentPerDay} PKR
+                    </td>
+
+                    <td class="text-right">
+                      <ReactSwitch
+                        className="switch"
+                        checked={item.status}
+                        onChange={() => statusChangeTwo(item._id)}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </>
+        ) : (
+          <Loader2 />
+        )}
+      </table>
+    </div>
+  );
+}
+
+function PendingListingsTable() {
+  const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [loading, setLoading] = useState(true);
+  var navigate = useNavigate();
+  var [listings, setListings] = useState([]);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingListings", {
+        headers: { Authorization: userDetails },
+      });
+
+      var data = await response.json();
+      console.log(data);
+      setListings(data.pendingListings);
       setLoading(false);
     }
 
@@ -568,7 +672,6 @@ function ListingsTable() {
   }
 
   async function statusChange(id) {
-    setSwitchState(true);
     axios
       .put(
         "http://localhost:8080/api/listing/verifyListing/" + id,
@@ -585,44 +688,14 @@ function ListingsTable() {
         console.log(e);
       });
 
-    await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+      await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingListings", {
       headers: { Authorization: userDetails },
     })
       .then(() => {
-        setSwitchState(false);
       })
       .catch((e) => {
         console.log(e);
-      });
-    forceUpdate();
-  }
-
-  async function statusChangeTwo(id) {
-    setSwitchState(true);
-    axios
-      .put(
-        "http://localhost:8080/api/listing/toggle/" + id,
-        {},
-        {
-          headers: { Authorization: userDetails },
-        }
-      )
-      .then((res) => {
-        console.log(res);
       })
-      .catch((e) => {
-        console.log(e);
-      });
-
-    await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
-      headers: { Authorization: userDetails },
-    })
-      .then(() => {
-        setSwitchState(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
     forceUpdate();
   }
 
@@ -637,7 +710,6 @@ function ListingsTable() {
                 <th>Company</th>
                 <th>Date Listed</th>
                 <th class="text-right">Rent Per Day</th>
-                <th class="text-right">Status</th>
                 <th class="text-center">Approve Listing</th>
               </tr>
             </thead>
@@ -652,14 +724,6 @@ function ListingsTable() {
                     </td>
                     <td onClick={() => goToListings(item._id)} class="text-right">
                       {item.rentPerDay} PKR
-                    </td>
-                    <td class="text-right">
-                      <ReactSwitch
-                        className="switch"
-                        disabled={switchState}
-                        checked={item.status}
-                        onChange={() => statusChangeTwo(item._id)}
-                      />
                     </td>
                     <td className="text-center" id="approval">
                       {item.approved === false ? (
@@ -701,7 +765,7 @@ function BookingsTable() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllBookings", {
         headers: { Authorization: userDetails },
       });
       var data = await response.json();
@@ -766,12 +830,12 @@ function PendingBookingsTable() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+      const response = await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingBookings", {
         headers: { Authorization: userDetails },
       });
       var data = await response.json();
       console.log(data);
-      setBookings(data.allBookings);
+      setBookings(data.pendingBookings);
       setLoading(false);
     }
 
@@ -795,7 +859,7 @@ function PendingBookingsTable() {
         console.log(e);
       });
 
-    await fetch("http://localhost:8080/api/analytics/adminAnalytics", {
+      await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingBookings", {
       headers: { Authorization: userDetails },
     })
       .then((res) => {
@@ -820,7 +884,7 @@ function PendingBookingsTable() {
                 <th>Date Listed</th>
                 <th class="text-right">Rent Per Day</th>
                 <th>Status</th>
-                <th class="text-right">Reject</th>
+                <th class="text-right">Action</th>
               </tr>
             </thead>
             <tbody>
