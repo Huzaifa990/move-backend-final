@@ -327,7 +327,7 @@ const updateBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Updated Successfully" });
 };
 
-//lessee
+//bookings done by a lessee
 const getMyBookings = async (req, res) => {
   const { _id, accountType } = req.body;
 
@@ -411,7 +411,7 @@ const rejectBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Rejected Successfully" });
 };
 
-//lessor
+//bookings of lessor's cars
 const getLessorBookings = async (req, res) => {
   const { _id, accountType } = req.body;
 
@@ -487,6 +487,49 @@ const markAsComplete = async (req, res) => {
   return res.status(200).send({ msg: "Booking marked as complete successfully" });
 };
 
+const cancelBooking = async (req, res) => {
+  const id = req.params.id;
+  const { accountType, _id } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  const bookingFound = await booking.findById(id);
+  if (!bookingFound) {
+    return res.status(404).send({ msg: "Booking not found!" });
+  }
+
+  if (
+    bookingFound.lessor.toString() !== _id &&
+    bookingFound.lessee.toString() !== _id &&
+    accountType !== "Admin"
+  ) {
+    return res.status(422).send({ msg: "You are not allowed to cancel this booking" });
+  }
+
+  if (bookingFound.status == "Cancelled") {
+    return res.status(422).send({ msg: "This booking is already cancelled" });
+  }
+
+  if (bookingFound.status == "Completed") {
+    return res.status(422).send({ msg: "Completed booking cannot be cancelled" });
+  }
+
+  if (bookingFound.status == "Rejected") {
+    return res.status(422).send({ msg: "Rejected booking cannot be cancelled" });
+  }
+
+  await booking.updateOne(
+    { _id: id },
+    {
+      status: "Cancelled",
+    }
+  );
+
+  //TO DO: deal payment refunds scenario.
+
+  return res.status(200).send({ msg: "Booking Cancelled Successfully" });
+};
+
 module.exports = {
   addBooking,
   deleteBooking,
@@ -496,6 +539,7 @@ module.exports = {
   getMyBookings,
   approveBooking,
   rejectBooking,
+  cancelBooking,
   markAsComplete,
   getLessorBookings,
   getLessorPendingBookings,
