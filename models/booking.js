@@ -42,7 +42,7 @@ const Booking = new mongoose.Schema({
     default: 0,
   },
   status: {
-    type: "String",
+    type: String,
     default: "pending",
   },
 });

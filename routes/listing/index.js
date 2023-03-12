@@ -8,6 +8,7 @@ const {
   myListings,
   toggleListingStatus,
   verifyLessorListing,
+  rejectLessorListing,
 } = require("../../controllers/listing");
 const { Validator, ensureAuth } = require("../../middleware/ensure-auth");
 const { validateNew, validateUpdate } = require("./validate");
@@ -21,5 +22,6 @@ app.get("/:id", ensureAuth, getById);
 app.delete("/:id", ensureAuth, deleteListing);
 app.put("/toggle/:id", ensureAuth, toggleListingStatus);
 app.put("/verifyListing/:id", ensureAuth, verifyLessorListing);
+app.put("/rejectListing/:id", ensureAuth, rejectLessorListing);
 app.put("/:id", ensureAuth, Validator(validateUpdate, "body"), updateListing);
 module.exports = app;

@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const listing = require("../../models/listing");
 
 const getAllListings = async (req, res) => {
-  const listings = await listing.find({ status: true, approved: true });
+  const listings = await listing.find({ status: true, approved: "Accepted" });
   //need to add in filters
   return res.status(200).send({ count: listings.length, listings });
 };
@@ -154,6 +154,10 @@ const toggleListingStatus = async (req, res) => {
     return res.status(422).send({ msg: "You are not allowed to change status of this listing" });
   }
 
+  if (listingExist.approved == "Rejected") {
+    return res.status(422).send({ msg: "Rejected listing cannot be activated" });
+  }
+
   const newStatus = !listingExist.status;
   await listing.updateOne(
     { _id: id },
@@ -167,7 +171,7 @@ const toggleListingStatus = async (req, res) => {
 
 const verifyLessorListing = async (req, res) => {
   const id = req.params.id;
-  const { accountType, _id } = req.body;
+  const { accountType } = req.body;
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
@@ -187,11 +191,45 @@ const verifyLessorListing = async (req, res) => {
   await listing.updateOne(
     { _id: id },
     {
-      approved: true,
+      approved: "Accepted",
     }
   );
 
   return res.status(200).send({ msg: "Listing Approved Successfully" });
+};
+
+const rejectLessorListing = async (req, res) => {
+  const id = req.params.id;
+  const { accountType } = req.body;
+  const valid = mongoose.isValidObjectId(id);
+  if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  if (accountType !== "Admin") {
+    return res.status(422).send({ msg: "You are not allowed to reject a listing" });
+  }
+
+  const listingExist = await listing.findById(id);
+  if (!listingExist) {
+    return res.status(404).send({ msg: "Listing not found" });
+  }
+
+  if (listingExist.approved == "Accepted") {
+    return res.status(200).send({ msg: "Approved listing cannot be rejected!" });
+  }
+
+  if (listingExist.approved == "Rejected") {
+    return res.status(200).send({ msg: "Listing Already Rejected!" });
+  }
+
+  await listing.updateOne(
+    { _id: id },
+    {
+      approved: "Rejected",
+      status: false,
+    }
+  );
+
+  return res.status(200).send({ msg: "Listing Rejected Successfully" });
 };
 
 module.exports = {
@@ -203,4 +241,5 @@ module.exports = {
   updateListing,
   toggleListingStatus,
   verifyLessorListing,
+  rejectLessorListing,
 };

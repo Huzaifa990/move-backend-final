@@ -175,6 +175,9 @@ const deleteBooking = async (req, res) => {
     return res.status(404).send({ msg: "Booking not found!" });
   }
 
+  if (carBooking.status !== "pending")
+    return res.status(200).send({ msg: "Booking cannot be deleted at this stage" });
+
   // TODO: Handle the history of bookings rather than allowing people to delete closed/done bookings.
 
   // Delete the booking and the associated payment details
@@ -183,7 +186,7 @@ const deleteBooking = async (req, res) => {
 
   // TODO: Add a status field (e.g., "Cancelled", "Confirmed") to the booking model rather than deleting the booking as a whole.
 
-  return res.status(200).send({ msg: "Booking Cancelled Successfully" });
+  return res.status(200).send({ msg: "Booking Deleted Successfully" });
 };
 
 const updateBooking = async (req, res) => {
@@ -324,6 +327,7 @@ const updateBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Updated Successfully" });
 };
 
+//lessee
 const getMyBookings = async (req, res) => {
   const { _id, accountType } = req.body;
 
@@ -407,6 +411,7 @@ const rejectBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Rejected Successfully" });
 };
 
+//lessor
 const getLessorBookings = async (req, res) => {
   const { _id, accountType } = req.body;
 
