@@ -13,7 +13,7 @@ const lessorAnalytics = async (req, res) => {
 
   const carsListed = await listing.find({ lessor: _id, approved: "Accepted" }).count();
   const bookings = await booking
-    .find({ lessor: _id, status: "Accepted" })
+    .find({ lessor: _id, status: { $in: ["Accepted", "Completed"] } })
     .populate("paymentDetails", "amount")
     .lean();
   const totalBookings = bookings.length;
