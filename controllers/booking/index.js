@@ -656,7 +656,7 @@ const checkAndAddBooking = async (req, res) => {
   // Optionally, send an email to confirm the booking
 
   // Return a success message
-  return res.status(200).send({ bookingPossible, bookingId: bookingg._id });
+  return res.status(200).send({ bookingPossible, bookingId: bookingg._id, amount: rent });
 };
 
 // initiate transfer
