@@ -19,12 +19,10 @@ const MyListings = () => {
   //Function defined to fetch data from api for all the bookings and store it in a variable.
   const names = async () => {
     var userDetails = JSON.parse(localStorage.getItem("userDetails"));
-    console.log("User ID =>", userDetails);
     const response = await fetch("http://localhost:8080/api/booking/myBookings", {
       headers: { Authorization: userDetails },
     });
     const data = await response.json();
-    console.log(data);
     setName(data.bookings);
     setLoading(false);
   };
@@ -59,12 +57,14 @@ const MyListings = () => {
     <>
       <div className="">
         {/* This condition allows us to render all of the objects received from the Api. It runs for the count of objects received. */}
-        {loading===true? <Loader/>:name.length > 0 ? (
+        {loading === true ? (
+          <Loader />
+        ) : name.length > 0 ? (
           name.map((data) => {
             if (data !== null) {
               return (
                 <>
-                {/* Data being fed into the list that we fetched from API. */}
+                  {/* Data being fed into the list that we fetched from API. */}
                   <div
                     className="container-fluid-listing pt-5 pb-3"
                     key={data.car?.carName}
@@ -106,7 +106,7 @@ const MyListings = () => {
                     </ul>
                     {/* Moment plugin used to make the time and date format readable. */}
                     <div className="d-flex mb-4">
-                    <div className="px-2 border-left border-right">
+                      <div className="px-2 border-left border-right">
                         <span>Pickup Date: {moment.utc(data?.pickupDate).format("llll")}</span>
                       </div>
                       <div className="px-2 border-left border-right">
@@ -114,20 +114,39 @@ const MyListings = () => {
                       </div>
                     </div>
 
-                    <span className = "headingsRent" style={{}}>
+                    <span className="headingsRent" style={{}}>
                       <h5>PKR {data?.car?.rentPerDay}/Day</h5>
                       <h5>
-                        Booking Days: <span style={{ color: "rgb(197, 197, 197)" }}>{data?.bookingDays}</span>
+                        Booking Days:{" "}
+                        <span style={{ color: "rgb(197, 197, 197)" }}>{data?.bookingDays}</span>
                       </h5>
                       <h5>Location: {data?.car?.location}</h5>
                       <h5>
-                            Current Status:{data.status==="Accepted"?<><span style={{ color: "green" }}> Active</span></>: <span style={{ color: "#6c757d" }}> Processing</span>} 
-                        </h5>
-                        <br></br>
-                        {data.status==="Accepted"?<><button className="btn btn-primary px-3" onClick={() => showId(data._id)}>
-                        View Booking
-                      </button></>:<div></div>}
-                      
+                        Current Status:
+                        {data.status === "Accepted" ? (
+                          <>
+                            <span style={{ color: "green" }}> Active</span>
+                          </>
+                        ) : data.status === "Cancelled" ? (
+                          <span style={{ color: "#6c757d" }}> Cancelled</span>
+                        ) : data.status === "Completed" ? (
+                          <span style={{ color: "#6c757d" }}> Completed</span>
+                        ) : data.status === "Rejected" ? (
+                          <span style={{ color: "#6c757d" }}> Rejected</span>
+                        ) : (
+                          <span style={{ color: "#6c757d" }}> Processing</span>
+                        )}
+                      </h5>
+                      <br></br>
+                      {data.status === "Accepted" ? (
+                        <>
+                          <button className="btn btn-primary px-3" onClick={() => showId(data._id)}>
+                            View Booking
+                          </button>
+                        </>
+                      ) : (
+                        <div></div>
+                      )}
                     </span>
                   </div>
                 </>
@@ -136,7 +155,9 @@ const MyListings = () => {
               return <div></div>;
             }
           })
-        ) : loading===true? <Loader/>:(
+        ) : loading === true ? (
+          <Loader />
+        ) : (
           // If no data is found from API, this is show.
           <div>
             <center>

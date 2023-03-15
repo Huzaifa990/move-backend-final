@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { Bar, Line} from "react-chartjs-2";
 import "chart.js/auto";
 import Loader from "./Loader";
+import reject from "../img/remove.png";
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import "react-notifications/lib/notifications.css";
+import axios from "axios";
+
 
 export default function LesseeDashboard() {
   var [stats, setStats] = useState([]);
   var [Analytics, setAnalytics] = useState({});
   const [loading, setLoading] = useState(true);
+  const [forceUpdate] = useReducer((x) => x + 1, 0);
+  const [switchState, setSwitchState] = useState(false);
 
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -33,8 +40,31 @@ export default function LesseeDashboard() {
     navigate("/viewBookingDashboard", { state: { id: id } });
   }
 
+  async function BookingReject(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/cancel/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.error("Booking Cancelled");
+        setSwitchState(!switchState)
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+      
+    forceUpdate();
+  }
+
   return (
     <div className="stats-section">
+      <NotificationContainer/>
       {loading === true? <Loader/>: 
       <>
       <h1>Analytics:</h1>
@@ -238,6 +268,7 @@ export default function LesseeDashboard() {
               <th>Date Listed</th>
               <th class="text-right">Rent Per Day</th>
               <th class="text-right">Status</th>
+              <th class="text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -249,6 +280,15 @@ export default function LesseeDashboard() {
                   <td>{moment.utc(item.listedDate).format("llll")}</td>
                   <td class="text-right">{item.paymentDetails.amount} PKR</td>
                   <td class="text-right">{item.status}</td>
+                  <td class="text-right">
+                  {item.status === "Accepted" ? (<img
+                            src={reject}
+                            width="35"
+                            alt=""
+                            id="tick"
+                            onClick={() => BookingReject(item._id)}/>):<></>}
+
+                  </td>
                 </tr>
               );
             })}
