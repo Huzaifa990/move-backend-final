@@ -839,7 +839,7 @@ function PendingBookingsTable() {
       setLoading(false);
     }
 
-    getData();
+    setInterval(getData,5000);
   }, [userDetails, ingnored]);
 
   async function rejectBooking(id) {
