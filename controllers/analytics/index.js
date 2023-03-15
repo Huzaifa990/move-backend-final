@@ -11,8 +11,11 @@ const lessorAnalytics = async (req, res) => {
     return res.status(200).send({ msg: "Access Denied" });
   }
 
-  const carsListed = await listing.find({ lessor: _id }).count();
-  const bookings = await booking.find({ lessor: _id }).populate("paymentDetails", "amount").lean();
+  const carsListed = await listing.find({ lessor: _id, approved: "Accepted" }).count();
+  const bookings = await booking
+    .find({ lessor: _id, status: { $in: ["Accepted", "Completed"] } })
+    .populate("paymentDetails", "amount")
+    .lean();
   const totalBookings = bookings.length;
 
   const currentMonth = moment().month() + 1;
@@ -77,7 +80,7 @@ const lesseeAnalytics = async (req, res) => {
   let currentMonthBookings = 0;
   if (bookings.length > 0) {
     for (const obj of bookings) {
-      if (obj.status == "completed") lifetimeSpent += obj.paymentDetails.amount;
+      if (obj.status == "Completed") lifetimeSpent += obj.paymentDetails.amount;
     }
 
     const currentMonthData = bookings.filter((booking) => {
@@ -86,7 +89,7 @@ const lesseeAnalytics = async (req, res) => {
     if (currentMonthData.length > 0) {
       currentMonthBookings = currentMonthData.length;
       for (const obj of currentMonthData) {
-        if (obj.status == "completed") currentMonthSpent += obj.paymentDetails.amount;
+        if (obj.status == "Completed") currentMonthSpent += obj.paymentDetails.amount;
       }
     }
   }
@@ -98,7 +101,6 @@ const lesseeAnalytics = async (req, res) => {
     currentMonthSpent,
   };
 
-  const allBookings = await booking.find({}).lean();
   let myBookings = await booking
     .find({ lessee: _id }, "bookingDate pickupDate dropOffDate paymentDetails car status")
     .populate("paymentDetails", "amount")
@@ -125,8 +127,8 @@ const adminAnalytics = async (req, res) => {
   const totalMembers = await users.find({}).count();
   const totalLessors = await users.find({ accountType: "Lessor" }).count();
   const totalLessees = await users.find({ accountType: "Lessee" }).count();
-  const totalCarListed = await listing.find({}).count();
-  const totalBookings = await booking.find({}).count();
+  const totalCarListed = await listing.find({ approved: { $eq: "Accepted" } }).count();
+  const totalBookings = await booking.find({ status: { $in: ["Completed", "Accepted"] } }).count();
 
   const analytics = {
     totalRevenueGenerated,
@@ -150,7 +152,7 @@ const getAllListings = async (req, res) => {
 
   let allListings = await listing
     .find(
-      { approved: { $ne: false } },
+      { approved: { $ne: "pending" } },
       "listingDate company rentPerDay carName status approved lessor"
     )
     .populate("lessor", "email name")
@@ -168,7 +170,7 @@ const getAllPendingListings = async (req, res) => {
 
   let pendingListings = await listing
     .find(
-      { approved: { $eq: false } },
+      { approved: { $eq: "pending" } },
       "listingDate company rentPerDay carName status approved lessor"
     )
     .populate("lessor", "email name")
