@@ -375,7 +375,6 @@ export default function MyProfile() {
     const popupContainer = document.getElementById("popPP");
     popupContainer.style.display = "none";
   }
- 
 
   function uploadCnic() {
     var allPics = document.getElementsByClassName("cnic-pics");
@@ -411,6 +410,7 @@ export default function MyProfile() {
         document.getElementById("errorApi").style.width = "100%";
       });
   }
+
 
   return (
     <div>
@@ -450,9 +450,9 @@ export default function MyProfile() {
               <div class="card-body">
                 <div class="account-settings">
                   <div class="user-profile">
-                  <div class="logoxTwo" onClick={togglePopupPP}>
-                        <img src={edit} alt="info" className="edit-logo" />
-                      </div>
+                    <div class="logoxTwo" onClick={togglePopupPP}>
+                      <img src={edit} alt="info" className="edit-logo" />
+                    </div>
                     <div class="user-avatar">
                       <MDBCardImage
                         src={userInfo.profilePicture}
@@ -462,30 +462,29 @@ export default function MyProfile() {
                         fluid
                       />
                       <div class="popup-containerTwo" id="popPP">
-                      <div class="popupPP">
-                      <div className="container-3">
-                      <div className="box" id="uPp">
-                          <input
-                            onChange={readFile}
-                            type="file"
-                            id="fileImg"
-                            name="file1"
-                            accept="image/*"
-                          />
-                          <label for="fileImg" className="camera-icon"></label>
+                        <div class="popupPP">
+                          <div className="container-3">
+                            <div className="box" id="uPp">
+                              <input
+                                onChange={readFile}
+                                type="file"
+                                id="fileImg"
+                                name="file1"
+                                accept="image/*"
+                              />
+                              <label for="fileImg" className="camera-icon"></label>
+                            </div>
+
+                            <input type="text" id="profile-pic" hidden />
+                            <button className="btn btn-editProfile" onClick={sendProfielPicture}>
+                              Update Profile Picture
+                            </button>
+                            <button className="btn btn-deletePhoto" onClick={toggleOffPP}>
+                              Cancel
+                            </button>
+                          </div>
                         </div>
-                        
-                          <input type="text" id="profile-pic" hidden />
-                          <button className="btn btn-editProfile" onClick={sendProfielPicture}>
-                            Update Profile Picture
-                          </button>
-                          <button className="btn btn-deletePhoto" onClick={toggleOffPP}>
-                            Cancel
-                          </button>
-                        
                       </div>
-                      </div>
-                    </div>
                     </div>
                     <hr width="100%;" color="f77d0a" size="20" align="left"></hr>
                     <h5 class="mb-4 text-primary">User Information</h5>
@@ -660,7 +659,6 @@ export default function MyProfile() {
                         </div>
                       </div>
                     </div>
-
                     <div className="warning-container">
                       <h1 class="mb-4 text-primary">CNIC VERIFICATION</h1>
                       <div class="logo-x" onClick={togglePopup}>

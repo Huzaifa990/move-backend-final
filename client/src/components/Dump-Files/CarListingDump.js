@@ -5,7 +5,7 @@ import master from "../../img/mastercard.svg";
 import cancel from "../../img/remove.png";
 
 export default function CarListingDump() {
-  function togglePopup() {
+  function togglePopupCredit() {
     const popupContainer = document.getElementById("popCredit");
     if (popupContainer.style.display === "block") {
       popupContainer.style.display = "none";
@@ -30,7 +30,7 @@ export default function CarListingDump() {
     }
   }
 
-  function toggleOff() {
+  function toggleOffCredit() {
     const popupContainer = document.getElementById("popCredit");
     popupContainer.style.display = "none";
   }
@@ -42,7 +42,7 @@ export default function CarListingDump() {
           <img
             src={cancel}
             style={{ width: "35px", cursor: "pointer", marginLeft: "100%" }}
-            onClick={toggleOff}
+            onClick={toggleOffCredit}
             alt="button close"
           />
           <div className="popup-credit-flex">
@@ -133,7 +133,7 @@ export default function CarListingDump() {
         </div>
       </div>
 
-      <button onClick={togglePopup}>Toggle</button>
+      <button onClick={togglePopupCredit}>Toggle</button>
     </div>
   );
 }

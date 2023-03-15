@@ -438,6 +438,14 @@ h6,
   position: absolute;
   visibility: hidden;
 }
+#errorApi-credit {
+  display: block;
+  padding: 20px;
+  background-color: crimson;
+  border-radius: 5px;
+  position: absolute;
+  visibility: hidden;
+}
 
 #successApi {
   display: block;
@@ -1956,5 +1964,15 @@ select:focus {
   color: white;
   padding: 10px 30px;
   border-radius: 5px;
+}
+
+#btn-card, #btn-cash{
+  visibility: hidden;
+  position: absolute;
+}
+
+#attempts{
+  margin-top: 20px;
+  display: block;
 }
 
