@@ -4,6 +4,7 @@ const listing = require("../../models/listing");
 const User = require("../../models/users");
 const booking = require("../../models/booking");
 const payment = require("../../models/payment");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const addBooking = async (req, res) => {
   const { car, pickupDate, dropOffDate, _id, accountType, paymentMethod } = req.body;
@@ -44,6 +45,7 @@ const addBooking = async (req, res) => {
       // Match bookings that belong to the same car and satisfy any of the following conditions:
       $match: {
         $and: [
+          { status: { $in: ["pending", "Accepted"] } },
           { car: mongoose.Types.ObjectId(car) },
           {
             $or: [
@@ -241,6 +243,7 @@ const updateBooking = async (req, res) => {
       $match: {
         // Find bookings with the same car id
         $and: [
+          { status: { $in: ["pending", "Accepted"] } },
           { car: mongoose.Types.ObjectId(car) },
           // Find bookings with pickup or drop off times that overlap with the updated booking's pickup and drop off times
           {
@@ -530,6 +533,216 @@ const cancelBooking = async (req, res) => {
   return res.status(200).send({ msg: "Booking Cancelled Successfully" });
 };
 
+const checkAndAddBooking = async (req, res) => {
+  const { car, pickupDate, dropOffDate, _id, accountType, paymentMethod } = req.body;
+  let bookingPossible = false;
+  const valid = mongoose.isValidObjectId(_id);
+  if (!_id || _id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
+
+  let user = await User.findById({ _id });
+  if (!user) {
+    return res.status(404).send({ bookingPossible, msg: "User not found!" });
+  }
+
+  if (accountType === "Lessor") {
+    return res
+      .status(404)
+      .send({ bookingPossible, msg: "This account type is not allowed to do a booking" });
+  }
+
+  let checkCar = await listing.findById(car);
+  if (!checkCar) {
+    return res.status(404).send({ bookingPossible, msg: "Car Listing Not Found!" });
+  }
+  if (checkCar.status === false) {
+    return res.status(422).send({ bookingPossible, msg: "Car Listing Is Inactive!" });
+  }
+
+  const currentDate = moment(new Date());
+  const bookingDate = moment(pickupDate);
+  const dropOff = moment(dropOffDate);
+
+  if (bookingDate < currentDate) {
+    return res.status(404).send({ bookingPossible, msg: "Booking Date/Time Cannot Be In Past" });
+  }
+  if (dropOff <= bookingDate) {
+    return res
+      .status(404)
+      .send({ bookingPossible, msg: "Drop Off Date/Time Cannot Be Before Booking Date/Time" });
+  }
+
+  const sameBooking = await booking.aggregate([
+    {
+      // Match bookings that belong to the same car and satisfy any of the following conditions:
+      $match: {
+        $and: [
+          { status: { $in: ["pending", "Accepted"] } },
+          { car: mongoose.Types.ObjectId(car) },
+          {
+            $or: [
+              {
+                // Existing booking starts before and ends after new booking's pickup date
+                pickupDate: {
+                  $lte: new Date(pickupDate),
+                },
+                dropOffDate: {
+                  $gte: new Date(pickupDate),
+                },
+              },
+              {
+                // Existing booking starts before and ends after new booking's drop-off date
+                pickupDate: {
+                  $lte: new Date(dropOffDate),
+                },
+                dropOffDate: {
+                  $gte: new Date(dropOffDate),
+                },
+              },
+              {
+                // Existing booking starts after new booking's pickup date and ends before new booking's drop-off date
+                pickupDate: {
+                  $gt: new Date(pickupDate),
+                },
+                dropOffDate: {
+                  $lt: new Date(dropOffDate),
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ]);
+
+  if (sameBooking.length > 0) {
+    return res
+      .status(404)
+      .send({ bookingPossible, msg: "This car is already booked in the chosen timeslot!" });
+  }
+
+  bookingPossible = true;
+
+  // Calculate the number of days the car will be booked for
+  let diff = (new Date(dropOffDate).getTime() - new Date(pickupDate).getTime()) / 1000;
+  diff = Math.abs(Math.round(diff));
+  let hours = Math.round(diff / 3600);
+  const bookingDays = Math.ceil(hours / 24);
+
+  // Calculate the total rent for the booking
+  const rent = checkCar.rentPerDay * bookingDays;
+
+  // Create a new payment object
+  const payments = new payment({
+    paymentMethod,
+    amount: rent,
+  });
+  await payments.save();
+
+  const bookingAppliedDate = moment(new Date());
+  const lessor = checkCar.lessor;
+  // Create a new booking object
+  const bookingg = new booking({
+    bookingDate: bookingAppliedDate,
+    lessor: lessor,
+    lessee: _id,
+    car,
+    pickupDate,
+    dropOffDate,
+    bookingDays,
+    paymentDetails: payments._id,
+  });
+  await bookingg.save();
+
+  // Optionally, send an email to confirm the booking
+
+  // Return a success message
+  return res.status(200).send({ bookingPossible, bookingId: bookingg._id });
+};
+
+// initiate transfer
+const cardPayment = async (req, res) => {
+  const { cardNumber, exp_month, exp_year, cvc, bookingId, attempt } = req.body;
+
+  const valid = mongoose.isValidObjectId(bookingId);
+
+  if (!bookingId || bookingId <= 0 || !valid)
+    return res.status(400).send({ attempt, msg: "Booking Not Found" });
+
+  const carBooking = await booking
+    .findById(bookingId)
+    .populate("lessee", "name email _id")
+    .populate("paymentDetails")
+    .populate("car", "carName company carNum");
+
+  if (!carBooking) {
+    return res.status(404).send({ attempt, msg: "Booking not found!" });
+  }
+
+  if (carBooking.paymentDetails.chargeId) {
+    return res.status(402).send({ attempt, msg: "Card is already charged for the booking!" });
+  }
+
+  if (attempt <= 3) {
+    stripe.tokens.create(
+      {
+        card: {
+          number: cardNumber,
+          exp_month,
+          exp_year,
+          cvc,
+        },
+      },
+      (err, token) => {
+        if (err) {
+          return res.status(402).send({ attempt, msg: err.raw.message });
+        } else {
+          // Create a customer with the token and their email
+          stripe.customers.create(
+            {
+              source: token.id,
+              email: carBooking?.lessee?.email,
+              description: "Customer for Move.com",
+            },
+            (err, customer) => {
+              if (err) {
+                return res.status(402).send({ attempt, msg: err.raw.message });
+              } else {
+                // Charge the customer for the order
+                stripe.charges.create(
+                  {
+                    amount: carBooking.paymentDetails.amount * 100,
+                    currency: "PKR",
+                    customer: customer.id,
+                    description: `Booking for ${carBooking.car.company} ${carBooking.car.carName} (${carBooking.car.carNum})`,
+                  },
+                  async (err, charge) => {
+                    if (err) {
+                      return res.status(402).send({ msg: err.raw.message });
+                    } else {
+                      console.log(`Charge created with ID: ${charge.id}`);
+                      await payment.updateOne(
+                        { _id: carBooking.paymentDetails._id },
+                        {
+                          chargeId: charge.id,
+                        }
+                      );
+                      return res.status(200).send({ attempt, msg: "Payment successful" });
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      }
+    );
+  } else {
+    await booking.deleteOne({ _id: bookingId });
+    await payment.deleteOne({ _id: carBooking.paymentDetails._id });
+    return res.status(402).send({ attempt, msg: "Maximum card tries exceeded" });
+  }
+};
+
 module.exports = {
   addBooking,
   deleteBooking,
@@ -543,4 +756,6 @@ module.exports = {
   markAsComplete,
   getLessorBookings,
   getLessorPendingBookings,
+  checkAndAddBooking,
+  cardPayment,
 };
