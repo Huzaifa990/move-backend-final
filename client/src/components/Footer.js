@@ -30,7 +30,7 @@ function Footer(){
               </div>
             </div>
             <div className="col-lg-3 col-md-6 mb-5">
-              <h4 className="text-uppercase text-light mb-4">Usefull Links</h4>
+              <h4 className="text-uppercase text-light mb-4">Useful Links</h4>
               <div className="d-flex flex-column justify-content-start">
                 <a className="text-body mb-2" href="Contact.js"><i className="fa fa-angle-right text-white mr-2" />Private
                   Policy</a>

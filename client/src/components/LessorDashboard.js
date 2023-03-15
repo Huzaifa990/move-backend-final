@@ -11,7 +11,7 @@ import "react-notifications/lib/notifications.css";
 import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
 import unable from "../img/unable3.png";
-
+import reject from "../img/remove.png";
 
 export default function LessorDashboard() {
   const [activeOption, setActiveOption] = useState("allListings");
@@ -273,7 +273,7 @@ export default function LessorDashboard() {
                 ) : activeOption === "bookingsCurrent" ? (
                   <AllBookings />
                 ) : activeOption === "bookingsPending" ? (
-                  <PendingBookings/>
+                  <PendingBookings />
                 ) : (
                   ""
                 )}
@@ -372,21 +372,29 @@ function AllListings() {
                       {item.rentPerDay} PKR
                     </td>
                     <td class="text-right">
-                      {item.status === true && item.approved === true ? (
+                      {item.status === true && item.approved === "Accepted" ? (
                         <>
                           <span style={{ color: "green" }}> Active</span>
                         </>
-                      ) : item.status === false && item.approved === true ?(
+                      ) : item.status === false && item.approved === "Accepted" ? (
                         <span style={{ color: "#6c757d" }}> Inactive</span>
-                      ):<span style={{ color: "#6c757d" }}> Processing</span>}{" "}
+                      ) : item.approved === "Rejected" ? (
+                        <span style={{ color: "#6c757d" }}> Rejected</span>
+                      ) : (
+                        <span style={{ color: "#6c757d" }}> Processing</span>
+                      )}{" "}
                     </td>
                     <td class="text-right">
-                      {item.approved === true ? (<ReactSwitch
-                        className="switch"
-                        disabled={switchState}
-                        checked={item.status}
-                        onChange={() => statusChange(item._id)}
-                      />):<></>}
+                      {item.approved === "Accepted" ? (
+                        <ReactSwitch
+                          className="switch"
+                          disabled={switchState}
+                          checked={item.status}
+                          onChange={() => statusChange(item._id)}
+                        />
+                      ) : (
+                        <></>
+                      )}
                     </td>
                   </tr>
                 );
@@ -404,7 +412,7 @@ function AllListings() {
 function AllBookings() {
   var [stats, setStats] = useState([]);
   const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
-
+  const [switchState, setSwitchState] = useState(false);
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [loading, setLoading] = useState(true);
@@ -421,13 +429,33 @@ function AllBookings() {
     }
 
     getData();
-  }, [userDetails, ingnored]);
+  }, [userDetails, ingnored, switchState]);
 
   function goToBookings(id) {
     navigate("/viewListings", { state: { id: id } });
   }
 
-  
+  async function BookingReject(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/cancel/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.error("Booking Cancelled");
+        setSwitchState(!switchState);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    forceUpdate();
+  }
+
   async function statusChange(id) {
     axios
       .put(
@@ -448,8 +476,7 @@ function AllBookings() {
     await fetch("http://localhost:8080/api/booking/getLessorBookings", {
       headers: { Authorization: userDetails },
     })
-      .then((res) => {
-      })
+      .then((res) => {})
       .catch((e) => {
         console.log(e);
       });
@@ -469,6 +496,7 @@ function AllBookings() {
                 <th class="text-center">Earnings</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Mark As Complete</th>
+                <th class="text-center">Cancel</th>
               </tr>
             </thead>
             <tbody>
@@ -477,13 +505,23 @@ function AllBookings() {
                   <tr>
                     <td onClick={() => goToBookings(item.car._id)}>{item.car.carName}</td>
                     <td onClick={() => goToBookings(item.car._id)}>
-                      {moment.utc(item.pickUpDate).format("llll")}
+                      {moment.utc(item.pickupDate).format("llll")}
                     </td>
                     <td onClick={() => goToBookings(item.car._id)}>
                       {moment.utc(item.dropOffDate).format("llll")}
                     </td>
-                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>{item.paymentDetails.amount} PKR</td>
-                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>{item.status}</td>
+
+                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>
+                      {item.status === "Rejected" || item.status === "Cancelled" ? (
+                        <p>-</p>
+                      ) : (
+                        <>{item.paymentDetails.amount}</>
+                      )}
+                    </td>
+
+                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>
+                      {item.status}
+                    </td>
                     {item.status === "Accepted" ? (
                       <>
                         <td class="text-center">
@@ -498,14 +536,30 @@ function AllBookings() {
                       </>
                     ) : (
                       <>
-                      <td class="text-center">
+                        <td class="text-center">
+                          <img src={unable} width="28" alt="" id="unable" />
+                        </td>
+                      </>
+                    )}
+
+                    {item.status === "Accepted" ? (
+                      <>
+                        <td class="text-center">
                           <img
-                            src={unable}
-                            width="28"
+                            src={reject}
+                            width="35"
                             alt=""
-                            id="unable"
+                            id="tick"
+                            onClick={() => BookingReject(item._id)}
                           />
-                        </td></>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td class="text-center">
+                          <img src={unable} width="28" alt="" id="unable" />
+                        </td>
+                      </>
                     )}
                   </tr>
                 );
@@ -519,7 +573,6 @@ function AllBookings() {
     </>
   );
 }
-
 
 function PendingBookings() {
   var [stats, setStats] = useState([]);
@@ -547,7 +600,6 @@ function PendingBookings() {
     navigate("/viewListings", { state: { id: id } });
   }
 
-  
   async function statusChange(id) {
     axios
       .put(
@@ -568,8 +620,7 @@ function PendingBookings() {
     await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
       headers: { Authorization: userDetails },
     })
-      .then(() => {
-      })
+      .then(() => {})
       .catch((e) => {
         console.log(e);
       });
@@ -596,19 +647,21 @@ function PendingBookings() {
                   <tr>
                     <td onClick={() => goToBookings(item.car._id)}>{item.car.carName}</td>
                     <td onClick={() => goToBookings(item.car._id)}>
-                      {moment.utc(item.pickUpDate).format("llll")}
+                      {moment.utc(item.pickupDate).format("llll")}
                     </td>
                     <td onClick={() => goToBookings(item.car._id)}>
                       {moment.utc(item.dropOffDate).format("llll")}
                     </td>
-                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>{item.paymentDetails.amount} PKR</td>
+                    <td class="text-center" onClick={() => goToBookings(item.car._id)}>
+                      {item.paymentDetails.amount} PKR
+                    </td>
                     <td className="text-center">
                       <img
-                      src={approve}
-                      width="35"
-                      alt=""
-                      id="tick"
-                      onClick={() => statusChange(item._id)}
+                        src={approve}
+                        width="35"
+                        alt=""
+                        id="tick"
+                        onClick={() => statusChange(item._id)}
                       />
                     </td>
                   </tr>

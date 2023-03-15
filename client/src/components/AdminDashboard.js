@@ -648,11 +648,11 @@ function ListingsTable() {
 
 function PendingListingsTable() {
   const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [switchState, setSwitchState] = useState(false);
   const [loading, setLoading] = useState(true);
   var navigate = useNavigate();
   var [listings, setListings] = useState([]);
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const [switchState, setSwitchState] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -777,6 +777,8 @@ function BookingsTable() {
   var navigate = useNavigate();
   var [bookings, setBookings] = useState([]);
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [forceUpdate] = useReducer((x) => x + 1, 0);
+  const [switchState, setSwitchState] = useState(false);
 
   function goToBookings(id) {
     navigate("/viewBookingDashboard", { state: { id: id } });
@@ -794,7 +796,29 @@ function BookingsTable() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails, switchState]);
+
+  async function BookingReject(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/cancel/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.error("Booking Cancelled");
+        setSwitchState(!switchState)
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+      
+    forceUpdate();
+  }
 
   return (
     <div>
@@ -807,19 +831,24 @@ function BookingsTable() {
                 <th>Company</th>
                 <th>Date Listed</th>
                 <th class="text-right">Rent Per Day</th>
-                <th class="text-right">Status</th>
+                <th class="text-right">Cancel Booking</th>
               </tr>
             </thead>
             <tbody>
               {bookings.map((item) => {
                 if (item.status === "Accepted") {
                   return (
-                    <tr onClick={() => goToBookings(item._id)}>
-                      <td>{item.car.carName}</td>
-                      <td>{item.car.company}</td>
-                      <td>{moment.utc(item.listedDate).format("llll")}</td>
-                      <td class="text-right">{item.paymentDetails.amount} PKR</td>
-                      <td class="text-right">{item.status}</td>
+                    <tr>
+                      <td onClick={() => goToBookings(item._id)}>{item.car.carName}</td>
+                      <td onClick={() => goToBookings(item._id)}>{item.car.company}</td>
+                      <td onClick={() => goToBookings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
+                      <td onClick={() => goToBookings(item._id)} class="text-right">{item.paymentDetails.amount} PKR</td>
+                      <td class="text-right"><img
+                            src={reject}
+                            width="35"
+                            alt=""
+                            id="tick"
+                            onClick={() => BookingReject(item._id)}/></td>
                     </tr>
                   );
                 } else {
