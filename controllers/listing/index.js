@@ -27,7 +27,9 @@ const addListing = async (req, res) => {
     return res.status(402).send({ msg: "This Account Cannot Add A Listing" });
   }
 
-  const checkCarNum = await listing.findOne({ carNum: carNum });
+  const checkCarNum = await listing.findOne({
+    carNum: { $regex: new RegExp("^" + carNum + "$", "i") },
+  });
   if (checkCarNum) {
     return res.status(422).send({ msg: "Listing with same car number already exists" });
   }

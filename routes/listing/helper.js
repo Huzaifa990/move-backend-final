@@ -160,5 +160,6 @@ const citiesInPak = [
 ];
 
 const base64ImgPattern = new RegExp(/^data:image\/([a-zA-Z]*);base64,([^"]*)$/);
+const listingNumber = new RegExp(/^[A-Za-z0-9]+$/i);
 
-module.exports = { citiesInPak, base64ImgPattern };
+module.exports = { citiesInPak, base64ImgPattern, listingNumber };
