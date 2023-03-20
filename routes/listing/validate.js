@@ -1,5 +1,5 @@
 const yup = require("yup");
-const { citiesInPak, base64ImgPattern } = require("./helper");
+const { citiesInPak, base64ImgPattern, listingNumber } = require("./helper");
 
 const maxValue = parseInt(new Date().getFullYear());
 
@@ -21,7 +21,12 @@ module.exports.validateNew = yup.object({
     .array()
     .of(yup.string().matches(base64ImgPattern, "Uploaded File Must Be An Image"))
     .label("Picture"),
-  carNum: yup.string().required().label("Car Number"),
+  carNum: yup
+    .string()
+    .matches(listingNumber, "Car Number can only contain alphabets and digits eg AAA111")
+    .required()
+    .typeError("Car Number can only contain alphabets and digits eg AAA111")
+    .label("Car Number"),
 });
 
 module.exports.validateUpdate = yup.object({
