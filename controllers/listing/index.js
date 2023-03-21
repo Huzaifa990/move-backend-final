@@ -21,6 +21,7 @@ const addListing = async (req, res) => {
     _id,
     carNum,
     accountType,
+    fuelEconomy,
   } = req.body;
 
   if (accountType === "Lessee") {
@@ -48,6 +49,7 @@ const addListing = async (req, res) => {
     location,
     rentPerDay,
     carNum,
+    fuelEconomy,
     picture,
   });
   await listedCar.save();
@@ -120,6 +122,7 @@ const updateListing = async (req, res) => {
       location,
       rentPerDay,
       picture,
+      fuelEconomy,
       // verified: false,
     }
   );

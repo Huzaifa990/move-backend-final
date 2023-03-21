@@ -51,6 +51,9 @@ const Listings = new mongoose.Schema(
       type: String,
       default: "pending",
     },
+    fuelEconomy: {
+      type: String,
+    },
   },
   {
     timestamps: true,
