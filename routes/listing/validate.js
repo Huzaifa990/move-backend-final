@@ -27,6 +27,12 @@ module.exports.validateNew = yup.object({
     .required()
     .typeError("Car Number can only contain alphabets and digits eg AAA111")
     .label("Car Number"),
+  fuelEconomy: yup
+    .number()
+    .required()
+    .min(1)
+    .label("Fuel Economy")
+    .typeError("Fuel Economy must be a number"),
 });
 
 module.exports.validateUpdate = yup.object({
@@ -48,4 +54,10 @@ module.exports.validateUpdate = yup.object({
     .of(yup.string().matches(base64ImgPattern, "Uploaded File Must Be An Image"))
     .label("Picture"),
   carNum: yup.string().required().label("Car Number"),
+  fuelEconomy: yup
+    .number()
+    .required()
+    .min(1)
+    .label("Fuel Economy")
+    .typeError("Fuel Economy must be a number"),
 });
