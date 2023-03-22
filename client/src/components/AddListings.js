@@ -67,6 +67,8 @@ const sendData = () => {
   let transmissio = document.getElementById("transmission");
   let transmission = transmissio[transmissio.selectedIndex].value;
   let carNum = document.getElementById("carNum").value;
+  let fuelEconomy = document.getElementById("fuelMileage").value;
+  let description = document.getElementById("details-box").value;
   console.log(picture);
   axios
     .post(
@@ -81,6 +83,8 @@ const sendData = () => {
         rentPerDay,
         picture,
         carNum,
+        fuelEconomy,
+        description
       },
       {
         headers: headers,
@@ -102,6 +106,7 @@ const sendData = () => {
       document.getElementById("userPrice").value = null;
       document.getElementById("inp").value = null;
       document.getElementById("carNum").value = null;
+      document.getElementById("fuelMileage").value = null;
       document.querySelector("#img").style.visibility = "hidden";
       document.querySelector("#img").style.position = "absolute";
       
@@ -154,12 +159,25 @@ const sendData = () => {
         document.getElementById("errorApi").style.visibility = "visible";
         document.getElementById("errorApi").style.position = "relative";
         document.getElementById("errorApi").style.width = "100%";
+      } 
+      else if (e.response.data.error.fuelEconomy !== undefined) {
+        document.getElementById("make").style.border = "none";
+        document.getElementById("model").style.border = "none";
+        document.getElementById("modelYear").style.border = "none";
+        document.getElementById("mileage").style.border = "none";
+        document.getElementById("carNum").style.border = "none";
+        document.getElementById("fuelMileage").style.border = "2px solid crimson";
+        document.getElementById("errorMessage").innerText = e.response.data.error.fuelEconomy;
+        document.getElementById("errorApi").style.visibility = "visible";
+        document.getElementById("errorApi").style.position = "relative";
+        document.getElementById("errorApi").style.width = "100%";
       } else if (e.response.data.error.transmission !== undefined) {
         document.getElementById("make").style.border = "none";
         document.getElementById("model").style.border = "none";
         document.getElementById("modelYear").style.border = "none";
         document.getElementById("mileage").style.border = "none";
         document.getElementById("carNum").style.border = "none";
+        document.getElementById("fuelMileage").style.border = "none";
         document.getElementById("transmission").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.transmission;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -172,6 +190,7 @@ const sendData = () => {
         document.getElementById("mileage").style.border = "none";
         document.getElementById("transmission").style.border = "none";
         document.getElementById("carNum").style.border = "none";
+        document.getElementById("fuelMileage").style.border = "none";
         document.getElementById("location").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.location;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -185,6 +204,7 @@ const sendData = () => {
         document.getElementById("transmission").style.border = "none";
         document.getElementById("carNum").style.border = "none";
         document.getElementById("location").style.border = "none";
+        document.getElementById("fuelMileage").style.border = "none";
         document.getElementById("userPrice").style.border = "2px solid crimson";
         document.getElementById("errorMessage").innerText = e.response.data.error.rentPerDay;
         document.getElementById("errorApi").style.visibility = "visible";
@@ -199,6 +219,7 @@ const sendData = () => {
         document.getElementById("carNum").style.border = "none";
         document.getElementById("location").style.border = "none";
         document.getElementById("userPrice").style.border = "none";
+        document.getElementById("fuelMileage").style.border = "none";
         document.getElementById("errorMessage").innerText = e.response.data.error.picture;
         document.getElementById("errorApi").style.visibility = "visible";
         document.getElementById("errorApi").style.position = "relative";
@@ -263,9 +284,19 @@ const sendData = () => {
             <input
               type="text"
               className="form-control p-4"
-              placeholder=""
+              placeholder="XYZ999"
               required="required"
               id="carNum"
+            />
+          </div>
+          <div className="col-6 form-group">
+            <label for="">Fuel Mileage (KM/L):</label>
+            <input
+              type="number"
+              className="form-control p-4"
+              placeholder="eg: 10.2"
+              required="required"
+              id="fuelMileage"
             />
           </div>
 
@@ -330,6 +361,14 @@ const sendData = () => {
               id="userPrice"
               min="500"
             />
+          </div>
+        </div>
+        <br />
+        <p className="sub-form-heading">Description:</p>
+        <div className="row">
+          <div className="col-12 form-group">
+            <label for="">About your business (Maximum 500 characters): </label>
+            <textarea name="details" id="details-box" placeholder="DESCRIPTION.." min="50" max="500"></textarea>
           </div>
         </div>
 
