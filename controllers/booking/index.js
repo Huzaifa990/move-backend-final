@@ -4,6 +4,7 @@ const listing = require("../../models/listing");
 const User = require("../../models/users");
 const booking = require("../../models/booking");
 const payment = require("../../models/payment");
+const wallet = require("../../models/wallet");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const addBooking = async (req, res) => {
@@ -496,7 +497,7 @@ const cancelBooking = async (req, res) => {
   const valid = mongoose.isValidObjectId(id);
   if (!id || id <= 0 || !valid) return res.status(400).send({ msg: "Invalid Id" });
 
-  const bookingFound = await booking.findById(id);
+  const bookingFound = await booking.findById(id).populate("paymentDetails");
   if (!bookingFound) {
     return res.status(404).send({ msg: "Booking not found!" });
   }
@@ -528,9 +529,131 @@ const cancelBooking = async (req, res) => {
     }
   );
 
-  //TO DO: deal payment refunds scenario.
+  if (accountType == "Lessee" && bookingFound.paymentDetails.chargeId) {
+    const chargeId = bookingFound.paymentDetails.chargeId;
 
-  return res.status(200).send({ msg: "Booking Cancelled Successfully" });
+    const charge = await stripe.charges.retrieve(chargeId);
+    const refundAmount = Math.round(charge.amount * 0.8); // 80% refund
+
+    stripe.charges.list({ limit: 1000 }, (err, charges) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const charge = charges.data.find((c) => c.id === chargeId);
+        if (charge) {
+          stripe.refunds
+            .create({
+              amount: refundAmount,
+              charge: chargeId,
+            })
+            .then(() => {
+              return res.status(200).send({
+                msg: `Booking Cancelled, Your refund process is initiated for amount PKR ${
+                  refundAmount / 100
+                }`,
+              });
+            })
+            .catch((error) => {
+              return res.status(400).send({ msg: error.raw.message });
+            });
+        } else {
+          console.error(`Charge ID ${chargeId} not found.`);
+        }
+      }
+    });
+  } else if (accountType == "Lessee") {
+    const walletData = new wallet({
+      userId: _id,
+      amount: bookingFound.paymentDetails.amount * -0.2,
+      bookingId: id,
+      dropOffDate: bookingFound.dropOffDate,
+    });
+    await walletData.save();
+
+    return res.status(200).send({
+      msg: `Cancellation successful: PKR ${
+        bookingFound.paymentDetails.amount * 0.2
+      } has been deducted from your wallet`,
+    });
+  } else if (accountType == "Lessor") {
+    if (bookingFound.paymentDetails.chargeId) {
+      const chargeId = bookingFound.paymentDetails.chargeId;
+      const charge = await stripe.charges.retrieve(chargeId);
+      const refundAmount = Math.round(charge.amount); // 100% refund
+
+      stripe.charges.list({ limit: 1000 }, (err, charges) => {
+        if (err) {
+          console.error(err);
+        } else {
+          const charge = charges.data.find((c) => c.id === chargeId);
+          if (charge) {
+            stripe.refunds
+              .create({
+                amount: refundAmount,
+                charge: chargeId,
+              })
+              .then(() => {
+                return res.status(200).send({
+                  msg: `Booking Cancelled, refund process is initiated for amount PKR ${
+                    refundAmount / 100
+                  } to lessee`,
+                });
+              })
+              .catch((error) => {
+                return res.status(400).send({ msg: error.raw.message });
+              });
+          } else {
+            console.error(`Charge ID ${chargeId} not found.`);
+          }
+        }
+      });
+    }
+    const walletData = new wallet({
+      userId: _id,
+      amount: -1000,
+      bookingId: id,
+      dropOffDate: bookingFound.dropOffDate,
+    });
+    await walletData.save();
+
+    return res.status(200).send({
+      msg: `Cancellation successful: PKR 1000 has been deducted from your wallet`,
+    });
+  } else {
+    if (bookingFound.paymentDetails.chargeId) {
+      const chargeId = bookingFound.paymentDetails.chargeId;
+      const charge = await stripe.charges.retrieve(chargeId);
+      const refundAmount = Math.round(charge.amount); // 100% refund
+
+      stripe.charges.list({ limit: 1000 }, (err, charges) => {
+        if (err) {
+          console.error(err);
+        } else {
+          const charge = charges.data.find((c) => c.id === chargeId);
+          if (charge) {
+            stripe.refunds
+              .create({
+                amount: refundAmount,
+                charge: chargeId,
+              })
+              .then(() => {
+                return res.status(200).send({
+                  msg: `Booking Cancelled, refund process is initiated for amount PKR ${
+                    refundAmount / 100
+                  } to lessee`,
+                });
+              })
+              .catch((error) => {
+                return res.status(400).send({ msg: error.raw.message });
+              });
+          } else {
+            console.error(`Charge ID ${chargeId} not found.`);
+          }
+        }
+      });
+    }
+    return res.status(200).send({ msg: "Booking Cancelled Successfully" });
+  }
 };
 
 const checkAndAddBooking = async (req, res) => {
@@ -719,7 +842,7 @@ const cardPayment = async (req, res) => {
                     if (err) {
                       return res.status(402).send({ msg: err.raw.message });
                     } else {
-                      console.log(`Charge created with ID: ${charge.id}`);
+                      console.info(`Charge created with ID: ${charge.id}`);
                       await payment.updateOne(
                         { _id: carBooking.paymentDetails._id },
                         {
