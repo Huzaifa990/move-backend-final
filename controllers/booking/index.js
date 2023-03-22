@@ -392,7 +392,7 @@ const rejectBooking = async (req, res) => {
     return res.status(422).send({ msg: "You are not allowed to reject a booking" });
   }
 
-  const bookingFound = await booking.findById(id);
+  const bookingFound = await booking.findById(id).populate("paymentDetails");
   if (!bookingFound) {
     return res.status(404).send({ msg: "Booking not found!" });
   }
@@ -412,7 +412,80 @@ const rejectBooking = async (req, res) => {
     }
   );
 
-  return res.status(200).send({ msg: "Booking Rejected Successfully" });
+  if (accountType == "Admin" && bookingFound.paymentDetails.chargeId) {
+    const chargeId = bookingFound.paymentDetails.chargeId;
+    const charge = await stripe.charges.retrieve(chargeId);
+    const refundAmount = charge.amount; // 100% refund to lessee
+    stripe.charges.list({ limit: 1000 }, (err, charges) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const charge = charges.data.find((c) => c.id === chargeId);
+        if (charge) {
+          stripe.refunds
+            .create({
+              amount: refundAmount,
+              charge: chargeId,
+            })
+            .then(() => {
+              return res.status(200).send({
+                msg: `Booking Cancelled, Refund initiated to lessee for amount PKR ${
+                  refundAmount / 100
+                }`,
+              });
+            })
+            .catch((error) => {
+              return res.status(400).send({ msg: error.raw.message });
+            });
+        } else {
+          console.error(`Charge ID ${chargeId} not found.`);
+        }
+      }
+    });
+  } else if (accountType == "Lessor") {
+    const walletData = new wallet({
+      userId: _id,
+      amount: -1000,
+      bookingId: id,
+      dropOffDate: bookingFound.dropOffDate,
+    });
+    await walletData.save();
+
+    if (bookingFound.paymentDetails.chargeId) {
+      const chargeId = bookingFound.paymentDetails.chargeId;
+      const charge = await stripe.charges.retrieve(chargeId);
+      const refundAmount = charge?.amount; // 100% refund to lessee
+
+      stripe.charges.list({ limit: 1000 }, (err, charges) => {
+        if (err) {
+          console.error(err);
+        } else {
+          const charge = charges.data.find((c) => c.id === chargeId);
+          if (charge) {
+            stripe.refunds
+              .create({
+                amount: refundAmount,
+                charge: chargeId,
+              })
+              .then(() => {
+                return res.status(200).send({
+                  msg: `Booking Cancelled, Rs. 1000 has been deducted from your wallet's balance`,
+                });
+              })
+              .catch((error) => {
+                return res.status(400).send({ msg: error.raw.message });
+              });
+          } else {
+            console.error(`Charge ID ${chargeId} not found.`);
+          }
+        }
+      });
+    } else {
+      return res.status(200).send({
+        msg: `Booking Cancelled, Rs. 1000 has been deducted from your wallet's balance`,
+      });
+    }
+  }
 };
 
 //bookings of lessor's cars
