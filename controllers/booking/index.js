@@ -610,14 +610,16 @@ const cancelBooking = async (req, res) => {
     }
     const walletData = new wallet({
       userId: _id,
-      amount: -1000,
+      amount: bookingFound.paymentDetails.amount * -0.2,
       bookingId: id,
       dropOffDate: bookingFound.dropOffDate,
     });
     await walletData.save();
 
     return res.status(200).send({
-      msg: `Cancellation successful: PKR 1000 has been deducted from your wallet`,
+      msg: `Cancellation successful: PKR ${
+        bookingFound.paymentDetails.amount * -0.2
+      } has been deducted from your wallet`,
     });
   } else {
     if (bookingFound.paymentDetails.chargeId) {
