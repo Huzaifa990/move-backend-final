@@ -1976,3 +1976,19 @@ select:focus {
   display: block;
 }
 
+#details-box{
+  width: 100%;
+  display: block;
+  padding: 10px;
+  min-height: 200px;
+  border: 1px solid #f77d0a;
+  background-color: #232627cc;
+  color: white;
+  resize: none;
+  border-radius: 5px;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
