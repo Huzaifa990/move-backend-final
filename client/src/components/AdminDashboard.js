@@ -779,6 +779,8 @@ function BookingsTable() {
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [forceUpdate] = useReducer((x) => x + 1, 0);
   const [switchState, setSwitchState] = useState(false);
+  const [show,setShow]=useState();
+  const [update, setUpdate] = useState(false);
 
   function goToBookings(id) {
     navigate("/viewBookingDashboard", { state: { id: id } });
@@ -796,7 +798,7 @@ function BookingsTable() {
     }
 
     getData();
-  }, [userDetails, switchState]);
+  }, [userDetails, switchState, update]);
 
   async function BookingReject(id) {
     axios
@@ -811,6 +813,7 @@ function BookingsTable() {
         console.log(res);
         NotificationManager.error("Booking Cancelled");
         setSwitchState(!switchState)
+        setUpdate(!update);
       })
       .catch((e) => {
         console.log(e);
@@ -819,6 +822,22 @@ function BookingsTable() {
       
     forceUpdate();
   }
+
+  function togglePopup(item) {
+    setShow(item);
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
+  }
+
 
   return (
     <div>
@@ -848,7 +867,16 @@ function BookingsTable() {
                             width="35"
                             alt=""
                             id="tick"
-                            onClick={() => BookingReject(item._id)}/></td>
+                            onClick={() => togglePopup(item)}/></td>
+                            <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
+                        <br />
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
+                        
+                        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        </div>
+                    </div>
                     </tr>
                   );
                 } else {
@@ -871,6 +899,8 @@ function PendingBookingsTable() {
   var navigate = useNavigate();
   var [bookings, setBookings] = useState([]);
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [show,setShow]=useState();
+  const [update, setUpdate] = useState(false);
 
   function goToBookings(id) {
     navigate("/viewBookingDashboard", { state: { id: id } });
@@ -888,7 +918,49 @@ function PendingBookingsTable() {
     }
 
     setInterval(getData,5000);
-  }, [userDetails, ingnored]);
+  }, [userDetails, ingnored, update]);
+
+  async function acceptBooking(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/approve/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.success("Booking Approved!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
+      headers: { Authorization: userDetails },
+    })
+      .then(() => {})
+      .catch((e) => {
+        console.log(e);
+      });
+    forceUpdate();
+  }
+
+  function togglePopup(item) {
+    setShow(item);
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
+  }
 
   async function rejectBooking(id) {
     axios
@@ -902,6 +974,7 @@ function PendingBookingsTable() {
       .then((res) => {
         console.log(res);
         NotificationManager.error("Booking Rejected");
+        setUpdate(!update);
       })
       .catch((e) => {
         console.log(e);
@@ -932,7 +1005,7 @@ function PendingBookingsTable() {
                 <th>Date Listed</th>
                 <th class="text-right">Rent Per Day</th>
                 <th>Status</th>
-                <th class="text-right">Action</th>
+                <th class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -951,15 +1024,31 @@ function PendingBookingsTable() {
                       <td onClick={() => goToBookings(item._id)} id="stat">
                         {item.status}
                       </td>
-                      <td className="text-right">
+                      <td className="tr-flex" id="approval">
+                      <img
+                        src={approve}
+                        width="35"
+                        alt=""
+                        id="tick"
+                        onClick={() => acceptBooking(item._id)}
+                      />
                         <img
                           src={reject}
                           width="35"
                           alt=""
                           id="tick"
-                          onClick={() => rejectBooking(item._id)}
+                          onClick={() => togglePopup(item)}
                         />
                       </td>
+                      <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
+                        <br />
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => rejectBooking(show?._id)}>Cancel Booking</button>
+                        
+                        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        </div>
+                    </div>
                     </tr>
                   );
                 } else {

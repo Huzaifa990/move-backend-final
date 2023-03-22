@@ -13,9 +13,12 @@ import axios from "axios";
 export default function LesseeDashboard() {
   var [stats, setStats] = useState([]);
   var [Analytics, setAnalytics] = useState({});
+  const [show,setShow]=useState();
   const [loading, setLoading] = useState(true);
+  const [update, setUpdate] = useState(false);
   const [forceUpdate] = useReducer((x) => x + 1, 0);
   const [switchState, setSwitchState] = useState(false);
+  const [fees, setFees] = useState();
 
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -34,7 +37,7 @@ export default function LesseeDashboard() {
     }
 
     getData();
-  }, [userDetails]);
+  }, [userDetails,update]);
 
   function goToBookings(id) {
     navigate("/viewBookingDashboard", { state: { id: id } });
@@ -52,7 +55,8 @@ export default function LesseeDashboard() {
       .then((res) => {
         console.log(res);
         NotificationManager.error("Booking Cancelled");
-        setSwitchState(!switchState)
+        setSwitchState(!switchState);
+        setUpdate(!update);
       })
       .catch((e) => {
         console.log(e);
@@ -60,6 +64,24 @@ export default function LesseeDashboard() {
 
       
     forceUpdate();
+  }
+
+  function togglePopup(item) {
+    setShow(item);
+    var discount = item.paymentDetails.amount;
+    discount = discount * 0.2;
+    setFees(discount);
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
   }
 
   return (
@@ -272,23 +294,35 @@ export default function LesseeDashboard() {
             </tr>
           </thead>
           <tbody>
+          
             {stats.map((item) => {
               return (
-                <tr onClick={()=>goToBookings(item._id)}>
-                  <td>{item.car.carName}</td>
-                  <td>{item.car.company}</td>
-                  <td>{moment.utc(item.listedDate).format("llll")}</td>
-                  <td class="text-right">{item.paymentDetails.amount} PKR</td>
-                  <td class="text-right">{item.status}</td>
+                <tr>
+                  <td onClick={()=>goToBookings(item._id)}>{item.car.carName}</td>
+                  <td onClick={()=>goToBookings(item._id)}>{item.car.company}</td>
+                  <td onClick={()=>goToBookings(item._id)}>{moment.utc(item.listedDate).format("llll")}</td>
+                  <td onClick={()=>goToBookings(item._id)} class="text-right">{item.paymentDetails.amount} PKR</td>
+                  <td onClick={()=>goToBookings(item._id)} class="text-right">{item.status}</td>
                   <td class="text-right">
                   {item.status === "Accepted" ? (<img
                             src={reject}
                             width="35"
                             alt=""
                             id="tick"
-                            onClick={() => BookingReject(item._id)}/>):<></>}
+                            onClick={() => togglePopup(item)}/>):<></>}
 
                   </td>
+                  <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel your booking?</h2>
+                        <br />
+                        <p>You will be charged {fees} of the {show?.paymentDetails?.amount} amount you paid.</p>
+
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
+                        
+                        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        </div>
+                    </div>
                 </tr>
               );
             })}

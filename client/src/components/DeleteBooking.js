@@ -50,7 +50,7 @@ const DeleteBooking = () => {
   return (
     <>
       <div className="signup-form-container">
-        <h1 className="display text-uppercase text-white mb-3 text-center p-4">Delete Booking</h1>
+        <h1 className="display text-uppercase text-white mb-3 text-center p-4">Cancel Booking</h1>
 
         <label htmlFor id="errorApi">
           {" "}

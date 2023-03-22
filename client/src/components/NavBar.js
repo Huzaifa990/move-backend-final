@@ -148,6 +148,12 @@ const NavBar = () => {
                         ) : null}
 
                         {userName !== null ? (
+                          accountType === "Lessor" || accountType === "Lessee" ? (
+                            <Link to="/myWallet">My Wallet</Link>
+                          ) : null
+                        ) : null}
+
+                        {userName !== null ? (
                           accountType === "Lessee" ? (
                             <Link to="/lesseeDashboard">My Dashboard</Link>
                           ) : null

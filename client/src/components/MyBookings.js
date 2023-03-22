@@ -1,15 +1,25 @@
 import moment from "moment/moment";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
+import reject from "../img/remove.png";
+import axios from "axios";
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
-const MyListings = () => {
+const MyBookings = () => {
   const [name, setName] = useState([]);
   const navigate = useNavigate();
+  const [show,setShow]=useState();
+  const [update, setUpdate] = useState(false);
+  var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [switchState, setSwitchState] = useState(false);
+  const [forceUpdate] = useReducer((x) => x + 1, 0);
   // State of true means data is loading state of false means data has been loaded
 
   const [loading, setLoading] = useState(true);
+  const [fees, setFees] = useState();
 
   //Function being called that fetches data from api.
   useEffect(() => {
@@ -36,10 +46,6 @@ const MyListings = () => {
     navigate("/editBooking", { state: { id: id } });
   }
 
-  function goToDelete(id) {
-    navigate("/deleteBooking", { state: { id: id } });
-  }
-
   //Function that also passes the ID of the object to the navigated page.
   function showId(id) {
     goToDetails(id);
@@ -49,13 +55,52 @@ const MyListings = () => {
     goToEdit(id);
   }
 
-  function deleteCar(id) {
-    goToDelete(id);
+
+  function togglePopup(item) {
+    setShow(item);
+    var discount = item.paymentDetails.amount;
+    discount = discount * 0.2;
+    setFees(discount);
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
+  }
+
+  async function BookingReject(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/cancel/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.error("Booking Cancelled");
+        setSwitchState(!switchState);
+        setUpdate(!update);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+      
+    forceUpdate();
   }
 
   return (
     <>
       <div className="">
+        <NotificationContainer/>
         {/* This condition allows us to render all of the objects received from the Api. It runs for the count of objects received. */}
         {loading === true ? (
           <Loader />
@@ -78,6 +123,8 @@ const MyListings = () => {
                       src={data?.car?.picture[0]}
                       alt="car"
                     />
+
+                    {data.status === "Accepted" || data.status === "pending" ? (
                     <ul style={{ float: "right" }} className="list-inline">
                       <li className="list-inline-item">
                         <button
@@ -98,12 +145,30 @@ const MyListings = () => {
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Delete"
-                          onClick={() => deleteCar(data._id)}
+                          onClick={() => togglePopup(data)}
                         >
-                          <i className="fa fa-trash"></i>
+                          <img
+                            src={reject}
+                            width="20"
+                            alt=""
+                            id="tick"/>
                         </button>
                       </li>
                     </ul>
+                    ) : <></>}
+
+                    <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel your booking?</h2>
+                        <br />
+                        <p>You will be charged {fees} of the {show?.paymentDetails?.amount} amount you paid.</p>
+
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
+                        
+                        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        </div>
+                    </div>
+
                     {/* Moment plugin used to make the time and date format readable. */}
                     <div className="d-flex mb-4">
                       <div className="px-2 border-left border-right">
@@ -170,4 +235,4 @@ const MyListings = () => {
   );
 };
 
-export default MyListings;
+export default MyBookings;
