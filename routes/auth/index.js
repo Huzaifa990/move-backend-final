@@ -18,13 +18,6 @@ const {
   getAllUsers,
   getAllPendingApprovalUsers,
   getUserById,
-
-  // forgotPassword,
-  // getById,
-  // changePassword,
-  // deleteProfile,
-  // getPayment,
-  // resetPassword,
 } = require("../../controllers/auth");
 const { ensureAuth, Validator } = require("../../middleware/ensure-auth");
 const {
@@ -65,8 +58,5 @@ app.put("/updateEmail", ensureAuth, Validator(validateEmail, "body"), updateEmai
 app.post("/forgotPassword", Validator(validateForgotPassword, "body"), forgotPassword);
 app.put("/setPassword", Validator(validateSetPassword, "body"), setPassword);
 app.put("/activateAccount", activateAccount);
-
-// app.post("/delete-profile", Validator(validateDeleteProfile, "body"), ensureAuth, deleteProfile);
-// app.get("/payment", ensureAuth, getPayment);
 
 module.exports = app;
