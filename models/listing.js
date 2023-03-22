@@ -54,6 +54,9 @@ const Listings = new mongoose.Schema(
     fuelEconomy: {
       type: String,
     },
+    description: {
+      type: String,
+    },
   },
   {
     timestamps: true,

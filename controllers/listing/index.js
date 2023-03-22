@@ -22,6 +22,7 @@ const addListing = async (req, res) => {
     carNum,
     accountType,
     fuelEconomy,
+    description,
   } = req.body;
 
   if (accountType === "Lessee") {
@@ -51,6 +52,7 @@ const addListing = async (req, res) => {
     carNum,
     fuelEconomy,
     picture,
+    description,
   });
   await listedCar.save();
 
@@ -92,8 +94,18 @@ const getById = async (req, res) => {
 };
 
 const updateListing = async (req, res) => {
-  const { carName, company, model, mileage, transmission, carNum, location, rentPerDay, picture } =
-    req.body;
+  const {
+    carName,
+    company,
+    model,
+    mileage,
+    transmission,
+    carNum,
+    location,
+    rentPerDay,
+    picture,
+    description,
+  } = req.body;
 
   const id = req.params.id;
   const valid = mongoose.isValidObjectId(id);
@@ -123,6 +135,7 @@ const updateListing = async (req, res) => {
       rentPerDay,
       picture,
       fuelEconomy,
+      description,
       // verified: false,
     }
   );
