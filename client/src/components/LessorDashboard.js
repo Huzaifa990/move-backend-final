@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useReducer } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Line,  } from "react-chartjs-2";
 import "chart.js/auto";
 import Loader from "./Loader";
 import ReactSwitch from "react-switch";
@@ -40,6 +40,7 @@ export default function LessorDashboard() {
     getData();
   }, [userDetails]);
 
+  
   return (
     <div className="stats-section">
       <NotificationContainer />
@@ -241,6 +242,7 @@ export default function LessorDashboard() {
               </div>
             </div>
           </div>
+
           <h1>Your Cars: </h1>
           <br /> <br />
           <div className="table-responsive table--no-card m-b-40">
@@ -416,6 +418,9 @@ function AllBookings() {
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [loading, setLoading] = useState(true);
+  const [show,setShow]=useState();
+  const [update, setUpdate] = useState(false);
+  const [fees, setFees] = useState();
 
   useEffect(() => {
     async function getData() {
@@ -429,12 +434,13 @@ function AllBookings() {
     }
 
     getData();
-  }, [userDetails, ingnored, switchState]);
+  }, [userDetails, ingnored, switchState, update]);
 
   function goToBookings(id) {
     navigate("/viewListings", { state: { id: id } });
   }
 
+  
   async function BookingReject(id) {
     axios
       .put(
@@ -448,12 +454,32 @@ function AllBookings() {
         console.log(res);
         NotificationManager.error("Booking Cancelled");
         setSwitchState(!switchState);
+        setUpdate(!update);
       })
       .catch((e) => {
         console.log(e);
       });
 
     forceUpdate();
+  }
+
+  function togglePopup(item) {
+    setShow(item);
+    var discount = item.paymentDetails.amount;
+    discount = discount * 0.2;
+    console.log(discount);
+    setFees(discount);
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
   }
 
   async function statusChange(id) {
@@ -550,7 +576,7 @@ function AllBookings() {
                             width="35"
                             alt=""
                             id="tick"
-                            onClick={() => BookingReject(item._id)}
+                            onClick={() => togglePopup(item)}
                           />
                         </td>
                       </>
@@ -561,6 +587,17 @@ function AllBookings() {
                         </td>
                       </>
                     )}
+                     <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
+                        <br />
+                        <p>You will be charged {fees} Pkr for cancelling this booking!</p>
+
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
+                        
+                        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        </div>
+                    </div>
                   </tr>
                 );
               })}
@@ -581,6 +618,8 @@ function PendingBookings() {
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [loading, setLoading] = useState(true);
+  const [show,setShow]=useState();
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -594,13 +633,60 @@ function PendingBookings() {
     }
 
     getData();
-  }, [userDetails, ingnored]);
+  }, [userDetails, ingnored, update]);
 
   function goToBookings(id) {
     navigate("/viewListings", { state: { id: id } });
   }
 
-  async function statusChange(id) {
+  function togglePopup(item) {
+    setShow(item);
+    const popupContainer = document.getElementById("pop");
+    if (popupContainer.style.display === "block") {
+      popupContainer.style.display = "none";
+    } else {
+      popupContainer.style.display = "block";
+    }
+  }
+
+  function toggleOff() {
+    const popupContainer = document.getElementById("pop");
+    popupContainer.style.display = "none";
+  }
+
+  async function rejectBooking(id) {
+    axios
+      .put(
+        "http://localhost:8080/api/booking/reject/" + id,
+        {},
+        {
+          headers: { Authorization: userDetails },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        NotificationManager.error("Booking Rejected");
+        setUpdate(!update);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+      await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingBookings", {
+      headers: { Authorization: userDetails },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    forceUpdate();
+  }
+
+
+  async function acceptBooking(id) {
     axios
       .put(
         "http://localhost:8080/api/booking/approve/" + id,
@@ -638,7 +724,7 @@ function PendingBookings() {
                 <th>Pickup Date</th>
                 <th>Delivery Date</th>
                 <th class="text-center">Earnings</th>
-                <th class="text-center">Accept</th>
+                <th class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -655,15 +741,32 @@ function PendingBookings() {
                     <td class="text-center" onClick={() => goToBookings(item.car._id)}>
                       {item.paymentDetails.amount} PKR
                     </td>
-                    <td className="text-center">
+                    <td className="tr-flex" id="approval">
                       <img
                         src={approve}
                         width="35"
                         alt=""
                         id="tick"
-                        onClick={() => statusChange(item._id)}
+                        onClick={() => acceptBooking(item._id)}
+                      />
+                      <img
+                        src={reject}
+                        width="35"
+                        alt=""
+                        id="tick"
+                        onClick={() => togglePopup(item)}
                       />
                     </td>
+                    <div class="popup-container" id="pop" onClick={toggleOff}>
+                      <div class="popup">
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
+                        <br />
+                        <p>You will be charged 1000 Pkr for rejecting this booking!</p>
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => rejectBooking(show?._id)}>Cancel Booking</button>
+                        
+                        <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        </div>
+                    </div>
                   </tr>
                 );
               })}

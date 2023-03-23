@@ -814,6 +814,31 @@ select:focus {
   margin-bottom: 25px;
 }
 
+.wallet-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  padding: 50px;
+  background-color: #1c1e32;
+  border-radius: 15px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.stats-containerTwo {
+  width: 100%;
+  justify-content: space-between;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding: 50px;
+  background-color: #272927;
+  border-radius: 15px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+
 .stats-section {
   padding: 50px;
 }
@@ -1369,6 +1394,28 @@ select:focus {
     width: 100%;
   }
 }
+
+.chart-2 {
+  padding: 20px;
+  width: 650px;
+  height: 650px;
+  color: white;
+}
+
+@media screen and (max-width: 750px) {
+  .chart-2 {
+    width: 100%;
+    margin-bottom: -75px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .chart-2 {
+    width: 100%;
+    margin-bottom: -325px;
+  }
+}
+
 
 .account-settings .user-profile {
   margin: 0 0 1rem 0;
@@ -1991,4 +2038,151 @@ select:focus {
 ::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
+
+.containerWallet {
+  width: 100%;
+  max-width: 750px;
+  padding: 30px;
+  background: #181a1b ;
+  border-radius: 30px;
+  color: var(--primary);
+}
+
+.pieWallet {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+@keyframes pieWallet {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.inner-circleWallet {
+  width: 80%;
+  height: 80%;
+  background: rgb(6, 6, 6);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inner-circleWallet p {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.flexWallet {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.pro-bar-containerWallet {
+  display: flex;
+  gap: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row-containerWallet,
+.percentWallet {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rowWallet {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.barWallet {
+  width: 200px;
+  height: 10px;
+  background: #d2ddf6;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.barWallet:hover {
+  box-shadow: #d2ddf6 0 0 10px;
+}
+.barWallet:hover .progress {
+  background: #24284a;
+}
+
+.progressWallet {
+  height: 10px;
+  position: absolute;
+  right: 0;
+}
+
+.p1Wallet {
+  width: 37.5%;
+  background: #6792ff;
+  animation: p1 1s;
+}
+@keyframes p1Wallet {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 37.5%;
+  }
+}
+.p2Wallet {
+  width: 33.6%;
+  background: #4473ea;
+  animation: p2 1s;
+}
+@keyframes p2Wallet {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 33.6%;
+  }
+}
+.p3Wallet {
+  width: 11%;
+  background: #1a52e1;
+  animation: p3 1s;
+}
+@keyframes p3Wallet {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 11%;
+  }
+}
+.p4Wallet {
+  width: 6%;
+  background: #96b3ff;
+  animation: p4 1s;
+}
+@keyframes p4Wallet {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 6%;
+  }
+}
+
+
 

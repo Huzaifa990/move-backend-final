@@ -36,6 +36,8 @@ import MyProfile from "../components/MyProfile.js";
 import ViewBookingDashBoard from "../components/ViewBookingDashboard";
 import ViewUser from "../components/ViewUser";
 import ViewListingsDashboard from "../components/ViewListingsDashboard";
+import MyWallet from "../components/MyWallet";
+
 function App() {
   return (
     <>
@@ -290,6 +292,16 @@ function App() {
             element={
               <>
                 <ActivateAccount />
+              </>
+            }
+          />
+
+          <Route
+            path="myWallet"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="My Wallet" />{" "}
+                <MyWallet /> <Footer />{" "}
               </>
             }
           />
