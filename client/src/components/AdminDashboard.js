@@ -920,33 +920,6 @@ function PendingBookingsTable() {
     setInterval(getData,5000);
   }, [userDetails, ingnored, update]);
 
-  async function acceptBooking(id) {
-    axios
-      .put(
-        "http://localhost:8080/api/booking/approve/" + id,
-        {},
-        {
-          headers: { Authorization: userDetails },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        NotificationManager.success("Booking Approved!");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-
-    await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
-      headers: { Authorization: userDetails },
-    })
-      .then(() => {})
-      .catch((e) => {
-        console.log(e);
-      });
-    forceUpdate();
-  }
-
   function togglePopup(item) {
     setShow(item);
     const popupContainer = document.getElementById("pop");
@@ -1025,13 +998,6 @@ function PendingBookingsTable() {
                         {item.status}
                       </td>
                       <td className="tr-flex" id="approval">
-                      <img
-                        src={approve}
-                        width="35"
-                        alt=""
-                        id="tick"
-                        onClick={() => acceptBooking(item._id)}
-                      />
                         <img
                           src={reject}
                           width="35"
