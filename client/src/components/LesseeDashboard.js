@@ -54,7 +54,7 @@ export default function LesseeDashboard() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error("Booking Cancelled");
+        NotificationManager.error(res.data.msg);
         setSwitchState(!switchState);
         setUpdate(!update);
       })
@@ -316,11 +316,9 @@ export default function LesseeDashboard() {
                       <div class="popup">
                         <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel your booking?</h2>
                         <br />
-                        <p>You will be charged {fees} of the {show?.paymentDetails?.amount} amount you paid.</p>
-
-                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
-                        
+                        <p>You will be charged PKR {fees} of the PKR {show?.paymentDetails?.amount} amount you paid.</p>
                         <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
                         </div>
                     </div>
                 </tr>

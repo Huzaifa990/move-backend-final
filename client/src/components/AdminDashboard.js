@@ -811,7 +811,7 @@ function BookingsTable() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error("Booking Cancelled");
+        NotificationManager.error(res.data.msg);
         setSwitchState(!switchState)
         setUpdate(!update);
       })
@@ -871,10 +871,9 @@ function BookingsTable() {
                             <div class="popup-container" id="pop" onClick={toggleOff}>
                       <div class="popup">
                         <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
-                        <br />
-                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
-                        
+                        <br />                        
                         <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
                         </div>
                     </div>
                     </tr>
@@ -946,7 +945,8 @@ function PendingBookingsTable() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error("Booking Rejected");
+        //Response Message Not Shown
+        NotificationManager.error("Booking Cancelled");
         setUpdate(!update);
       })
       .catch((e) => {
@@ -1010,9 +1010,8 @@ function PendingBookingsTable() {
                       <div class="popup">
                         <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
                         <br />
-                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => rejectBooking(show?._id)}>Cancel Booking</button>
-                        
                         <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => rejectBooking(show?._id)}>Cancel Booking</button>
                         </div>
                     </div>
                     </tr>

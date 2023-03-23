@@ -493,7 +493,7 @@ function AllBookings() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.success("Order Completed!");
+        NotificationManager.success(res.data.msg);
       })
       .catch((e) => {
         console.log(e);
@@ -591,11 +591,9 @@ function AllBookings() {
                       <div class="popup">
                         <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
                         <br />
-                        <p>You will be charged {fees} Pkr for cancelling this booking!</p>
-
-                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
-                        
+                        <p>You will be charged PKR {fees} for cancelling this booking!</p>
                         <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => BookingReject(show?._id)}>Cancel Booking</button>
                         </div>
                     </div>
                   </tr>
@@ -665,7 +663,7 @@ function PendingBookings() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error("Booking Rejected");
+        NotificationManager.error(res.data.msg);
         setUpdate(!update);
       })
       .catch((e) => {
@@ -697,7 +695,7 @@ function PendingBookings() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.success("Booking Approved!");
+        NotificationManager.success(res.data.msg);
       })
       .catch((e) => {
         console.log(e);
@@ -759,12 +757,11 @@ function PendingBookings() {
                     </td>
                     <div class="popup-container" id="pop" onClick={toggleOff}>
                       <div class="popup">
-                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to cancel this booking?</h2>
+                        <h2 style={{ color: "#f77d0a" }}>Are you sure you want to reject this booking?</h2>
                         <br />
-                        <p>You will be charged 1000 Pkr for rejecting this booking!</p>
-                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => rejectBooking(show?._id)}>Cancel Booking</button>
-                        
+                        <p>You will be charged PKR 1000 for rejecting this booking!</p>
                         <button className="btn btn-secondaryDelete py-3 px-5 cancel-btn" onClick={() => toggleOff()}>Go Back</button>
+                        <button className="btn btn-primaryDelete py-3 px-5 cancel-btn" onClick={() => rejectBooking(show?._id)}>Cancel Booking</button>
                         </div>
                     </div>
                   </tr>
