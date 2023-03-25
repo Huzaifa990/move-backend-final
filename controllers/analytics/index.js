@@ -25,7 +25,7 @@ const lessorAnalytics = async (req, res) => {
   let currentMonthBookings = 0;
   if (bookings.length > 0) {
     for (const obj of bookings) {
-      lifetimeRevenue += obj.paymentDetails.amount;
+      lifetimeRevenue += obj.paymentDetails.amount * 0.8;
     }
 
     const currentMonthData = bookings.filter((booking) => {
@@ -34,7 +34,7 @@ const lessorAnalytics = async (req, res) => {
     if (currentMonthData.length > 0) {
       currentMonthBookings = currentMonthData.length;
       for (const obj of currentMonthData) {
-        currentMonthRevenue += obj.paymentDetails.amount;
+        currentMonthRevenue += obj.paymentDetails.amount * 0.8;
       }
     }
   }
