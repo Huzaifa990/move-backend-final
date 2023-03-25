@@ -7,6 +7,14 @@ const Wallet = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    lessorId: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+    },
+    lesseeId: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+    },
     userId: {
       type: mongoose.Types.ObjectId,
       required: true,

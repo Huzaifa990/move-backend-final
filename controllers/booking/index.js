@@ -429,7 +429,7 @@ const rejectBooking = async (req, res) => {
             })
             .then(() => {
               return res.status(200).send({
-                msg: `Booking Cancelled, Refund initiated to lessee for amount PKR ${
+                msg: `Booking Rejected, Refund initiated to lessee for amount PKR ${
                   refundAmount / 100
                 }`,
               });
@@ -445,6 +445,7 @@ const rejectBooking = async (req, res) => {
   } else if (accountType == "Lessor") {
     const walletData = new wallet({
       userId: _id,
+      lessorId: bookingFound.lessor,
       amount: -1000,
       bookingId: id,
       dropOffDate: bookingFound.dropOffDate,
@@ -469,7 +470,7 @@ const rejectBooking = async (req, res) => {
               })
               .then(() => {
                 return res.status(200).send({
-                  msg: `Booking Cancelled, Rs. 1000 has been deducted from your wallet's balance`,
+                  msg: `Booking Rejected, Rs. 1000 has been deducted from your wallet's balance`,
                 });
               })
               .catch((error) => {
@@ -496,12 +497,18 @@ const getLessorBookings = async (req, res) => {
     return res.status(402).send({ msg: "Access Denied!" });
   }
 
-  const bookings = await booking
+  let bookings = await booking
     .find({ lessor: _id, status: { $ne: "pending" } })
     .sort({ status: 1, dropOffDate: 1 })
     .populate("lessee", "name email _id accountType")
     .populate("car", "_id carName company model rentPerDay")
     .populate("paymentDetails");
+
+  if (bookings.length > 0) {
+    for (let i = 0; i < bookings.length; i++) {
+      bookings[i].paymentDetails.amount = bookings[i].paymentDetails.amount * 0.8;
+    }
+  }
 
   return res.status(200).send({ count: bookings.length, bookings });
 };
@@ -533,7 +540,7 @@ const markAsComplete = async (req, res) => {
     return res.status(422).send({ msg: "You are not allowed to mark a booking as complete" });
   }
 
-  const bookingFound = await booking.findById(id);
+  const bookingFound = await booking.findById(id).populate("paymentDetails");
   if (!bookingFound) {
     return res.status(404).send({ msg: "Booking not found!" });
   }
@@ -554,12 +561,27 @@ const markAsComplete = async (req, res) => {
     return res.status(422).send({ msg: "Booking already marked as complete" });
   }
 
+  // const today = new Date();
+  // const dropOffDate = new Date(bookingFound.dropOffDate);
+  // if (dropOffDate > today) {
+  //   return res.status(422).send({ msg: "Drop off date not passed yet" });
+  // }
+
   await booking.updateOne(
     { _id: id },
     {
       status: "Completed",
     }
   );
+
+  const walletData = new wallet({
+    userId: _id,
+    lessorId: bookingFound.lessor,
+    amount: bookingFound.paymentDetails.amount * 0.8,
+    bookingId: id,
+    dropOffDate: bookingFound.dropOffDate,
+  });
+  await walletData.save();
 
   return res.status(200).send({ msg: "Booking marked as complete successfully" });
 };
@@ -637,6 +659,7 @@ const cancelBooking = async (req, res) => {
   } else if (accountType == "Lessee") {
     const walletData = new wallet({
       userId: _id,
+      lesseeId: bookingFound.lessee,
       amount: bookingFound.paymentDetails.amount * -0.2,
       bookingId: id,
       dropOffDate: bookingFound.dropOffDate,
@@ -684,6 +707,7 @@ const cancelBooking = async (req, res) => {
     const walletData = new wallet({
       userId: _id,
       amount: bookingFound.paymentDetails.amount * -0.2,
+      lessorId: bookingFound.lessor,
       bookingId: id,
       dropOffDate: bookingFound.dropOffDate,
     });
@@ -691,7 +715,7 @@ const cancelBooking = async (req, res) => {
 
     return res.status(200).send({
       msg: `Cancellation successful: PKR ${
-        bookingFound.paymentDetails.amount * -0.2
+        bookingFound.paymentDetails.amount * 0.2
       } has been deducted from your wallet`,
     });
   } else {

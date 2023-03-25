@@ -10,7 +10,7 @@ app.use("/contact", require("./contact"));
 app.use("/listing", require("./listing"));
 app.use("/booking", require("./booking"));
 app.use("/analytics", require("./analytics"));
-
+app.use("/wallet", require("./wallet"));
 app.use(dbError);
 
 module.exports = app;
