@@ -33,6 +33,6 @@ app.put("/approve/:id", ensureAuth, approveBooking);
 app.put("/reject/:id", ensureAuth, rejectBooking);
 app.put("/cancel/:id", ensureAuth, cancelBooking);
 app.put("/markAsComplete/:id", ensureAuth, markAsComplete);
-app.put("/:id", ensureAuth, Validator(validateUpdate, "body"), updateBooking);
+// app.put("/:id", ensureAuth, Validator(validateUpdate, "body"), updateBooking);
 
 module.exports = app;
