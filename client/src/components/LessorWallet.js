@@ -59,7 +59,7 @@ export default function LessorWallet() {
       setCurrentMonths(currentMonths);
       console.log(graph);
       console.log(data);
-      setbalance(data.pendingBalance);
+      setbalance(data.pendingBalance * 0.8);
       setUpcomingBookings(data.upcomingBookings);
       setRecentBooking(recentData);
       setGraphData(graph.earnings);
@@ -149,7 +149,7 @@ export default function LessorWallet() {
                             </h4>
                             <p>
                               Your car was booked for {item.bookingDays} days, you earned{" "}
-                              {item.paymentDetails.amount.toLocaleString()} PKR
+                              {(item.paymentDetails.amount*0.8).toLocaleString()} PKR
                             </p>
                             <button className="btn btn-primary px-3">View Details</button>
                           </div>
@@ -182,7 +182,7 @@ export default function LessorWallet() {
                             </h4>
                             <p>
                               Your car was booked for {item.bookingDays} days, you earned{" "}
-                              {item.paymentDetails.amount.toLocaleString()} PKR
+                              {(item.paymentDetails.amount*0.8).toLocaleString()} PKR
                             </p>
                             <button className="btn btn-primary px-3">View Details</button>
                           </div>
