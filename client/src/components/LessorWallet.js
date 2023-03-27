@@ -6,7 +6,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 
-export default function MyWallet() {
+export default function LessorWallet() {
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   var [balance, setbalance] = useState("");
   var [upcomingBooking, setUpcomingBookings] = useState([]);
