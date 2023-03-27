@@ -36,8 +36,8 @@ import MyProfile from "../components/MyProfile.js";
 import ViewBookingDashBoard from "../components/ViewBookingDashboard";
 import ViewUser from "../components/ViewUser";
 import ViewListingsDashboard from "../components/ViewListingsDashboard";
-import MyWallet from "../components/MyWallet";
 import ViewBookingLessor from "../components/ViewBookingLessor";
+import LessorWallet from "../components/LessorWallet";
 
 function App() {
   return (
@@ -308,11 +308,11 @@ function App() {
           />
 
           <Route
-            path="myWallet"
+            path="lessorWallet"
             element={
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="My Wallet" />{" "}
-                <MyWallet /> <Footer />{" "}
+                <LessorWallet /> <Footer />{" "}
               </>
             }
           />
