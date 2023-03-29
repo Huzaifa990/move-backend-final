@@ -387,7 +387,7 @@ function UsersTable() {
     )
     .then((res)=>{
       console.log(res);
-      NotificationManager.error("User Rejected");
+      NotificationManager.success("User Rejected");
 
     }).catch((e)=>{
       console.log(e);
@@ -706,7 +706,7 @@ function PendingListingsTable() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error("Listing Rejected");
+        NotificationManager.success("Listing Rejected");
         setSwitchState(!switchState)
       })
       .catch((e) => {
@@ -811,7 +811,7 @@ function BookingsTable() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error(res.data.msg);
+        NotificationManager.success(res.data.msg);
         setSwitchState(!switchState)
         setUpdate(!update);
       })

@@ -34,7 +34,7 @@ function Footer(){
               <div className="d-flex flex-column justify-content-start">
                 <a className="text-body mb-2" href="Contact.js"><i className="fa fa-angle-right text-white mr-2" />Private
                   Policy</a>
-                <a className="text-body mb-2" href="Contact.js"><i className="fa fa-angle-right text-white mr-2" />Term &amp;
+                <a className="text-body mb-2" href="/termsandconditions"><i className="fa fa-angle-right text-white mr-2" />Term &amp;
                   Conditions</a>
               </div>
             </div>

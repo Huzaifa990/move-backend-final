@@ -54,7 +54,7 @@ export default function LesseeDashboard() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error(res.data.msg);
+        NotificationManager.success(res.data.msg);
         setSwitchState(!switchState);
         setUpdate(!update);
       })

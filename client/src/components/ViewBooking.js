@@ -163,12 +163,12 @@ const ViewBooking = () => {
                 <div className="col-lg-4">
                   <div className="bg-secondary p-4 mb-5">
                     <h2 className="text-primary mb-4">Manage Booking</h2>
-                    <button
+                    {/* <button
                       className="btn btn-block btn-edit py-2"
                       onClick={() => editCar(name?._id)}
                     >
                       Edit Booking <i className="fa fa-edit"></i>
-                    </button>
+                    </button> */}
                     <button
                       className="btn btn-block btn-deleteBooking py-2"
                       onClick={() => deleteCar(name?._id)}

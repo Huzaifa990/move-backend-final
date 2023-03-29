@@ -331,7 +331,7 @@ function AllListings() {
       })
       .catch((e) => {
         console.log(e);
-        NotificationManager.success("Listing Update Failed  ");
+        NotificationManager.error("Listing Update Failed  ");
       });
 
     await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
@@ -663,7 +663,7 @@ function PendingBookings() {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error(res.data.msg);
+        NotificationManager.success(res.data.msg);
         setUpdate(!update);
       })
       .catch((e) => {
