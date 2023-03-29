@@ -38,6 +38,7 @@ import ViewUser from "../components/ViewUser";
 import ViewListingsDashboard from "../components/ViewListingsDashboard";
 import ViewBookingLessor from "../components/ViewBookingLessor";
 import LessorWallet from "../components/LessorWallet";
+import LesseeWallet from "../components/LesseeWallet";
 
 function App() {
   return (
@@ -313,6 +314,16 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="My Wallet" />{" "}
                 <LessorWallet /> <Footer />{" "}
+              </>
+            }
+          />
+
+          <Route
+            path="lesseeWallet"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="My Wallet" />{" "}
+                <LesseeWallet/> <Footer />{" "}
               </>
             }
           />

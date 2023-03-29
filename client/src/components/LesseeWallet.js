@@ -6,7 +6,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 
-export default function LessorWallet() {
+export default function LesseeWallet() {
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   var [balance, setbalance] = useState("");
   var [upcomingBooking, setUpcomingBookings] = useState([]);
@@ -18,11 +18,11 @@ export default function LessorWallet() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/wallet/lessorWallet", {
+      const response = await fetch("http://localhost:8080/api/wallet/lesseeWallet", {
         headers: { Authorization: userDetails },
       });
 
-      const graphResponse = await fetch("http://localhost:8080/api/wallet/graphDataForLessor", {
+      const graphResponse = await fetch("http://localhost:8080/api/wallet/graphDataForLessee", {
         headers: { Authorization: userDetails },
       });
 
@@ -53,7 +53,7 @@ export default function LessorWallet() {
         "Dec",
       ];
       var currentMonths = [];
-      for (var x = 0; x < graph.earnings.length; x++) {
+      for (var x = 0; x < graph.spendings.length; x++) {
         currentMonths.push(allMonths[x]);
       }
       setCurrentMonths(currentMonths);
@@ -62,7 +62,7 @@ export default function LessorWallet() {
       setbalance(data.pendingBalance * 0.8);
       setUpcomingBookings(data.upcomingBookings);
       setRecentBooking(recentData);
-      setGraphData(graph.earnings);
+      setGraphData(graph.spendings);
       setLoader(false);
     }
 
@@ -78,7 +78,7 @@ export default function LessorWallet() {
       {loader === false ? (
         <>
           <div className="stats-container">
-            <h1>Current Balance: {(balance*0.8).toLocaleString()} PKR</h1>
+            <h1>Pending Balance: {balance.toLocaleString()} PKR</h1>
           </div>
           <h1>Recent Trends: </h1>
           <div className="stats-container">
@@ -87,7 +87,7 @@ export default function LessorWallet() {
                 data={{
                   datasets: [
                     {
-                      label: "Your Earnings",
+                      label: "Your Spendings",
                       data: graphData,
                       backgroundColor: ["rgba(253,126,20, 0.25)", "white", "white"],
                       borderColor: "#F77D0A",
@@ -148,8 +148,8 @@ export default function LessorWallet() {
                               {item.car.company} {item.car.carName}
                             </h4>
                             <p>
-                              Your car was booked for {item.bookingDays} days, you earned{" "}
-                              {(item.paymentDetails.amount*0.8).toLocaleString()} PKR
+                              You booked this car for {item.bookingDays} days, you spent{" "}
+                              {(item.paymentDetails.amount).toLocaleString()} PKR
                             </p>
                             <button className="btn btn-primary px-3">View Details</button>
                           </div>
@@ -181,8 +181,8 @@ export default function LessorWallet() {
                               {item.car.company} {item.car.carName}
                             </h4>
                             <p>
-                              Your car was booked for {item.bookingDays} days, you earned{" "}
-                              {(item.paymentDetails.amount*0.8).toLocaleString()} PKR
+                              You booked this car for {item.bookingDays} days, you spent{" "}
+                              {(item.paymentDetails.amount).toLocaleString()} PKR
                             </p>
                             <button className="btn btn-primary px-3">View Details</button>
                           </div>
@@ -242,7 +242,7 @@ export default function LessorWallet() {
       </div>
       </div> */}
 
-          <h1>Upcoming Bookings: </h1>
+          <h1>Ongoing Bookings: </h1>
           <div className="stats-container">
             <div class="table-responsive table--no-card m-b-40">
               <table class="table table-borderless table-striped table-earning">
@@ -267,7 +267,7 @@ export default function LessorWallet() {
                         <td>{item.car.rentPerDay} PKR/Day</td>
                         <td className="text-right">{item.paymentDetails.paymentMethod}</td>
                         <td class="text-right">{item.bookingDays} Days</td>
-                        <td class="text-right">{item.paymentDetails.amount*0.8} PKR</td>
+                        <td class="text-right">{item.paymentDetails.amount} PKR</td>
                       </tr>
                     );
                   })}
