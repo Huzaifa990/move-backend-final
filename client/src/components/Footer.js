@@ -32,7 +32,7 @@ function Footer(){
             <div className="col-lg-3 col-md-6 mb-5">
               <h4 className="text-uppercase text-light mb-4">Useful Links</h4>
               <div className="d-flex flex-column justify-content-start">
-                <a className="text-body mb-2" href="Contact.js"><i className="fa fa-angle-right text-white mr-2" />Private
+                <a className="text-body mb-2" href="/privacypolicy"><i className="fa fa-angle-right text-white mr-2" />Privacy
                   Policy</a>
                 <a className="text-body mb-2" href="/termsandconditions"><i className="fa fa-angle-right text-white mr-2" />Term &amp;
                   Conditions</a>
