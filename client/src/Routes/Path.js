@@ -39,6 +39,8 @@ import ViewListingsDashboard from "../components/ViewListingsDashboard";
 import ViewBookingLessor from "../components/ViewBookingLessor";
 import LessorWallet from "../components/LessorWallet";
 import LesseeWallet from "../components/LesseeWallet";
+import TermsAndConditions from "../components/Terms&Conditions";
+import PrivacyPolicy from "../components/PrivacyPolicy";
 
 function App() {
   return (
@@ -324,6 +326,26 @@ function App() {
               <>
                 <NavBar /> <Search /> <SubHeaderAbout headingText="My Wallet" />{" "}
                 <LesseeWallet/> <Footer />{" "}
+              </>
+            }
+          />
+          
+          <Route
+            path="termsandconditions"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Terms and Conditions" />{" "}
+                <TermsAndConditions/> <Footer />{" "}
+              </>
+            }
+          />
+
+            <Route
+            path="privacyPolicy"
+            element={
+              <>
+                <NavBar /> <Search /> <SubHeaderAbout headingText="Privacy Policy" />{" "}
+                <PrivacyPolicy/> <Footer />{" "}
               </>
             }
           />

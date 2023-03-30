@@ -92,6 +92,12 @@ const NavBar = () => {
                   </Link>
                 ) : null}
 
+                 {accountType !== "Admin" ? (
+                  <Link to="/termsandconditions" className="nav-item nav-link active">
+                    Terms & Conditions
+                  </Link>
+                ) : null}
+
                 {accountType !== "Admin" ? (
                   <Link to="/listings" className="nav-item nav-link active">
                     Car Listings

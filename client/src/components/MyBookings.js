@@ -42,18 +42,18 @@ const MyBookings = () => {
     navigate("/viewBooking", { state: { id: id } });
   }
 
-  function goToEdit(id) {
-    navigate("/editBooking", { state: { id: id } });
-  }
+  // function goToEdit(id) {
+  //   navigate("/editBooking", { state: { id: id } });
+  // }
 
   //Function that also passes the ID of the object to the navigated page.
   function showId(id) {
     goToDetails(id);
   }
 
-  function editCar(id) {
-    goToEdit(id);
-  }
+  // function editCar(id) {
+  //   goToEdit(id);
+  // }
 
 
   function togglePopup(item) {
@@ -85,7 +85,7 @@ const MyBookings = () => {
       )
       .then((res) => {
         console.log(res);
-        NotificationManager.error(res.data.msg);
+        NotificationManager.success(res.data.msg);
         setSwitchState(!switchState);
         setUpdate(!update);
       })
@@ -126,7 +126,7 @@ const MyBookings = () => {
 
                     {data.status === "Accepted" || data.status === "pending" ? (
                     <ul style={{ float: "right" }} className="list-inline">
-                      <li className="list-inline-item">
+                      {/* <li className="list-inline-item">
                         <button
                           className="btn btn-success btn-sm rounded-0 px-4"
                           type="button"
@@ -137,7 +137,7 @@ const MyBookings = () => {
                         >
                           <i className="fa fa-edit"></i>
                         </button>
-                      </li>
+                      </li> */}
                       <li className="list-inline-item">
                         <button
                           className="btn btn-danger btn-sm rounded-0 px-4"
