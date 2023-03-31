@@ -78,7 +78,7 @@ export default function LessorWallet() {
       {loader === false ? (
         <>
           <div className="stats-container">
-            <h1>Current Balance: {(balance*0.8).toLocaleString()} PKR</h1>
+            <h1>Current Balance: {(balance).toLocaleString()} PKR</h1>
           </div>
           <h1>Recent Trends: </h1>
           <div className="stats-container">
