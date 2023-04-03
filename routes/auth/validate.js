@@ -44,6 +44,12 @@ module.exports.validateSignUp = yup.object({
     .max(999999999999, "Phone length must be 12 digits")
     .required()
     .label("Phone Number"),
+  agreeWithTerms: yup
+    .boolean()
+    .oneOf([true], "You must agree with terms and conditions")
+    .typeError("You must agree with terms and conditions")
+    .required("Please check I agree with terms and conditions")
+    .label("Agree With Terms And Conditions"),
 });
 
 module.exports.validateChangePassword = yup.object({
