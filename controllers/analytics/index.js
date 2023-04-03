@@ -7,6 +7,9 @@ const users = require("../../models/users");
 
 const lessorAnalytics = async (req, res) => {
   const { accountType, _id } = req.body;
+  const page = req.query.page || 0;
+  const pageSize = req.query.pageSize || 10;
+
   if (accountType !== "Lessor") {
     return res.status(200).send({ msg: "Access Denied" });
   }
@@ -46,9 +49,6 @@ const lessorAnalytics = async (req, res) => {
     currentMonthRevenue,
     currentMonthBookings,
   };
-
-  const page = req.query.page || 0;
-  const pageSize = req.query.pageSize || 10;
 
   const allBookings = await booking.find({}).lean();
   let myListings = await listing
