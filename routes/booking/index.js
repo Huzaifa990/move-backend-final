@@ -16,7 +16,13 @@ const {
   cardPayment,
 } = require("../../controllers/booking");
 const { Validator, ensureAuth } = require("../../middleware/ensure-auth");
-const { validateNew, validateUpdate, validateNewCard, validateCardPayment } = require("./validate");
+const {
+  validateNew,
+  validateUpdate,
+  validateNewCard,
+  validateCardPayment,
+  validateQuery,
+} = require("./validate");
 
 const app = express.Router();
 
@@ -24,7 +30,7 @@ app.get("/", ensureAuth, getAllBookings);
 app.post("/", ensureAuth, Validator(validateNew, "body"), addBooking);
 app.post("/cardBooking", ensureAuth, Validator(validateNewCard, "body"), checkAndAddBooking);
 app.get("/myBookings", ensureAuth, getMyBookings);
-app.get("/getLessorBookings", ensureAuth, getLessorBookings);
+app.get("/getLessorBookings", Validator(validateQuery, "query"), ensureAuth, getLessorBookings);
 app.get("/getLessorPendingBookings", ensureAuth, getLessorPendingBookings);
 app.get("/:id", ensureAuth, getBookingById);
 app.delete("/:id", ensureAuth, deleteBooking);
