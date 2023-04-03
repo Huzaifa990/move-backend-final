@@ -31,7 +31,12 @@ app.post("/", ensureAuth, Validator(validateNew, "body"), addBooking);
 app.post("/cardBooking", ensureAuth, Validator(validateNewCard, "body"), checkAndAddBooking);
 app.get("/myBookings", ensureAuth, getMyBookings);
 app.get("/getLessorBookings", Validator(validateQuery, "query"), ensureAuth, getLessorBookings);
-app.get("/getLessorPendingBookings", ensureAuth, getLessorPendingBookings);
+app.get(
+  "/getLessorPendingBookings",
+  Validator(validateQuery, "query"),
+  ensureAuth,
+  getLessorPendingBookings
+);
 app.get("/:id", ensureAuth, getBookingById);
 app.delete("/:id", ensureAuth, deleteBooking);
 app.put("/stripePayment", ensureAuth, Validator(validateCardPayment, "body"), cardPayment);

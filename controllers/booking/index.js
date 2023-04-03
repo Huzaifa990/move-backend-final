@@ -521,6 +521,8 @@ const getLessorBookings = async (req, res) => {
 
 const getLessorPendingBookings = async (req, res) => {
   const { _id, accountType } = req.body;
+  const page = req.query.page || 0;
+  const pageSize = req.query.pageSize || 10;
 
   if (accountType !== "Lessor") {
     return res.status(402).send({ msg: "Access Denied!" });
@@ -528,12 +530,16 @@ const getLessorPendingBookings = async (req, res) => {
 
   const bookings = await booking
     .find({ lessor: _id, status: { $eq: "pending" } })
+    .skip(page * pageSize)
+    .limit(pageSize)
     .sort({ status: 1, dropOffDate: 1 })
     .populate("lessee", "name email _id accountType")
     .populate("car", "_id carName company model rentPerDay")
     .populate("paymentDetails");
 
-  return res.status(200).send({ count: bookings.length, bookings });
+  let bookingsTotalCount = await booking.find({ lessor: _id, status: { $eq: "pending" } }).count();
+
+  return res.status(200).send({ count: bookingsTotalCount, bookings });
 };
 
 const markAsComplete = async (req, res) => {
