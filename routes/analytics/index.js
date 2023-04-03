@@ -9,11 +9,12 @@ const {
   getAllBookings,
 } = require("../../controllers/analytics");
 
-const { ensureAuth } = require("../../middleware/ensure-auth");
+const { ensureAuth, Validator } = require("../../middleware/ensure-auth");
+const { validateQuery } = require("./validate");
 
 const app = express.Router();
 
-app.get("/lessorAnalytics", ensureAuth, lessorAnalytics);
+app.get("/lessorAnalytics", Validator(validateQuery, "query"), ensureAuth, lessorAnalytics);
 app.get("/lesseeAnalytics", ensureAuth, lesseeAnalytics);
 app.get("/adminAnalytics", ensureAuth, adminAnalytics);
 app.get("/adminAnalytics/getAllListings", ensureAuth, getAllListings);

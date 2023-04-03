@@ -47,9 +47,14 @@ const lessorAnalytics = async (req, res) => {
     currentMonthBookings,
   };
 
+  const page = req.query.page || 0;
+  const pageSize = req.query.pageSize || 10;
+
   const allBookings = await booking.find({}).lean();
   let myListings = await listing
     .find({ lessor: _id }, "listingDate company rentPerDay carName status approved")
+    .skip(page * pageSize)
+    .limit(pageSize)
     .lean();
 
   for (const listing of myListings) {
