@@ -59,7 +59,7 @@ export default function LessorWallet() {
       setCurrentMonths(currentMonths);
       console.log(graph);
       console.log(data);
-      setbalance(data.pendingBalance * 0.8);
+      setbalance(data.pendingBalance);
       setUpcomingBookings(data.upcomingBookings);
       setRecentBooking(recentData);
       setGraphData(graph.earnings);
