@@ -73,7 +73,7 @@ export default function MyProfile() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics?pageSize=10&page=0", {
         headers: { Authorization: userDetails },
       });
 
