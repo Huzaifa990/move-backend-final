@@ -866,6 +866,9 @@ select:focus {
     width: 100%;
   }
 }
+.table-responsive.table--no-card{
+  width: 97.8%;
+}
 
 .table-earning thead th {
   background: #333;

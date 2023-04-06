@@ -133,8 +133,10 @@ export default function LessorDashboard() {
                   },
                   scales: {
                     y: {
+                      beginAtZero: true,
                       ticks: {
                         color: "white",
+                       
                       },
                       grid: {
                         color: "rgba(185, 185, 185, 0.427)",
@@ -452,6 +454,7 @@ function AllBookings() {
   const [show,setShow]=useState();
   const [update, setUpdate] = useState(false);
   const [fees, setFees] = useState();
+  var [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     async function getData() {
@@ -461,6 +464,7 @@ function AllBookings() {
       var data = await response.json();
       console.log(data);
       setStats(data.bookings);
+      setTotalPages(Math.ceil(data.count/10));
       setLoading(false);
     }
 
@@ -530,7 +534,7 @@ function AllBookings() {
         console.log(e);
       });
 
-    await fetch("http://localhost:8080/api/booking/getLessorBookings", {
+    await fetch("http://localhost:8080/api/booking/getLessorBookings?pageSize=10&page="+pageNum, {
       headers: { Authorization: userDetails },
     })
       .then((res) => {})
@@ -636,6 +640,26 @@ function AllBookings() {
           <Loader2 />
         )}
       </table>
+      {totalPages > 1?<>
+        <div className="pagination">
+        <div className="pagi-cons">
+          {pageNum > 0? <>
+            <img src={left_arr} alt="left" width="25px" onClick={()=>setPageNum(--pageNum)}/>
+          </>:null}
+          
+          <span>Page {pageNum+1} of {totalPages}</span>
+          {pageNum+1 !== totalPages? <>
+            <img src={right_arr} alt="right"  width="25px"  onClick={()=>setPageNum(++pageNum)}/>
+          </>:null}
+        </div>
+      </div>
+      </>:<>
+      <div className="pagination">
+        <div className="pagi-cons">
+          <span>Page {pageNum+1} of {totalPages}</span>
+        </div>
+      </div>
+      </>}
     </>
   );
 }
