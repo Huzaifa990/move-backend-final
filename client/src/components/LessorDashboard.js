@@ -12,6 +12,9 @@ import Loader2 from "./Loader2";
 import approve from "../img/correct.png";
 import unable from "../img/unable3.png";
 import reject from "../img/remove.png";
+import left_arr from "../img/backward.png";
+import right_arr from "../img/forward.png";
+
 
 export default function LessorDashboard() {
   const [activeOption, setActiveOption] = useState("allListings");
@@ -27,7 +30,7 @@ export default function LessorDashboard() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics?pageSize=10&page=0", {
         headers: { Authorization: userDetails },
       });
 
@@ -292,24 +295,30 @@ function AllListings() {
   var [stats, setStats] = useState([]);
   const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
   const [switchState, setSwitchState] = useState(false);
+  var [pageNum, setPageNum] = useState(0);
+
 
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [loading, setLoading] = useState(true);
+  var [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
+
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+      const response = await fetch("http://localhost:8080/api/analytics/lessorAnalytics?pageSize=10&page="+pageNum, {
         headers: { Authorization: userDetails },
       });
       var data = await response.json();
       console.log(data);
       setStats(data.myListings);
       setLoading(false);
+      setTotalPages(Math.ceil(data.analytics.carsListed/10));
+      console.log(totalPages);
     }
 
     getData();
-  }, [userDetails, ingnored]);
+  }, [userDetails, ingnored,pageNum, totalPages]);
 
   function goToListings(id) {
     navigate("/viewListings", { state: { id: id } });
@@ -334,7 +343,7 @@ function AllListings() {
         NotificationManager.error("Listing Update Failed  ");
       });
 
-    await fetch("http://localhost:8080/api/analytics/lessorAnalytics", {
+      await fetch("http://localhost:8080/api/analytics/lessorAnalytics?pageSize=10&page="+pageNum, {
       headers: { Authorization: userDetails },
     })
       .then(() => {
@@ -407,11 +416,33 @@ function AllListings() {
           <Loader2 />
         )}
       </table>
+      {totalPages > 1?<>
+        <div className="pagination">
+        <div className="pagi-cons">
+          {pageNum > 0? <>
+            <img src={left_arr} alt="left" width="25px" onClick={()=>setPageNum(--pageNum)}/>
+          </>:null}
+          
+          <span>Page {pageNum+1} of {totalPages}</span>
+          {pageNum+1 !== totalPages? <>
+            <img src={right_arr} alt="right"  width="25px"  onClick={()=>setPageNum(++pageNum)}/>
+          </>:null}
+        </div>
+      </div>
+      </>:<>
+      <div className="pagination">
+        <div className="pagi-cons">
+          <span>Page {pageNum+1} of {totalPages}</span>
+        </div>
+      </div>
+      </>}
+      
     </>
   );
 }
 
 function AllBookings() {
+  var [pageNum, setPageNum] = useState(0);
   var [stats, setStats] = useState([]);
   const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
   const [switchState, setSwitchState] = useState(false);
@@ -424,7 +455,7 @@ function AllBookings() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/booking/getLessorBookings", {
+      const response = await fetch("http://localhost:8080/api/booking/getLessorBookings?pageSize=10&page="+pageNum, {
         headers: { Authorization: userDetails },
       });
       var data = await response.json();
@@ -434,7 +465,7 @@ function AllBookings() {
     }
 
     getData();
-  }, [userDetails, ingnored, switchState, update]);
+  }, [userDetails, ingnored, switchState, update, pageNum]);
 
   function goToBookings(id) {
     navigate("/viewListings", { state: { id: id } });
