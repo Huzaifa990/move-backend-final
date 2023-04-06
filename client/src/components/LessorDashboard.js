@@ -667,7 +667,8 @@ function AllBookings() {
 function PendingBookings() {
   var [stats, setStats] = useState([]);
   const [ingnored, forceUpdate] = useReducer((x) => x + 1, 0);
-
+  var [pageNum, setPageNum] = useState(0);
+  var [totalPages, setTotalPages] = useState(0);
   var navigate = useNavigate();
   var userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [loading, setLoading] = useState(true);
@@ -676,17 +677,18 @@ function PendingBookings() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
+      const response = await fetch("http://localhost:8080/api/booking/getLessorPendingBookings?pageSize=10&page="+pageNum, {
         headers: { Authorization: userDetails },
       });
       var data = await response.json();
       console.log(data);
       setStats(data.bookings);
       setLoading(false);
+      setTotalPages(Math.ceil(data.count/10));
     }
 
     getData();
-  }, [userDetails, ingnored, update]);
+  }, [userDetails, ingnored, update, pageNum]);
 
   function goToBookings(id) {
     navigate("/viewListings", { state: { id: id } });
@@ -725,7 +727,7 @@ function PendingBookings() {
         console.log(e);
       });
 
-      await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingBookings", {
+      await fetch("http://localhost:8080/api/analytics/adminAnalytics/getAllPendingBookings?pageSize=10&page="+pageNum, {
       headers: { Authorization: userDetails },
     })
       .then((res) => {
@@ -756,7 +758,7 @@ function PendingBookings() {
         console.log(e);
       });
 
-    await fetch("http://localhost:8080/api/booking/getLessorPendingBookings", {
+    await fetch("http://localhost:8080/api/booking/getLessorPendingBookings?pageSize=10&page="+pageNum, {
       headers: { Authorization: userDetails },
     })
       .then(() => {})
@@ -828,6 +830,26 @@ function PendingBookings() {
           <Loader2 />
         )}
       </table>
+      {totalPages > 1?<>
+        <div className="pagination">
+        <div className="pagi-cons">
+          {pageNum > 0? <>
+            <img src={left_arr} alt="left" width="25px" onClick={()=>setPageNum(--pageNum)}/>
+          </>:null}
+          
+          <span>Page {pageNum+1} of {totalPages}</span>
+          {pageNum+1 !== totalPages? <>
+            <img src={right_arr} alt="right"  width="25px"  onClick={()=>setPageNum(++pageNum)}/>
+          </>:null}
+        </div>
+      </div>
+      </>:<>
+      <div className="pagination">
+        <div className="pagi-cons">
+          <span>Page {pageNum+1} of {totalPages}</span>
+        </div>
+      </div>
+      </>}
     </>
   );
 }
