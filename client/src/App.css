@@ -2202,4 +2202,21 @@ select:focus {
   }
 }
 
+.pagi-cons{
+  display: flex;
+  width: 200px;
+  align-items: center;
+  justify-content: space-around;
+  margin-left: auto;
+  padding: 5px;
+}
+
+.pagi-cons span{
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.pagi-cons img:hover{
+  cursor: pointer;
+}
 
