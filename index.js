@@ -38,6 +38,10 @@ app.use("/public", express.static(path.join(__dirname, "./public")));
 
 const setPort = process.env.PORT || 8080;
 
+app.get("/", (req,res)=>{
+  res.send("MOVE RENTALS IS RUNNING");
+})
+
 dbConnection().then(() => {
   server.listen(setPort, () => console.log(`Move running on PORT # ${setPort}`));
 });
