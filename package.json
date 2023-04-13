@@ -35,6 +35,7 @@
     "stripe": "^10.12.0",
     "supertest": "^6.3.3",
     "winston": "^3.8.1",
+    "yarn": "^1.22.19",
     "yup": "^0.32.11"
   },
   "devDependencies": {
